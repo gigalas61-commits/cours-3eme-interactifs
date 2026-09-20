@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trigonométrie dans le triangle rectangle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --text: #2c2418;
+  --muted: #6b5a48;
+  --border: #d4c8b8;
+  --surface2: #ebe6de;
+  --accent-light: #faf5ef;
+  --tip: #b8860b;
+  --tip-bg: #fdf8ef;
+  --success: #2e7d42;
+  --error: #c62828;
+  --shadow: 0 2px 8px rgba(139,69,19,0.07);
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1410;
+    --surface: #2a2218;
+    --heading: #d4a574;
+    --accent: #c8885a;
+    --text: #e8ddd0;
+    --muted: #a89880;
+    --border: #3d3228;
+    --surface2: #332a20;
+    --accent-light: #2a2218;
+    --tip: #d4a030;
+    --tip-bg: #2a2410;
+    --success: #66bb6a;
+    --error: #ef5350;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --radius: 6px;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1a1410;
+  --surface: #2a2218;
+  --heading: #d4a574;
+  --accent: #c8885a;
+  --text: #e8ddd0;
+  --muted: #a89880;
+  --border: #3d3228;
+  --surface2: #332a20;
+  --accent-light: #2a2218;
+  --tip: #d4a030;
+  --tip-bg: #2a2410;
+  --success: #66bb6a;
+  --error: #ef5350;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--heading);
+  line-height: 1.3;
+}
+
+/* Header */
+.header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 1.2rem 1rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.header h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+.header .subtitle { color: var(--muted); font-size: 0.95rem; }
+.level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.5px;
+}
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Tab nav */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0 1rem;
+  overflow-x: auto;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.7rem 0.9rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Content */
+.container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow);
+}
+.card h3 { margin-bottom: 0.6rem; font-size: 1.3rem; }
+
+/* Formula box */
+.formula-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.formula-box strong { color: var(--accent); }
+
+/* Fractions */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.3rem;
+  font-size: 0.95em;
+}
+.frac .num { border-bottom: 2px solid var(--text); padding: 0 0.3rem 0.15rem; }
+.frac .den { padding: 0.15rem 0.3rem 0; }
+
+/* Tip box */
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip);
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.92rem;
+}
+.tip-box::before {
+  content: "\1F4A1 ";
+}
+
+/* Exercise */
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.exercise h4 {
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Details/summary */
+details {
+  margin: 0.8rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+details summary {
+  background: var(--surface2);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+details[open] summary { border-bottom: 1px solid var(--border); }
+details .detail-content { padding: 0.8rem 1rem; }
+
+/* Inputs & buttons */
+input[type="number"], input[type="text"], select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.7rem;
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  width: 80px;
+}
+select { width: auto; }
+button.action-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1.2rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+button.action-btn:hover { opacity: 0.85; }
+
+/* Canvas */
+canvas {
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+/* Interactive areas */
+.interactive-area {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.interactive-area label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.result-box {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  background: var(--accent-light);
+  border-radius: var(--radius);
+  min-height: 2rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* Quiz */
+.quiz-question {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.quiz-question p { font-weight: 600; margin-bottom: 0.5rem; }
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.8rem;
+  margin: 0.3rem 0;
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s;
+}
+.quiz-option:hover { border-color: var(--accent); }
+.quiz-option.correct { background: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.quiz-option.wrong { background: #ffebee; border-color: var(--error); color: #b71c1c; }
+:root[data-theme="dark"] .quiz-option.correct,
+:root:not([data-theme="light"]) .quiz-option.correct { background: #1b3a1f; color: #a5d6a7; }
+:root[data-theme="dark"] .quiz-option.wrong,
+:root:not([data-theme="light"]) .quiz-option.wrong { background: #3a1b1b; color: #ef9a9a; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .quiz-option.correct { background: #e8f5e9; color: #1b5e20; }
+  :root:not([data-theme="dark"]) .quiz-option.wrong { background: #ffebee; color: #b71c1c; }
+}
+
+.quiz-explanation {
+  margin-top: 0.4rem;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.score-box {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.progress-bar {
+  height: 8px;
+  background: var(--surface2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0 1rem;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  margin: 0.5rem 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* SOH CAH TOA highlight */
+.sct-letter { font-size: 1.5rem; font-weight: 700; }
+.sct-s { color: #e74c3c; }
+.sct-o { color: #e67e22; }
+.sct-h { color: #2980b9; }
+.sct-c { color: #27ae60; }
+.sct-a { color: #8e44ad; }
+.sct-t { color: #d35400; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.4rem; }
+  .tab-btn { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
+  .container { padding: 1rem; }
+  .card { padding: 0.9rem; }
+  input[type="number"] { width: 65px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le th&egrave;me">&#9790;/&#9788;</button>
+  <span class="level-badge">3&egrave;me</span>
+  <h1>Trigonom&eacute;trie dans le triangle rectangle</h1>
+  <p class="subtitle">Cosinus, sinus, tangente &mdash; Cours interactif</p>
+</div>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" onclick="showTab(0)">Cos, Sin, Tan</button>
+  <button class="tab-btn" onclick="showTab(1)">Calculer un c&ocirc;t&eacute;</button>
+  <button class="tab-btn" onclick="showTab(2)">Calculer un angle</button>
+  <button class="tab-btn" onclick="showTab(3)">SOH CAH TOA</button>
+  <button class="tab-btn" onclick="showTab(4)">Applications</button>
+  <button class="tab-btn" onclick="showTab(5)">Exercices</button>
+  <button class="tab-btn" onclick="showTab(6)">QCM</button>
+</nav>
+
+<div class="container">
+
+<!-- TAB 0: Définitions -->
+<div class="tab-content active" id="tab0">
+  <div class="card">
+    <h3>Les rapports trigonom&eacute;triques</h3>
+    <p>Dans un <strong>triangle rectangle</strong>, consid&eacute;rons un angle aigu (diff&eacute;rent de l&rsquo;angle droit). Par rapport &agrave; cet angle, on distingue trois c&ocirc;t&eacute;s :</p>
+    <ul style="margin:0.5rem 0 0.5rem 1.5rem;">
+      <li><strong>L&rsquo;hypot&eacute;nuse</strong> : le c&ocirc;t&eacute; le plus long, oppos&eacute; &agrave; l&rsquo;angle droit</li>
+      <li><strong>Le c&ocirc;t&eacute; adjacent</strong> : le c&ocirc;t&eacute; de l&rsquo;angle (autre que l&rsquo;hypot&eacute;nuse)</li>
+      <li><strong>Le c&ocirc;t&eacute; oppos&eacute;</strong> : le c&ocirc;t&eacute; en face de l&rsquo;angle</li>
+    </ul>
+  </div>
+
+  <div class="formula-box">
+    <strong>cos(&alpha;)</strong> =
+    <span class="frac"><span class="num">c&ocirc;t&eacute; adjacent</span><span class="den">hypot&eacute;nuse</span></span>
+    &nbsp;&nbsp;&nbsp;
+    <strong>sin(&alpha;)</strong> =
+    <span class="frac"><span class="num">c&ocirc;t&eacute; oppos&eacute;</span><span class="den">hypot&eacute;nuse</span></span>
+    &nbsp;&nbsp;&nbsp;
+    <strong>tan(&alpha;)</strong> =
+    <span class="frac"><span class="num">c&ocirc;t&eacute; oppos&eacute;</span><span class="den">c&ocirc;t&eacute; adjacent</span></span>
+  </div>
+
+  <div class="tip-box">
+    Ces rapports ne d&eacute;pendent que de la mesure de l&rsquo;angle, pas de la taille du triangle !
+  </div>
+
+  <div class="card">
+    <h3>Triangle interactif</h3>
+    <p>D&eacute;placez le curseur pour modifier l&rsquo;angle et observer les rapports :</p>
+    <div class="interactive-area">
+      <label for="angle0">Angle &alpha; :</label>
+      <input type="range" id="angle0" min="10" max="80" value="35" oninput="drawTriangle0()">
+      <span id="angle0val" style="font-weight:700;">35&deg;</span>
+    </div>
+    <canvas id="canvas0" width="500" height="340"></canvas>
+    <div class="result-box" id="ratios0"></div>
+  </div>
+
+  <div class="card">
+    <h3>Valeurs remarquables</h3>
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;text-align:center;font-size:0.9rem;">
+      <tr style="background:var(--surface2);">
+        <th style="padding:0.5rem;border:1px solid var(--border);">&alpha;</th>
+        <th style="padding:0.5rem;border:1px solid var(--border);">30&deg;</th>
+        <th style="padding:0.5rem;border:1px solid var(--border);">45&deg;</th>
+        <th style="padding:0.5rem;border:1px solid var(--border);">60&deg;</th>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem;border:1px solid var(--border);font-weight:700;">cos(&alpha;)</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">&radic;3</span><span class="den">2</span></span> &asymp; 0,866</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">&radic;2</span><span class="den">2</span></span> &asymp; 0,707</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">1</span><span class="den">2</span></span> = 0,5</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem;border:1px solid var(--border);font-weight:700;">sin(&alpha;)</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">1</span><span class="den">2</span></span> = 0,5</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">&radic;2</span><span class="den">2</span></span> &asymp; 0,707</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">&radic;3</span><span class="den">2</span></span> &asymp; 0,866</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem;border:1px solid var(--border);font-weight:700;">tan(&alpha;)</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);"><span class="frac"><span class="num">&radic;3</span><span class="den">3</span></span> &asymp; 0,577</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);">1</td>
+        <td style="padding:0.5rem;border:1px solid var(--border);">&radic;3 &asymp; 1,732</td>
+      </tr>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 1: Calculer un côté -->
+<div class="tab-content" id="tab1">
+  <div class="card">
+    <h3>M&eacute;thode pour calculer un c&ocirc;t&eacute;</h3>
+    <ol style="margin:0.5rem 0 0.5rem 1.5rem;">
+      <li><strong>Rep&eacute;rer</strong> l&rsquo;angle connu et les c&ocirc;t&eacute;s concern&eacute;s (connu et cherch&eacute;)</li>
+      <li><strong>Choisir</strong> le bon rapport (cos, sin ou tan)</li>
+      <li><strong>&Eacute;crire</strong> l&rsquo;&eacute;galit&eacute; et <strong>r&eacute;soudre</strong></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Exemple d&eacute;taill&eacute;</h3>
+    <p>Dans un triangle rectangle ABC, l&rsquo;angle <strong>&Acirc; = 40&deg;</strong>, l&rsquo;hypot&eacute;nuse <strong>BC = 8 cm</strong>. Calculer le c&ocirc;t&eacute; adjacent AB.</p>
+    <div class="formula-box">
+      cos(40&deg;) = <span class="frac"><span class="num">AB</span><span class="den">BC</span></span> = <span class="frac"><span class="num">AB</span><span class="den">8</span></span>
+      <br>
+      Donc AB = 8 &times; cos(40&deg;) &asymp; 8 &times; 0,766 &asymp; <strong>6,13 cm</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Calculateur interactif</h3>
+    <p>Choisissez le rapport, entrez l&rsquo;angle et le c&ocirc;t&eacute; connu pour trouver le c&ocirc;t&eacute; manquant.</p>
+    <div class="interactive-area">
+      <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:end;">
+        <div>
+          <label for="rapport1">Rapport :</label><br>
+          <select id="rapport1">
+            <option value="cos">cosinus</option>
+            <option value="sin">sinus</option>
+            <option value="tan">tangente</option>
+          </select>
+        </div>
+        <div>
+          <label for="angleVal1">Angle (&deg;) :</label><br>
+          <input type="number" id="angleVal1" value="35" min="1" max="89">
+        </div>
+        <div>
+          <label for="side1">C&ocirc;t&eacute; connu :</label><br>
+          <input type="number" id="side1" value="10" min="0.1" step="0.1">
+        </div>
+        <div>
+          <label for="known1">Ce c&ocirc;t&eacute; est :</label><br>
+          <select id="known1">
+            <option value="hyp">l&rsquo;hypot&eacute;nuse</option>
+            <option value="adj">le c&ocirc;t&eacute; adjacent</option>
+            <option value="opp">le c&ocirc;t&eacute; oppos&eacute;</option>
+          </select>
+        </div>
+        <div>
+          <button class="action-btn" onclick="calcSide()">Calculer</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="result1"></div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Astuce :</strong> Si le c&ocirc;t&eacute; cherch&eacute; est au <em>num&eacute;rateur</em>, on <strong>multiplie</strong>. S&rsquo;il est au <em>d&eacute;nominateur</em>, on <strong>divise</strong>.
+  </div>
+</div>
+
+<!-- TAB 2: Calculer un angle -->
+<div class="tab-content" id="tab2">
+  <div class="card">
+    <h3>Les fonctions r&eacute;ciproques</h3>
+    <p>Quand on conna&icirc;t <strong>deux c&ocirc;t&eacute;s</strong> d&rsquo;un triangle rectangle, on peut retrouver un angle aigu gr&acirc;ce aux fonctions <strong>r&eacute;ciproques</strong> (ou inverses) :</p>
+    <div class="formula-box">
+      &alpha; = arccos<span style="font-size:1rem;">(</span><span class="frac"><span class="num">adjacent</span><span class="den">hypot&eacute;nuse</span></span><span style="font-size:1rem;">)</span>
+      &nbsp;&nbsp;
+      &alpha; = arcsin<span style="font-size:1rem;">(</span><span class="frac"><span class="num">oppos&eacute;</span><span class="den">hypot&eacute;nuse</span></span><span style="font-size:1rem;">)</span>
+      &nbsp;&nbsp;
+      &alpha; = arctan<span style="font-size:1rem;">(</span><span class="frac"><span class="num">oppos&eacute;</span><span class="den">adjacent</span></span><span style="font-size:1rem;">)</span>
+    </div>
+    <p style="margin-top:0.5rem;">Sur la calculatrice, ces touches sont souvent not&eacute;es <strong>cos<sup>&minus;1</sup></strong>, <strong>sin<sup>&minus;1</sup></strong>, <strong>tan<sup>&minus;1</sup></strong>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Exemple d&eacute;taill&eacute;</h3>
+    <p>Dans un triangle rectangle, le c&ocirc;t&eacute; oppos&eacute; &agrave; l&rsquo;angle &alpha; vaut <strong>5 cm</strong> et l&rsquo;hypot&eacute;nuse vaut <strong>9 cm</strong>.</p>
+    <div class="formula-box">
+      sin(&alpha;) = <span class="frac"><span class="num">5</span><span class="den">9</span></span> &asymp; 0,556
+      <br>
+      &alpha; = arcsin(0,556) &asymp; <strong>33,7&deg;</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Calculateur interactif</h3>
+    <p>Entrez deux c&ocirc;t&eacute;s pour trouver l&rsquo;angle :</p>
+    <div class="interactive-area">
+      <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:end;">
+        <div>
+          <label for="sideA2">C&ocirc;t&eacute; 1 :</label><br>
+          <input type="number" id="sideA2" value="5" min="0.1" step="0.1">
+        </div>
+        <div>
+          <label for="typeA2">qui est :</label><br>
+          <select id="typeA2">
+            <option value="opp">oppos&eacute;</option>
+            <option value="adj">adjacent</option>
+            <option value="hyp">hypot&eacute;nuse</option>
+          </select>
+        </div>
+        <div>
+          <label for="sideB2">C&ocirc;t&eacute; 2 :</label><br>
+          <input type="number" id="sideB2" value="9" min="0.1" step="0.1">
+        </div>
+        <div>
+          <label for="typeB2">qui est :</label><br>
+          <select id="typeB2">
+            <option value="hyp">hypot&eacute;nuse</option>
+            <option value="adj">adjacent</option>
+            <option value="opp">oppos&eacute;</option>
+          </select>
+        </div>
+        <div>
+          <button class="action-btn" onclick="calcAngle()">Calculer</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="result2"></div>
+  </div>
+
+  <div class="tip-box">
+    <strong>V&eacute;rification :</strong> Un angle aigu dans un triangle rectangle est toujours compris entre 0&deg; et 90&deg;. Si vous obtenez autre chose, v&eacute;rifiez vos donn&eacute;es !
+  </div>
+</div>
+
+<!-- TAB 3: SOH CAH TOA -->
+<div class="tab-content" id="tab3">
+  <div class="card">
+    <h3>Le moyen mn&eacute;motechnique : SOH CAH TOA</h3>
+    <p>Ce mot magique vous permet de retenir les trois formules en un clin d&rsquo;&oelig;il :</p>
+    <div style="text-align:center;margin:1.5rem 0;line-height:2.5;">
+      <span class="sct-letter sct-s">S</span><span class="sct-letter sct-o">O</span><span class="sct-letter sct-h">H</span>
+      &nbsp;&nbsp;&nbsp;
+      <span class="sct-letter sct-c">C</span><span class="sct-letter sct-a">A</span><span class="sct-letter sct-h">H</span>
+      &nbsp;&nbsp;&nbsp;
+      <span class="sct-letter sct-t">T</span><span class="sct-letter sct-o">O</span><span class="sct-letter sct-a">A</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+      <div class="formula-box" style="margin:0;">
+        <strong><span class="sct-s">S</span><span class="sct-o">O</span><span class="sct-h">H</span></strong><br>
+        <span class="sct-s">Sin</span> = <span class="frac"><span class="num"><span class="sct-o">Oppos&eacute;</span></span><span class="den"><span class="sct-h">Hypot&eacute;nuse</span></span></span>
+      </div>
+      <div class="formula-box" style="margin:0;">
+        <strong><span class="sct-c">C</span><span class="sct-a">A</span><span class="sct-h">H</span></strong><br>
+        <span class="sct-c">Cos</span> = <span class="frac"><span class="num"><span class="sct-a">Adjacent</span></span><span class="den"><span class="sct-h">Hypot&eacute;nuse</span></span></span>
+      </div>
+      <div class="formula-box" style="margin:0;">
+        <strong><span class="sct-t">T</span><span class="sct-o">O</span><span class="sct-a">A</span></strong><br>
+        <span class="sct-t">Tan</span> = <span class="frac"><span class="num"><span class="sct-o">Oppos&eacute;</span></span><span class="den"><span class="sct-a">Adjacent</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    Autre phrase mn&eacute;motechnique : &laquo;&nbsp;<strong>S</strong>ur <strong>O</strong>n <strong>H</strong>isse &ndash; <strong>C</strong>hacun <strong>A</strong> <strong>H</strong>orreur &ndash; <strong>T</strong>out <strong>O</strong>uvrir <strong>A</strong>nimalement&nbsp;&raquo;
+  </div>
+
+  <div class="card">
+    <h3>Triangle anim&eacute;</h3>
+    <p>Observez comment les rapports changent quand l&rsquo;angle varie. Le rapport qui correspond &agrave; chaque formule est mis en &eacute;vidence :</p>
+    <div class="interactive-area">
+      <label for="angle3">Angle &alpha; :</label>
+      <input type="range" id="angle3" min="10" max="80" value="40" oninput="drawTriangle3()">
+      <span id="angle3val" style="font-weight:700;">40&deg;</span>
+      <br><br>
+      <label>Mettre en &eacute;vidence :</label>
+      <select id="highlight3" onchange="drawTriangle3()">
+        <option value="sin">Sinus (SOH)</option>
+        <option value="cos">Cosinus (CAH)</option>
+        <option value="tan">Tangente (TOA)</option>
+      </select>
+    </div>
+    <canvas id="canvas3" width="500" height="340"></canvas>
+    <div class="result-box" id="ratios3"></div>
+  </div>
+</div>
+
+<!-- TAB 4: Applications -->
+<div class="tab-content" id="tab4">
+  <div class="card">
+    <h3>Application 1 : Pente de toit</h3>
+    <p>Un toit a une pente faisant un angle de <strong>&alpha;</strong> avec l&rsquo;horizontale. La port&eacute;e horizontale (demi-largeur de la maison) mesure <strong>d</strong> m&egrave;tres. Quelle est la hauteur du fa&icirc;tage ?</p>
+    <canvas id="canvas4a" width="500" height="280"></canvas>
+    <div class="interactive-area">
+      <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:end;">
+        <div>
+          <label for="roofAngle">Angle &alpha; (&deg;) :</label><br>
+          <input type="number" id="roofAngle" value="35" min="5" max="75">
+        </div>
+        <div>
+          <label for="roofDist">Port&eacute;e d (m) :</label><br>
+          <input type="number" id="roofDist" value="5" min="1" step="0.5">
+        </div>
+        <div>
+          <button class="action-btn" onclick="calcRoof()">Calculer</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="resultRoof"></div>
+  </div>
+
+  <div class="card">
+    <h3>Application 2 : Hauteur d&rsquo;une montagne</h3>
+    <p>Un randonneur se tient &agrave; <strong>d</strong> m&egrave;tres du pied d&rsquo;une falaise. Il l&egrave;ve les yeux d&rsquo;un angle de <strong>&alpha;</strong> pour voir le sommet. Quelle est la hauteur de la falaise (en ajoutant la hauteur de ses yeux, 1,7 m) ?</p>
+    <canvas id="canvas4b" width="500" height="300"></canvas>
+    <div class="interactive-area">
+      <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:end;">
+        <div>
+          <label for="mtnAngle">Angle d&rsquo;&eacute;l&eacute;vation (&deg;) :</label><br>
+          <input type="number" id="mtnAngle" value="28" min="1" max="85">
+        </div>
+        <div>
+          <label for="mtnDist">Distance d (m) :</label><br>
+          <input type="number" id="mtnDist" value="200" min="1" step="1">
+        </div>
+        <div>
+          <button class="action-btn" onclick="calcMountain()">Calculer</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="resultMtn"></div>
+  </div>
+
+  <div class="card">
+    <h3>Application 3 : Angle d&rsquo;&eacute;l&eacute;vation</h3>
+    <p>Un phare mesure <strong>h</strong> m&egrave;tres de haut. Un bateau se trouve &agrave; <strong>d</strong> m&egrave;tres de la base du phare. Quel est l&rsquo;angle sous lequel on voit le sommet du phare depuis le bateau ?</p>
+    <div class="interactive-area">
+      <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:end;">
+        <div>
+          <label for="lhHeight">Hauteur h (m) :</label><br>
+          <input type="number" id="lhHeight" value="30" min="1" step="1">
+        </div>
+        <div>
+          <label for="lhDist">Distance d (m) :</label><br>
+          <input type="number" id="lhDist" value="50" min="1" step="1">
+        </div>
+        <div>
+          <button class="action-btn" onclick="calcLighthouse()">Calculer</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="resultLH"></div>
+  </div>
+</div>
+
+<!-- TAB 5: Exercices -->
+<div class="tab-content" id="tab5">
+
+  <div class="exercise">
+    <h4>Exercice 1 &mdash; Calcul direct (niveau 1)</h4>
+    <p>Dans le triangle rectangle DEF, rectangle en F, l&rsquo;angle <strong>&Dcirc; = 52&deg;</strong> et <strong>DF = 7 cm</strong> (c&ocirc;t&eacute; adjacent &agrave; &Dcirc;). Calculer l&rsquo;hypot&eacute;nuse DE.</p>
+    <div class="interactive-area">
+      <label>Votre r&eacute;ponse (cm) :</label>
+      <input type="number" id="ex1ans" step="0.01">
+      <button class="action-btn" onclick="checkEx(1)">V&eacute;rifier</button>
+      <span id="ex1fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>DF est le c&ocirc;t&eacute; adjacent &agrave; &Dcirc;, DE est l&rsquo;hypot&eacute;nuse.</p>
+        <div class="formula-box">
+          cos(52&deg;) = <span class="frac"><span class="num">DF</span><span class="den">DE</span></span> = <span class="frac"><span class="num">7</span><span class="den">DE</span></span>
+          <br>
+          DE = <span class="frac"><span class="num">7</span><span class="den">cos(52&deg;)</span></span> = <span class="frac"><span class="num">7</span><span class="den">0,6157</span></span> &asymp; <strong>11,37 cm</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 2 &mdash; Trouver un c&ocirc;t&eacute; (niveau 1)</h4>
+    <p>Triangle rectangle GHI, rectangle en I. <strong>&Gcirc; = 38&deg;</strong>, <strong>GH = 12 cm</strong> (hypot&eacute;nuse). Calculer HI (c&ocirc;t&eacute; oppos&eacute; &agrave; &Gcirc;).</p>
+    <div class="interactive-area">
+      <label>Votre r&eacute;ponse (cm) :</label>
+      <input type="number" id="ex2ans" step="0.01">
+      <button class="action-btn" onclick="checkEx(2)">V&eacute;rifier</button>
+      <span id="ex2fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>HI est oppos&eacute; &agrave; &Gcirc;, GH est l&rsquo;hypot&eacute;nuse.</p>
+        <div class="formula-box">
+          sin(38&deg;) = <span class="frac"><span class="num">HI</span><span class="den">GH</span></span> = <span class="frac"><span class="num">HI</span><span class="den">12</span></span>
+          <br>
+          HI = 12 &times; sin(38&deg;) &asymp; 12 &times; 0,6157 &asymp; <strong>7,39 cm</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 3 &mdash; Trouver un angle (niveau 2)</h4>
+    <p>Triangle rectangle JKL, rectangle en L. <strong>JL = 6 cm</strong> et <strong>KL = 8 cm</strong>. Calculer l&rsquo;angle <strong>&Jcirc;</strong>.</p>
+    <div class="interactive-area">
+      <label>Votre r&eacute;ponse (&deg;) :</label>
+      <input type="number" id="ex3ans" step="0.1">
+      <button class="action-btn" onclick="checkEx(3)">V&eacute;rifier</button>
+      <span id="ex3fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>Par rapport &agrave; &Jcirc; : JL est le c&ocirc;t&eacute; adjacent, KL est le c&ocirc;t&eacute; oppos&eacute;.</p>
+        <div class="formula-box">
+          tan(&Jcirc;) = <span class="frac"><span class="num">KL</span><span class="den">JL</span></span> = <span class="frac"><span class="num">8</span><span class="den">6</span></span> &asymp; 1,333
+          <br>
+          &Jcirc; = arctan(1,333) &asymp; <strong>53,1&deg;</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 4 &mdash; Probl&egrave;me concret (niveau 2)</h4>
+    <p>Une &eacute;chelle de <strong>5 m</strong> est appuy&eacute;e contre un mur. Le pied de l&rsquo;&eacute;chelle est &agrave; <strong>1,5 m</strong> du mur. Calculer l&rsquo;angle que fait l&rsquo;&eacute;chelle avec le sol.</p>
+    <div class="interactive-area">
+      <label>Votre r&eacute;ponse (&deg;) :</label>
+      <input type="number" id="ex4ans" step="0.1">
+      <button class="action-btn" onclick="checkEx(4)">V&eacute;rifier</button>
+      <span id="ex4fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>L&rsquo;&eacute;chelle est l&rsquo;hypot&eacute;nuse (5 m), la distance au mur est le c&ocirc;t&eacute; adjacent &agrave; l&rsquo;angle avec le sol (1,5 m).</p>
+        <div class="formula-box">
+          cos(&alpha;) = <span class="frac"><span class="num">1,5</span><span class="den">5</span></span> = 0,3
+          <br>
+          &alpha; = arccos(0,3) &asymp; <strong>72,5&deg;</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 5 &mdash; Type Brevet (niveau 3)</h4>
+    <p>Un cerf-volant est reli&eacute; &agrave; une ficelle de <strong>80 m</strong>. La ficelle fait un angle de <strong>62&deg;</strong> avec le sol. &Agrave; quelle hauteur se trouve le cerf-volant ? (&Agrave; quelle distance horizontale se trouve-t-il ?)</p>
+    <div class="interactive-area">
+      <label>Hauteur (m) :</label>
+      <input type="number" id="ex5ans" step="0.1">
+      <label style="margin-left:1rem;">Distance horiz. (m) :</label>
+      <input type="number" id="ex5ans2" step="0.1">
+      <button class="action-btn" onclick="checkEx(5)">V&eacute;rifier</button>
+      <span id="ex5fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>La ficelle est l&rsquo;hypot&eacute;nuse. La hauteur est le c&ocirc;t&eacute; oppos&eacute;, la distance horizontale est le c&ocirc;t&eacute; adjacent.</p>
+        <div class="formula-box">
+          Hauteur = 80 &times; sin(62&deg;) &asymp; 80 &times; 0,8829 &asymp; <strong>70,6 m</strong>
+          <br>
+          Distance = 80 &times; cos(62&deg;) &asymp; 80 &times; 0,4695 &asymp; <strong>37,6 m</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 6 &mdash; Type Brevet (niveau 3)</h4>
+    <p>Du haut d&rsquo;une falaise de <strong>45 m</strong>, on observe un bateau avec un angle de d&eacute;pression de <strong>25&deg;</strong>. &Agrave; quelle distance de la falaise se trouve le bateau ?</p>
+    <div class="interactive-area">
+      <label>Votre r&eacute;ponse (m) :</label>
+      <input type="number" id="ex6ans" step="0.1">
+      <button class="action-btn" onclick="checkEx(6)">V&eacute;rifier</button>
+      <span id="ex6fb" style="margin-left:0.5rem;font-weight:700;"></span>
+    </div>
+    <details>
+      <summary>Voir la correction d&eacute;taill&eacute;e</summary>
+      <div class="detail-content">
+        <p>L&rsquo;angle de d&eacute;pression est &eacute;gal &agrave; l&rsquo;angle au bateau (angles alternes-internes). La hauteur (45 m) est le c&ocirc;t&eacute; oppos&eacute;, la distance horizontale est le c&ocirc;t&eacute; adjacent.</p>
+        <div class="formula-box">
+          tan(25&deg;) = <span class="frac"><span class="num">45</span><span class="den">d</span></span>
+          <br>
+          d = <span class="frac"><span class="num">45</span><span class="den">tan(25&deg;)</span></span> = <span class="frac"><span class="num">45</span><span class="den">0,4663</span></span> &asymp; <strong>96,5 m</strong>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- TAB 6: QCM -->
+<div class="tab-content" id="tab6">
+  <div class="card">
+    <h3>Quiz &mdash; Testez vos connaissances</h3>
+    <p>R&eacute;pondez aux 15 questions. Votre score s&rsquo;affiche &agrave; la fin.</p>
+    <div class="progress-bar"><div class="progress-fill" id="qProgress" style="width:0%"></div></div>
+    <p style="font-size:0.85rem;color:var(--muted);">Question <span id="qCurrent">0</span>/15 r&eacute;pondues</p>
+  </div>
+  <div id="quizContainer"></div>
+  <div class="score-box" id="scoreBox" style="display:none;"></div>
+  <div style="text-align:center;margin-top:1rem;">
+    <button class="action-btn" id="resetQuiz" style="display:none;" onclick="initQuiz()">Recommencer le quiz</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ========== THEME ==========
+function toggleTheme() {
+  var r = document.documentElement;
+  var cur = r.getAttribute('data-theme');
+  if (cur === 'dark') { r.setAttribute('data-theme','light'); }
+  else if (cur === 'light') { r.removeAttribute('data-theme'); }
+  else { r.setAttribute('data-theme','dark'); }
+}
+
+// ========== TABS ==========
+var tabInited = [true,false,false,false,false,false,false];
+function showTab(i) {
+  var tabs = document.querySelectorAll('.tab-content');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var t=0;t<tabs.length;t++) {
+    tabs[t].classList.remove('active');
+    btns[t].classList.remove('active');
+  }
+  tabs[i].classList.add('active');
+  btns[i].classList.add('active');
+  if (!tabInited[i]) { initSection(i); tabInited[i]=true; }
+}
+function initSection(i) {
+  if (i===0) drawTriangle0();
+  if (i===3) drawTriangle3();
+  if (i===4) { drawRoof(); drawMountain(); }
+  if (i===6) initQuiz();
+}
+
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+// degree helpers
+function degToRad(d) { return d * Math.PI / 180; }
+function radToDeg(r) { return r * 180 / Math.PI; }
+function round2(v) { return Math.round(v * 100) / 100; }
+
+// ========== TAB 0: Triangle interactif ==========
+function drawTriangle0() {
+  var angle = parseInt(document.getElementById('angle0').value);
+  document.getElementById('angle0val').textContent = angle + '°';
+  var c = document.getElementById('canvas0');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  ctx.clearRect(0,0,W,H);
+
+  var hyp = 220;
+  var rad = degToRad(angle);
+  var adj = hyp * Math.cos(rad);
+  var opp = hyp * Math.sin(rad);
+
+  var ox = 80, oy = H - 50;
+  var Bx = ox + adj, By = oy;
+  var Cx = ox + adj, Cy = oy - opp;
+
+  // triangle
+  ctx.beginPath();
+  ctx.moveTo(ox,oy);
+  ctx.lineTo(Bx,By);
+  ctx.lineTo(Cx,Cy);
+  ctx.closePath();
+  ctx.strokeStyle = getCSS('--accent');
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // fill light
+  ctx.fillStyle = getCSS('--accent-light');
+  ctx.globalAlpha = 0.4;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // right angle
+  var sq = 15;
+  ctx.beginPath();
+  ctx.moveTo(Bx - sq, By);
+  ctx.lineTo(Bx - sq, By - sq);
+  ctx.lineTo(Bx, By - sq);
+  ctx.strokeStyle = getCSS('--muted');
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // angle arc
+  ctx.beginPath();
+  ctx.arc(ox, oy, 30, -rad, 0);
+  ctx.strokeStyle = getCSS('--tip');
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // labels
+  ctx.font = '700 15px Nunito Sans, sans-serif';
+  ctx.fillStyle = getCSS('--heading');
+  ctx.textAlign = 'center';
+  // alpha
+  ctx.fillText('α=' + angle + '°', ox + 45, oy - 8);
+  // hypotenuse
+  var mx = (ox + Cx)/2 - 20, my = (oy + Cy)/2;
+  ctx.save();
+  ctx.translate(mx, my);
+  ctx.rotate(-rad);
+  ctx.fillStyle = '#2980b9';
+  ctx.fillText('Hypoténuse', 0, -8);
+  ctx.restore();
+  // adjacent
+  ctx.fillStyle = '#27ae60';
+  ctx.fillText('Adjacent', (ox + Bx)/2, oy + 25);
+  // opposite
+  ctx.fillStyle = '#e74c3c';
+  ctx.save();
+  ctx.translate(Bx + 15, (oy + Cy)/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('Opposé', 0, 0);
+  ctx.restore();
+
+  // ratios display
+  var cosV = Math.cos(rad), sinV = Math.sin(rad), tanV = Math.tan(rad);
+  document.getElementById('ratios0').innerHTML =
+    '<strong>cos(' + angle + '°)</strong> = ' + round2(cosV) +
+    ' &nbsp;&nbsp; <strong>sin(' + angle + '°)</strong> = ' + round2(sinV) +
+    ' &nbsp;&nbsp; <strong>tan(' + angle + '°)</strong> = ' + round2(tanV);
+}
+
+// ========== TAB 1: Calculer un côté ==========
+function calcSide() {
+  var rapport = document.getElementById('rapport1').value;
+  var angle = parseFloat(document.getElementById('angleVal1').value);
+  var side = parseFloat(document.getElementById('side1').value);
+  var known = document.getElementById('known1').value;
+  if (isNaN(angle)||isNaN(side)||angle<=0||angle>=90||side<=0) {
+    document.getElementById('result1').innerHTML = '<span style="color:var(--error)">Veuillez entrer des valeurs valides (angle entre 1° et 89°).</span>';
+    return;
+  }
+  var rad = degToRad(angle);
+  var trigVal, result, steps;
+
+  if (rapport==='cos') {
+    trigVal = Math.cos(rad);
+    // cos = adj / hyp
+    if (known==='hyp') {
+      result = side * trigVal;
+      steps = 'cos(' + angle + '°) = adj / hyp = adj / ' + side +
+        '<br>adj = ' + side + ' × cos(' + angle + '°) = ' + side + ' × ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else if (known==='adj') {
+      result = side / trigVal;
+      steps = 'cos(' + angle + '°) = adj / hyp = ' + side + ' / hyp' +
+        '<br>hyp = ' + side + ' / cos(' + angle + '°) = ' + side + ' / ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else {
+      document.getElementById('result1').innerHTML = '<span style="color:var(--error)">Le cosinus relie le côté adjacent et l\'hypoténuse, pas l\'opposé. Choisissez sinus ou tangente.</span>';
+      return;
+    }
+  } else if (rapport==='sin') {
+    trigVal = Math.sin(rad);
+    if (known==='hyp') {
+      result = side * trigVal;
+      steps = 'sin(' + angle + '°) = opp / hyp = opp / ' + side +
+        '<br>opp = ' + side + ' × sin(' + angle + '°) = ' + side + ' × ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else if (known==='opp') {
+      result = side / trigVal;
+      steps = 'sin(' + angle + '°) = opp / hyp = ' + side + ' / hyp' +
+        '<br>hyp = ' + side + ' / sin(' + angle + '°) = ' + side + ' / ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else {
+      document.getElementById('result1').innerHTML = '<span style="color:var(--error)">Le sinus relie le côté opposé et l\'hypoténuse, pas l\'adjacent. Choisissez cosinus ou tangente.</span>';
+      return;
+    }
+  } else {
+    trigVal = Math.tan(rad);
+    if (known==='adj') {
+      result = side * trigVal;
+      steps = 'tan(' + angle + '°) = opp / adj = opp / ' + side +
+        '<br>opp = ' + side + ' × tan(' + angle + '°) = ' + side + ' × ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else if (known==='opp') {
+      result = side / trigVal;
+      steps = 'tan(' + angle + '°) = opp / adj = ' + side + ' / adj' +
+        '<br>adj = ' + side + ' / tan(' + angle + '°) = ' + side + ' / ' + round2(trigVal) + ' = <strong>' + round2(result) + '</strong>';
+    } else {
+      document.getElementById('result1').innerHTML = '<span style="color:var(--error)">La tangente relie le côté opposé et l\'adjacent, pas l\'hypoténuse. Choisissez cosinus ou sinus.</span>';
+      return;
+    }
+  }
+  document.getElementById('result1').innerHTML = steps;
+}
+
+// ========== TAB 2: Calculer un angle ==========
+function calcAngle() {
+  var a = parseFloat(document.getElementById('sideA2').value);
+  var tA = document.getElementById('typeA2').value;
+  var b = parseFloat(document.getElementById('sideB2').value);
+  var tB = document.getElementById('typeB2').value;
+  if (isNaN(a)||isNaN(b)||a<=0||b<=0) {
+    document.getElementById('result2').innerHTML = '<span style="color:var(--error)">Entrez des valeurs positives.</span>';
+    return;
+  }
+  if (tA===tB) {
+    document.getElementById('result2').innerHTML = '<span style="color:var(--error)">Les deux côtés doivent être de types différents.</span>';
+    return;
+  }
+  var sides = {}; sides[tA] = a; sides[tB] = b;
+  var ratio, fn, label, angleVal;
+
+  if (sides.opp !== undefined && sides.hyp !== undefined) {
+    ratio = sides.opp / sides.hyp;
+    if (ratio > 1) { document.getElementById('result2').innerHTML = '<span style="color:var(--error)">L\'opposé ne peut pas dépasser l\'hypoténuse !</span>'; return; }
+    angleVal = radToDeg(Math.asin(ratio));
+    fn = 'sin'; label = 'opposé / hypoténuse';
+  } else if (sides.adj !== undefined && sides.hyp !== undefined) {
+    ratio = sides.adj / sides.hyp;
+    if (ratio > 1) { document.getElementById('result2').innerHTML = '<span style="color:var(--error)">L\'adjacent ne peut pas dépasser l\'hypoténuse !</span>'; return; }
+    angleVal = radToDeg(Math.acos(ratio));
+    fn = 'cos'; label = 'adjacent / hypoténuse';
+  } else {
+    ratio = sides.opp / sides.adj;
+    angleVal = radToDeg(Math.atan(ratio));
+    fn = 'tan'; label = 'opposé / adjacent';
+  }
+
+  document.getElementById('result2').innerHTML =
+    'Rapport utilisé : <strong>' + fn + '</strong> = ' + label + ' = ' + round2(ratio) +
+    '<br>arc' + fn + '(' + round2(ratio) + ') = <strong>' + round2(angleVal) + '°</strong>';
+}
+
+// ========== TAB 3: Triangle animé SOH CAH TOA ==========
+function drawTriangle3() {
+  var angle = parseInt(document.getElementById('angle3').value);
+  document.getElementById('angle3val').textContent = angle + '°';
+  var highlight = document.getElementById('highlight3').value;
+  var c = document.getElementById('canvas3');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  ctx.clearRect(0,0,W,H);
+
+  var hyp = 220;
+  var rad = degToRad(angle);
+  var adj = hyp * Math.cos(rad);
+  var opp = hyp * Math.sin(rad);
+
+  var ox = 80, oy = H - 50;
+  var Bx = ox + adj, By = oy;
+  var Cx = ox + adj, Cy = oy - opp;
+
+  var colHyp = '#2980b9', colAdj = '#27ae60', colOpp = '#e74c3c';
+  var dimAlpha = 0.3;
+
+  // Determine which sides to highlight
+  var highlightHyp = (highlight==='sin'||highlight==='cos');
+  var highlightAdj = (highlight==='cos'||highlight==='tan');
+  var highlightOpp = (highlight==='sin'||highlight==='tan');
+
+  // Draw sides
+  function drawSide(x1,y1,x2,y2,col,active,lw) {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+    ctx.strokeStyle = col;
+    ctx.lineWidth = active ? (lw||4) : 2;
+    ctx.globalAlpha = active ? 1 : dimAlpha;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  // hyp
+  drawSide(ox,oy,Cx,Cy, colHyp, highlightHyp);
+  // adj
+  drawSide(ox,oy,Bx,By, colAdj, highlightAdj);
+  // opp
+  drawSide(Bx,By,Cx,Cy, colOpp, highlightOpp);
+
+  // right angle
+  var sq=15;
+  ctx.beginPath(); ctx.moveTo(Bx-sq,By); ctx.lineTo(Bx-sq,By-sq); ctx.lineTo(Bx,By-sq);
+  ctx.strokeStyle=getCSS('--muted'); ctx.lineWidth=1.5; ctx.stroke();
+
+  // angle arc
+  ctx.beginPath(); ctx.arc(ox,oy,30,-rad,0);
+  ctx.strokeStyle=getCSS('--tip'); ctx.lineWidth=2; ctx.stroke();
+
+  // labels
+  ctx.font='700 14px Nunito Sans, sans-serif';
+  ctx.textAlign='center';
+  ctx.fillStyle = getCSS('--heading');
+  ctx.fillText('α=' + angle + '°', ox+45, oy-8);
+
+  ctx.globalAlpha = highlightHyp ? 1 : dimAlpha;
+  var mx=(ox+Cx)/2-20, my=(oy+Cy)/2;
+  ctx.save(); ctx.translate(mx,my); ctx.rotate(-rad);
+  ctx.fillStyle=colHyp; ctx.fillText('Hyp',0,-8);
+  ctx.restore();
+  ctx.globalAlpha = 1;
+
+  ctx.globalAlpha = highlightAdj ? 1 : dimAlpha;
+  ctx.fillStyle=colAdj; ctx.fillText('Adj',(ox+Bx)/2,oy+25);
+  ctx.globalAlpha = 1;
+
+  ctx.globalAlpha = highlightOpp ? 1 : dimAlpha;
+  ctx.fillStyle=colOpp;
+  ctx.save(); ctx.translate(Bx+15,(oy+Cy)/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Opp',0,0); ctx.restore();
+  ctx.globalAlpha = 1;
+
+  // formula text on canvas
+  ctx.font='700 16px Nunito Sans, sans-serif';
+  ctx.fillStyle=getCSS('--accent');
+  var formText = '';
+  var cosV=Math.cos(rad), sinV=Math.sin(rad), tanV=Math.tan(rad);
+  if (highlight==='sin') formText='sin('+angle+'°) = Opp/Hyp = '+round2(sinV);
+  if (highlight==='cos') formText='cos('+angle+'°) = Adj/Hyp = '+round2(cosV);
+  if (highlight==='tan') formText='tan('+angle+'°) = Opp/Adj = '+round2(tanV);
+  ctx.fillText(formText, W/2, 30);
+
+  document.getElementById('ratios3').innerHTML =
+    'cos('+angle+'°) = '+round2(cosV)+' &nbsp; sin('+angle+'°) = '+round2(sinV)+' &nbsp; tan('+angle+'°) = '+round2(tanV);
+}
+
+// ========== TAB 4: Applications ==========
+function drawRoof() {
+  var c = document.getElementById('canvas4a');
+  var ctx = c.getContext('2d');
+  var W=c.width, H=c.height;
+  ctx.clearRect(0,0,W,H);
+
+  var angle = parseFloat(document.getElementById('roofAngle').value)||35;
+  var dist = parseFloat(document.getElementById('roofDist').value)||5;
+  var rad = degToRad(angle);
+  var height = dist * Math.tan(rad);
+
+  // scale
+  var maxDim = Math.max(dist, height);
+  var scale = 160 / maxDim;
+  var dPx = dist * scale, hPx = height * scale;
+
+  var baseY = H - 60;
+  var leftX = W/2 - dPx;
+  var rightX = W/2 + dPx;
+  var peakX = W/2, peakY = baseY - hPx;
+
+  // house walls
+  ctx.fillStyle = getCSS('--surface2');
+  ctx.fillRect(leftX, baseY, dPx*2, 50);
+  ctx.strokeStyle = getCSS('--border');
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(leftX, baseY, dPx*2, 50);
+
+  // roof
+  ctx.beginPath();
+  ctx.moveTo(leftX - 10, baseY);
+  ctx.lineTo(peakX, peakY);
+  ctx.lineTo(rightX + 10, baseY);
+  ctx.closePath();
+  ctx.fillStyle = getCSS('--accent-light');
+  ctx.globalAlpha = 0.5; ctx.fill(); ctx.globalAlpha = 1;
+  ctx.strokeStyle = getCSS('--accent');
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // height line
+  ctx.setLineDash([5,5]);
+  ctx.beginPath(); ctx.moveTo(peakX, peakY); ctx.lineTo(peakX, baseY);
+  ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.setLineDash([]);
+
+  // labels
+  ctx.font = '700 13px Nunito Sans, sans-serif';
+  ctx.fillStyle = getCSS('--heading');
+  ctx.textAlign = 'center';
+  ctx.fillText('d = ' + dist + ' m', (leftX + peakX)/2, baseY + 15);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fillText('h = ?', peakX + 25, (peakY + baseY)/2);
+  ctx.fillStyle = getCSS('--tip');
+  ctx.fillText('α = ' + angle + '°', leftX + 25, baseY - 8);
+
+  // angle arc
+  ctx.beginPath(); ctx.arc(leftX - 10, baseY, 25, -rad, 0);
+  ctx.strokeStyle = getCSS('--tip'); ctx.lineWidth = 1.5; ctx.stroke();
+}
+
+function calcRoof() {
+  drawRoof();
+  var angle = parseFloat(document.getElementById('roofAngle').value);
+  var dist = parseFloat(document.getElementById('roofDist').value);
+  if (isNaN(angle)||isNaN(dist)||angle<=0||angle>=90||dist<=0) {
+    document.getElementById('resultRoof').innerHTML = '<span style="color:var(--error)">Valeurs invalides.</span>';
+    return;
+  }
+  var h = dist * Math.tan(degToRad(angle));
+  var hyp = dist / Math.cos(degToRad(angle));
+  document.getElementById('resultRoof').innerHTML =
+    'tan(' + angle + '°) = h / d<br>' +
+    'h = ' + dist + ' × tan(' + angle + '°) = ' + dist + ' × ' + round2(Math.tan(degToRad(angle))) +
+    ' = <strong>' + round2(h) + ' m</strong><br>' +
+    'Longueur du rampant (hypoténuse) = ' + dist + ' / cos(' + angle + '°) = <strong>' + round2(hyp) + ' m</strong>';
+}
+
+function drawMountain() {
+  var c = document.getElementById('canvas4b');
+  var ctx = c.getContext('2d');
+  var W=c.width, H=c.height;
+  ctx.clearRect(0,0,W,H);
+
+  var angle = parseFloat(document.getElementById('mtnAngle').value)||28;
+  var dist = parseFloat(document.getElementById('mtnDist').value)||200;
+  var rad = degToRad(angle);
+  var cliffH = dist * Math.tan(rad) + 1.7;
+
+  // ground
+  ctx.fillStyle = getCSS('--surface2');
+  ctx.fillRect(0, H-40, W, 40);
+  ctx.strokeStyle = getCSS('--border');
+  ctx.beginPath(); ctx.moveTo(0,H-40); ctx.lineTo(W,H-40); ctx.stroke();
+
+  var baseY = H - 40;
+  var personX = 80, cliffX = W - 60;
+  var cliffScale = Math.min(180, cliffH * 0.8);
+  var cliffTop = baseY - cliffScale;
+  var eyeY = baseY - 20;
+
+  // cliff
+  ctx.fillStyle = getCSS('--accent-light');
+  ctx.fillRect(cliffX - 20, cliffTop, 40, baseY - cliffTop);
+  ctx.strokeStyle = getCSS('--accent');
+  ctx.lineWidth = 2;
+  ctx.strokeRect(cliffX - 20, cliffTop, 40, baseY - cliffTop);
+
+  // person stick figure
+  ctx.strokeStyle = getCSS('--heading');
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(personX, baseY-30, 6, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(personX, baseY-24); ctx.lineTo(personX, baseY-10); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(personX, baseY-10); ctx.lineTo(personX-6, baseY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(personX, baseY-10); ctx.lineTo(personX+6, baseY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(personX, baseY-20); ctx.lineTo(personX-7, baseY-14); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(personX, baseY-20); ctx.lineTo(personX+7, baseY-14); ctx.stroke();
+
+  // line of sight
+  ctx.setLineDash([5,5]);
+  ctx.beginPath(); ctx.moveTo(personX + 8, eyeY); ctx.lineTo(cliffX - 20, cliffTop);
+  ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.setLineDash([]);
+
+  // labels
+  ctx.font = '700 12px Nunito Sans, sans-serif';
+  ctx.fillStyle = getCSS('--heading');
+  ctx.textAlign = 'center';
+  ctx.fillText('d = ' + dist + ' m', (personX + cliffX)/2, baseY + 20);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fillText('h = ?', cliffX + 35, (cliffTop + baseY)/2);
+  ctx.fillStyle = getCSS('--tip');
+  ctx.fillText('α = ' + angle + '°', personX + 55, eyeY - 10);
+}
+
+function calcMountain() {
+  drawMountain();
+  var angle = parseFloat(document.getElementById('mtnAngle').value);
+  var dist = parseFloat(document.getElementById('mtnDist').value);
+  if (isNaN(angle)||isNaN(dist)||angle<=0||angle>=90||dist<=0) {
+    document.getElementById('resultMtn').innerHTML = '<span style="color:var(--error)">Valeurs invalides.</span>';
+    return;
+  }
+  var h = dist * Math.tan(degToRad(angle));
+  var total = h + 1.7;
+  document.getElementById('resultMtn').innerHTML =
+    'tan(' + angle + '°) = h′ / d (où h′ est la hauteur au-dessus des yeux)<br>' +
+    'h′ = ' + dist + ' × tan(' + angle + '°) = ' + round2(h) + ' m<br>' +
+    'Hauteur totale = h′ + 1,7 = <strong>' + round2(total) + ' m</strong>';
+}
+
+function calcLighthouse() {
+  var h = parseFloat(document.getElementById('lhHeight').value);
+  var d = parseFloat(document.getElementById('lhDist').value);
+  if (isNaN(h)||isNaN(d)||h<=0||d<=0) {
+    document.getElementById('resultLH').innerHTML = '<span style="color:var(--error)">Valeurs invalides.</span>';
+    return;
+  }
+  var angle = radToDeg(Math.atan(h / d));
+  document.getElementById('resultLH').innerHTML =
+    'tan(α) = h / d = ' + h + ' / ' + d + ' = ' + round2(h/d) +
+    '<br>α = arctan(' + round2(h/d) + ') = <strong>' + round2(angle) + '°</strong>';
+}
+
+// ========== TAB 5: Exercices ==========
+function checkEx(n) {
+  var fb, correct, tol;
+  if (n===1) {
+    var ans = parseFloat(document.getElementById('ex1ans').value);
+    correct = 7 / Math.cos(degToRad(52));
+    tol = 0.15;
+    fb = document.getElementById('ex1fb');
+  } else if (n===2) {
+    var ans = parseFloat(document.getElementById('ex2ans').value);
+    correct = 12 * Math.sin(degToRad(38));
+    tol = 0.15;
+    fb = document.getElementById('ex2fb');
+  } else if (n===3) {
+    var ans = parseFloat(document.getElementById('ex3ans').value);
+    correct = radToDeg(Math.atan(8/6));
+    tol = 0.5;
+    fb = document.getElementById('ex3fb');
+  } else if (n===4) {
+    var ans = parseFloat(document.getElementById('ex4ans').value);
+    correct = radToDeg(Math.acos(1.5/5));
+    tol = 0.5;
+    fb = document.getElementById('ex4fb');
+  } else if (n===5) {
+    var ans = parseFloat(document.getElementById('ex5ans').value);
+    var ans2 = parseFloat(document.getElementById('ex5ans2').value);
+    var cH = 80 * Math.sin(degToRad(62));
+    var cD = 80 * Math.cos(degToRad(62));
+    fb = document.getElementById('ex5fb');
+    var ok1 = Math.abs(ans - cH) < 1;
+    var ok2 = Math.abs(ans2 - cD) < 1;
+    if (ok1 && ok2) { fb.textContent = 'Bravo ! Les deux valeurs sont correctes.'; fb.style.color = getCSS('--success'); }
+    else if (ok1) { fb.textContent = 'Hauteur correcte, vérifiez la distance.'; fb.style.color = getCSS('--tip'); }
+    else if (ok2) { fb.textContent = 'Distance correcte, vérifiez la hauteur.'; fb.style.color = getCSS('--tip'); }
+    else { fb.textContent = 'Essayez encore. Consultez la correction pour vous aider.'; fb.style.color = getCSS('--error'); }
+    return;
+  } else if (n===6) {
+    var ans = parseFloat(document.getElementById('ex6ans').value);
+    correct = 45 / Math.tan(degToRad(25));
+    tol = 1;
+    fb = document.getElementById('ex6fb');
+  }
+  if (isNaN(ans)) { fb.textContent = 'Entrez une valeur.'; fb.style.color = getCSS('--error'); return; }
+  if (Math.abs(ans - correct) <= tol) {
+    fb.textContent = 'Bravo ! Réponse correcte.';
+    fb.style.color = getCSS('--success');
+  } else {
+    fb.textContent = 'Pas tout à fait. Réponse attendue : ' + round2(correct) + '. Consultez la correction.';
+    fb.style.color = getCSS('--error');
+  }
+}
+
+// ========== TAB 6: QCM ==========
+var quizData = [
+  {q:"Dans un triangle rectangle, quel côté est l'hypoténuse ?",
+   o:["Le plus court","Celui opposé à l'angle droit","Celui adjacent à l'angle aigu","Celui opposé à l'angle aigu"],
+   a:1, e:"L'hypoténuse est toujours le côté opposé à l'angle droit, c'est le plus long."},
+
+  {q:"cos(α) dans un triangle rectangle est égal à :",
+   o:["Opposé / Hypoténuse","Adjacent / Hypoténuse","Opposé / Adjacent","Hypoténuse / Adjacent"],
+   a:1, e:"CAH : Cosinus = Adjacent / Hypoténuse."},
+
+  {q:"sin(α) dans un triangle rectangle est égal à :",
+   o:["Adjacent / Hypoténuse","Hypoténuse / Opposé","Opposé / Hypoténuse","Adjacent / Opposé"],
+   a:2, e:"SOH : Sinus = Opposé / Hypoténuse."},
+
+  {q:"tan(α) dans un triangle rectangle est égal à :",
+   o:["Opposé / Hypoténuse","Adjacent / Opposé","Hypoténuse / Adjacent","Opposé / Adjacent"],
+   a:3, e:"TOA : Tangente = Opposé / Adjacent."},
+
+  {q:"Quelle est la valeur de cos(60°) ?",
+   o:["0","0,5","√3/2","1"],
+   a:1, e:"cos(60°) = 1/2 = 0,5. C'est une valeur remarquable à connaître."},
+
+  {q:"Quelle est la valeur de sin(30°) ?",
+   o:["0,5","√2/2","√3/2","1"],
+   a:0, e:"sin(30°) = 1/2 = 0,5."},
+
+  {q:"Quelle est la valeur de tan(45°) ?",
+   o:["0","0,5","1","√3"],
+   a:2, e:"tan(45°) = 1 car les côtés opposé et adjacent sont égaux dans un triangle rectangle isocèle."},
+
+  {q:"Si cos(α) = 0,8 et l'hypoténuse vaut 10, le côté adjacent vaut :",
+   o:["12,5","8","0,08","80"],
+   a:1, e:"Adjacent = Hypoténuse × cos(α) = 10 × 0,8 = 8."},
+
+  {q:"Pour trouver un angle à partir de deux côtés, on utilise :",
+   o:["cos, sin ou tan","arccos, arcsin ou arctan","Pythagore","Thalès"],
+   a:1, e:"Les fonctions réciproques (arc...) permettent de retrouver l'angle à partir du rapport."},
+
+  {q:"Dans SOH CAH TOA, que signifie le « H » ?",
+   o:["Horizontal","Hauteur","Hypothèse","Hypoténuse"],
+   a:3, e:"H = Hypoténuse dans le moyen mnémotechnique SOH CAH TOA."},
+
+  {q:"Si tan(α) = 3/4, quelle est la mesure de α (arrondie) ?",
+   o:["36,9°","41,4°","53,1°","30°"],
+   a:0, e:"arctan(3/4) = arctan(0,75) ≈ 36,87° ≈ 36,9°."},
+
+  {q:"Un triangle rectangle a un angle de 40° et une hypoténuse de 15 cm. Le côté opposé vaut :",
+   o:["15 × cos(40°)","15 × sin(40°)","15 / sin(40°)","15 × tan(40°)"],
+   a:1, e:"Opposé = Hypoténuse × sin(α) = 15 × sin(40°)."},
+
+  {q:"Le cosinus d'un angle aigu est toujours :",
+   o:["Négatif","Supérieur à 1","Compris entre 0 et 1","Égal à 0"],
+   a:2, e:"Pour un angle aigu (entre 0° et 90°), le cosinus est toujours compris strictement entre 0 et 1."},
+
+  {q:"Pour calculer l'hypoténuse connaissant l'angle et le côté adjacent, on fait :",
+   o:["Adjacent × cos(α)","Adjacent / cos(α)","Adjacent × sin(α)","Adjacent / tan(α)"],
+   a:1, e:"cos(α) = Adj/Hyp, donc Hyp = Adj / cos(α)."},
+
+  {q:"Un angle de dépression de 20° depuis le haut d'une tour de 30 m donne une distance horizontale de :",
+   o:["30 × tan(20°)","30 / tan(20°)","30 × cos(20°)","30 / sin(20°)"],
+   a:1, e:"tan(20°) = 30/d, donc d = 30 / tan(20°) ≈ 82,4 m."}
+];
+
+var quizAnswered = 0;
+var quizScore = 0;
+
+function initQuiz() {
+  quizAnswered = 0;
+  quizScore = 0;
+  document.getElementById('qCurrent').textContent = '0';
+  document.getElementById('qProgress').style.width = '0%';
+  document.getElementById('scoreBox').style.display = 'none';
+  document.getElementById('resetQuiz').style.display = 'none';
+
+  var container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  for (var i=0; i<quizData.length; i++) {
+    var qd = quizData[i];
+    var div = document.createElement('div');
+    div.className = 'quiz-question';
+    div.id = 'qq' + i;
+    var html = '<p>' + (i+1) + '. ' + qd.q + '</p>';
+    for (var j=0; j<qd.o.length; j++) {
+      html += '<button class="quiz-option" data-q="'+i+'" data-o="'+j+'" onclick="answerQuiz(this,'+i+','+j+')">' + qd.o[j] + '</button>';
+    }
+    html += '<div class="quiz-explanation" id="qe'+i+'" style="display:none"></div>';
+    div.innerHTML = html;
+    container.appendChild(div);
+  }
+}
+
+function answerQuiz(btn, qi, oi) {
+  var qDiv = document.getElementById('qq' + qi);
+  var buttons = qDiv.querySelectorAll('.quiz-option');
+  // check if already answered
+  for (var b=0;b<buttons.length;b++) {
+    if (buttons[b].classList.contains('correct') || buttons[b].classList.contains('wrong')) return;
+  }
+  var correct = quizData[qi].a;
+  if (oi === correct) {
+    btn.classList.add('correct');
+    quizScore++;
+  } else {
+    btn.classList.add('wrong');
+    buttons[correct].classList.add('correct');
+  }
+  quizAnswered++;
+  document.getElementById('qCurrent').textContent = quizAnswered;
+  document.getElementById('qProgress').style.width = (quizAnswered/quizData.length*100)+'%';
+
+  var expl = document.getElementById('qe'+qi);
+  expl.textContent = quizData[qi].e;
+  expl.style.display = 'block';
+
+  if (quizAnswered === quizData.length) {
+    var pct = Math.round(quizScore/quizData.length*100);
+    var msg = quizScore + ' / ' + quizData.length + ' (' + pct + '%)';
+    if (pct >= 80) msg += ' — Excellent !';
+    else if (pct >= 60) msg += ' — Bien, révisez les erreurs.';
+    else msg += ' — Continuez à réviser !';
+    document.getElementById('scoreBox').textContent = msg;
+    document.getElementById('scoreBox').style.display = 'block';
+    document.getElementById('resetQuiz').style.display = 'inline-block';
+  }
+}
+
+// ========== INIT ==========
+window.addEventListener('DOMContentLoaded', function() {
+  drawTriangle0();
+});
+</script>
+</body>
+</html>

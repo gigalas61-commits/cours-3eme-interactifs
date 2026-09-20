@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arithm&eacute;tique et PGCD &mdash; 3&egrave;me</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --text: #2c2418;
+  --muted: #6b5a48;
+  --border: #d4c8b8;
+  --surface2: #ebe6de;
+  --accent-light: #faf5ef;
+  --tip: #b8860b;
+  --tip-bg: #fdf8ef;
+  --success: #2e7d42;
+  --error: #c62828;
+  --shadow: 0 2px 8px rgba(139,69,19,0.07);
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161210;
+    --surface: #221c18;
+    --heading: #e0a868;
+    --accent: #d08840;
+    --text: #ddd0c0;
+    --muted: #a89880;
+    --border: #3a302a;
+    --surface2: #2a2220;
+    --accent-light: #2a2018;
+    --tip: #e0a838;
+    --tip-bg: #2a2418;
+    --success: #66bb6a;
+    --error: #ef5350;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --radius: 6px;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161210;
+  --surface: #221c18;
+  --heading: #e0a868;
+  --accent: #d08840;
+  --text: #ddd0c0;
+  --muted: #a89880;
+  --border: #3a302a;
+  --surface2: #2a2220;
+  --accent-light: #2a2018;
+  --tip: #e0a838;
+  --tip-bg: #2a2418;
+  --success: #66bb6a;
+  --error: #ef5350;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: var(--heading); line-height: 1.3; }
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 16px 60px; }
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 28px 16px 18px;
+  border-bottom: 2px solid var(--border);
+  background: var(--surface);
+}
+.level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  padding: 3px 14px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.header h1 { font-size: 2rem; margin-bottom: 4px; }
+.header .subtitle { color: var(--muted); font-size: 0.95rem; }
+
+/* Theme toggle */
+.theme-toggle {
+  position: fixed; top: 10px; right: 10px; z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 10px; cursor: pointer;
+  font-size: 1.1rem; box-shadow: var(--shadow); line-height: 1;
+  color: var(--text);
+}
+
+/* Tab bar */
+.tab-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  box-shadow: var(--shadow);
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 0 0 auto;
+  background: none; border: none;
+  padding: 11px 14px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Sections */
+.sec { display: none; padding: 24px 0; }
+.sec.active { display: block; }
+.sec h2 { font-size: 1.55rem; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.sec h3 { font-size: 1.2rem; margin: 18px 0 10px; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 14px 0;
+  box-shadow: var(--shadow);
+}
+
+/* Formula box */
+.formula-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 1.02rem;
+}
+
+/* Tip box */
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+}
+.tip-box strong { color: var(--tip); }
+
+/* Fractions */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 4px;
+  font-size: 0.95em;
+}
+.frac .n { border-bottom: 2px solid var(--text); padding: 0 5px 2px; line-height: 1.2; }
+.frac .d { padding: 2px 5px 0; line-height: 1.2; }
+
+/* Interactive panels */
+.interactive-panel {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 18px 0;
+}
+.interactive-panel h4 { margin-bottom: 10px; font-size: 1.08rem; }
+.interactive-panel label { font-weight: 600; font-size: 0.88rem; color: var(--muted); }
+.interactive-panel input[type="number"] {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 7px 10px;
+  font-size: 1rem; color: var(--text); width: 110px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+.interactive-panel button, .btn {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius); padding: 7px 16px;
+  font-size: 0.92rem; font-weight: 600; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif; transition: opacity 0.2s;
+}
+.interactive-panel button:hover, .btn:hover { opacity: 0.85; }
+.result-area {
+  margin-top: 12px; padding: 12px;
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); min-height: 36px; line-height: 1.7;
+}
+
+/* Exercises */
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px; margin: 16px 0;
+  box-shadow: var(--shadow);
+}
+.exercise h4 { color: var(--accent); margin-bottom: 6px; }
+.ex-level {
+  display: inline-block; padding: 2px 10px; border-radius: 12px;
+  font-size: 0.72rem; font-weight: 700; color: #fff; margin-bottom: 6px;
+}
+.ex-apply { background: var(--success); }
+.ex-understand { background: var(--tip); }
+.ex-deepen { background: var(--accent); }
+.exercise details { margin-top: 10px; }
+.exercise summary {
+  cursor: pointer; color: var(--accent); font-weight: 600;
+  padding: 4px 0; user-select: none;
+}
+.exercise details[open] summary { margin-bottom: 6px; }
+.exercise .correction {
+  background: var(--accent-light); border-radius: var(--radius);
+  padding: 12px; line-height: 1.8;
+}
+.step-line {
+  padding: 4px 0; border-bottom: 1px dashed var(--border);
+  font-family: monospace, 'Nunito Sans'; font-size: 0.95rem;
+}
+.step-line:last-child { border-bottom: none; }
+
+/* Quiz */
+.quiz-question {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; margin: 14px 0;
+  box-shadow: var(--shadow);
+}
+.quiz-question > p { font-weight: 600; margin-bottom: 10px; }
+.quiz-options { display: flex; flex-direction: column; gap: 6px; }
+.quiz-option {
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 9px 14px; cursor: pointer;
+  font-size: 0.93rem; font-family: 'Nunito Sans', sans-serif;
+  text-align: left; color: var(--text); transition: border-color 0.2s;
+}
+.quiz-option:hover { border-color: var(--accent); }
+.quiz-option.correct { background: rgba(46,125,66,0.12); border-color: var(--success); }
+.quiz-option.wrong { background: rgba(198,40,40,0.1); border-color: var(--error); }
+.quiz-feedback { font-size: 0.83rem; margin-top: 6px; font-style: italic; color: var(--muted); }
+.quiz-score {
+  text-align: center; font-size: 1.2rem; font-weight: 700;
+  margin: 18px 0; color: var(--heading);
+}
+
+/* Canvas */
+canvas {
+  display: block; margin: 8px auto; border: 1px solid var(--border);
+  border-radius: var(--radius); max-width: 100%;
+}
+
+/* Grid helpers */
+.input-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+
+/* Criteria table */
+.criteria-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9rem; }
+.criteria-table th, .criteria-table td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
+.criteria-table th { background: var(--accent-light); color: var(--heading); font-weight: 700; }
+.criteria-table td { background: var(--surface); }
+.ck-y { color: var(--success); font-weight: 700; }
+.ck-n { color: var(--error); font-weight: 700; }
+
+/* Decomp tree */
+.decomp-tree { display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 0.98rem; }
+.decomp-row { display: flex; align-items: center; gap: 6px; }
+.decomp-num { font-weight: 700; min-width: 48px; text-align: right; }
+.decomp-sep { color: var(--border); }
+.decomp-factor { color: var(--accent); font-weight: 700; }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.45rem; }
+  .tab-btn { padding: 9px 10px; font-size: 0.76rem; }
+  .card, .exercise, .interactive-panel { padding: 12px; }
+  .interactive-panel input[type="number"] { width: 85px; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le th&egrave;me" title="Changer le th&egrave;me">&#9681;</button>
+
+<div class="header">
+  <span class="level-badge">3&egrave;me &mdash; Brevet</span>
+  <h1>Arithm&eacute;tique et PGCD</h1>
+  <p class="subtitle">Cours interactif &mdash; Coll&egrave;ge</p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="showTab(0)">Divisibilit&eacute;</button>
+  <button class="tab-btn" onclick="showTab(1)">Nb. premiers</button>
+  <button class="tab-btn" onclick="showTab(2)">PGCD</button>
+  <button class="tab-btn" onclick="showTab(3)">Fractions irr&eacute;d.</button>
+  <button class="tab-btn" onclick="showTab(4)">Applications</button>
+  <button class="tab-btn" onclick="showTab(5)">Exercices</button>
+  <button class="tab-btn" onclick="showTab(6)">QCM</button>
+</div>
+
+<div class="container">
+
+<!-- ==================== TAB 0 : Divisibilité ==================== -->
+<section class="sec active" id="sec0">
+  <h2>1. Divisibilit&eacute;</h2>
+
+  <div class="card">
+    <h3>D&eacute;finitions</h3>
+    <p>Soient <strong>a</strong> et <strong>b</strong> deux entiers naturels avec b &ne; 0.</p>
+    <div class="formula-box">
+      <strong>b divise a</strong> (on note <strong>b | a</strong>) signifie qu&rsquo;il existe un entier naturel <strong>k</strong> tel que <strong>a = b &times; k</strong>.<br>
+      On dit que <strong>b</strong> est un <em>diviseur</em> de <strong>a</strong>, et que <strong>a</strong> est un <em>multiple</em> de <strong>b</strong>.
+    </div>
+    <p><strong>Exemple :</strong> 7 divise 42 car 42 = 7 &times; 6.</p>
+  </div>
+
+  <div class="card">
+    <h3>Crit&egrave;res de divisibilit&eacute;</h3>
+    <table class="criteria-table">
+      <tr><th>Divisible par</th><th>Crit&egrave;re</th><th>Exemple</th></tr>
+      <tr><td><strong>2</strong></td><td>Chiffre des unit&eacute;s pair (0, 2, 4, 6, 8)</td><td>2&thinsp;346 &rarr; 6 pair &#10003;</td></tr>
+      <tr><td><strong>3</strong></td><td>Somme des chiffres divisible par 3</td><td>528 &rarr; 5+2+8 = 15 &#10003;</td></tr>
+      <tr><td><strong>4</strong></td><td>Les 2 derniers chiffres forment un nombre divisible par 4</td><td>1&thinsp;316 &rarr; 16 &divide; 4 = 4 &#10003;</td></tr>
+      <tr><td><strong>5</strong></td><td>Chiffre des unit&eacute;s : 0 ou 5</td><td>735 &#10003;</td></tr>
+      <tr><td><strong>9</strong></td><td>Somme des chiffres divisible par 9</td><td>729 &rarr; 7+2+9 = 18 &#10003;</td></tr>
+      <tr><td><strong>10</strong></td><td>Chiffre des unit&eacute;s : 0</td><td>490 &#10003;</td></tr>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    <strong>&#128161; Astuce :</strong> Un nombre divisible par 9 est toujours divisible par 3 (car 9 = 3 &times; 3). Un nombre divisible par 2 <em>et</em> par 3 est divisible par 6.
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Testez un nombre</h4>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:8px">Entrez un entier positif pour voir ses diviseurs et les crit&egrave;res de divisibilit&eacute; qui s&rsquo;appliquent.</p>
+    <div class="input-row">
+      <label>Nombre :</label>
+      <input type="number" id="divInput" min="1" max="100000" value="360" placeholder="Ex : 360">
+      <button onclick="analyserDiviseurs()">Analyser</button>
+    </div>
+    <div class="result-area" id="divResult">Cliquez sur &laquo;&nbsp;Analyser&nbsp;&raquo;.</div>
+  </div>
+</section>
+
+<!-- ==================== TAB 1 : Nombres premiers ==================== -->
+<section class="sec" id="sec1">
+  <h2>2. Nombres premiers</h2>
+
+  <div class="card">
+    <h3>D&eacute;finition</h3>
+    <div class="formula-box">
+      Un entier naturel <em>p</em> &ge; 2 est un <strong>nombre premier</strong> s&rsquo;il admet <em>exactement deux diviseurs</em> : 1 et lui-m&ecirc;me.
+    </div>
+    <p><strong>Exemples :</strong> 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47&hellip;</p>
+    <p><strong>Attention :</strong> 1 n&rsquo;est <em>pas</em> premier (un seul diviseur). 2 est le seul nombre premier pair.</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>&#128161; M&eacute;thode :</strong> Pour tester si <em>n</em> est premier, on v&eacute;rifie qu&rsquo;il n&rsquo;est divisible par aucun nombre premier &le; &radic;<em>n</em>.
+  </div>
+
+  <h3>Crible d&rsquo;&Eacute;ratosth&egrave;ne</h3>
+  <p>Algorithme antique pour trouver tous les premiers jusqu&rsquo;&agrave; <em>N</em> : on &eacute;crit les entiers de 2 &agrave; <em>N</em>, puis on raye les multiples de chaque premier successif.</p>
+
+  <div class="interactive-panel">
+    <h4>&#127912; Crible interactif (2 &agrave; 100)</h4>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:8px">Cliquez sur &laquo;&nbsp;Lancer&nbsp;&raquo; pour l&rsquo;animation pas &agrave; pas, ou &laquo;&nbsp;Instantan&eacute;&nbsp;&raquo; pour le r&eacute;sultat.</p>
+    <div class="input-row">
+      <button id="cribleBtn" onclick="lancerCrible(false)">&#9654; Lancer</button>
+      <button onclick="lancerCrible(true)">Instantan&eacute;</button>
+      <button onclick="resetCrible()">&#8635; R&eacute;initialiser</button>
+      <span id="cribleStatus" style="font-size:0.88rem;color:var(--muted)"></span>
+    </div>
+    <canvas id="cribleCanvas" width="640" height="360"></canvas>
+  </div>
+
+  <h3>D&eacute;composition en facteurs premiers</h3>
+  <div class="formula-box">
+    <strong>Th&eacute;or&egrave;me fondamental :</strong> Tout entier &ge; 2 s&rsquo;&eacute;crit de mani&egrave;re <strong>unique</strong> comme produit de nombres premiers :<br>
+    <em>n</em> = p<sub>1</sub><sup>&alpha;<sub>1</sub></sup> &times; p<sub>2</sub><sup>&alpha;<sub>2</sub></sup> &times; &hellip; &times; p<sub>k</sub><sup>&alpha;<sub>k</sub></sup>
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; D&eacute;composez un nombre</h4>
+    <div class="input-row">
+      <label>Nombre :</label>
+      <input type="number" id="decompInput" min="2" max="100000" value="360" placeholder="Ex : 360">
+      <button onclick="decomposer()">D&eacute;composer</button>
+    </div>
+    <div class="result-area" id="decompResult">Entrez un nombre &ge; 2.</div>
+  </div>
+</section>
+
+<!-- ==================== TAB 2 : PGCD ==================== -->
+<section class="sec" id="sec2">
+  <h2>3. PGCD</h2>
+
+  <div class="card">
+    <h3>D&eacute;finition</h3>
+    <div class="formula-box">
+      Le <strong>PGCD</strong> (Plus Grand Commun Diviseur) de deux entiers naturels non nuls <em>a</em> et <em>b</em> est le <strong>plus grand entier</strong> qui divise &agrave; la fois <em>a</em> et <em>b</em>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Algorithme d&rsquo;Euclide</h3>
+    <p>On effectue des <strong>divisions euclidiennes successives</strong> jusqu&rsquo;&agrave; obtenir un reste nul. Le dernier reste non nul est le PGCD.</p>
+    <div class="formula-box">
+      <strong>a = b &times; q + r</strong><br>
+      Si r = 0 alors PGCD(a, b) = b. Sinon PGCD(a, b) = PGCD(b, r).
+    </div>
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Algorithme d&rsquo;Euclide &mdash; pas &agrave; pas</h4>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:8px">Entrez deux nombres, puis cliquez sur &laquo;&nbsp;&Eacute;tape suivante&nbsp;&raquo; pour voir chaque division euclidienne.</p>
+    <div class="input-row">
+      <label>a =</label>
+      <input type="number" id="pgcdA" min="1" max="100000" value="462" placeholder="462">
+      <label>b =</label>
+      <input type="number" id="pgcdB" min="1" max="100000" value="330" placeholder="330">
+      <button id="pgcdStepBtn" onclick="pgcdStep()">&#9654; &Eacute;tape suivante</button>
+      <button onclick="pgcdReset()">&#8635;</button>
+    </div>
+    <div class="result-area" id="pgcdResult">Cliquez pour d&eacute;marrer l&rsquo;algorithme.</div>
+  </div>
+
+  <h3>Algorithme des soustractions successives</h3>
+  <p>M&eacute;thode plus ancienne : on remplace le plus grand des deux nombres par leur diff&eacute;rence, jusqu&rsquo;&agrave; obtenir deux nombres &eacute;gaux.</p>
+  <div class="formula-box">
+    Si <em>a</em> &gt; <em>b</em> : PGCD(<em>a</em>, <em>b</em>) = PGCD(<em>a</em> &minus; <em>b</em>, <em>b</em>)
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Soustractions successives</h4>
+    <div class="input-row">
+      <label>a =</label>
+      <input type="number" id="subA" min="1" max="5000" value="48" placeholder="48">
+      <label>b =</label>
+      <input type="number" id="subB" min="1" max="5000" value="18" placeholder="18">
+      <button onclick="computeSubPGCD()">Calculer</button>
+    </div>
+    <div class="result-area" id="subResult"></div>
+  </div>
+
+  <div class="tip-box">
+    <strong>&#128161; Propri&eacute;t&eacute; :</strong> Si PGCD(<em>a</em>, <em>b</em>) = 1, on dit que <em>a</em> et <em>b</em> sont <strong>premiers entre eux</strong>.
+  </div>
+</section>
+
+<!-- ==================== TAB 3 : Fractions irréductibles ==================== -->
+<section class="sec" id="sec3">
+  <h2>4. Fractions irr&eacute;ductibles</h2>
+
+  <div class="card">
+    <h3>D&eacute;finition</h3>
+    <div class="formula-box">
+      Une fraction
+      <span class="frac"><span class="n"><em>a</em></span><span class="d"><em>b</em></span></span>
+      est <strong>irr&eacute;ductible</strong> si <em>a</em> et <em>b</em> sont <strong>premiers entre eux</strong>, c&rsquo;est-&agrave;-dire PGCD(<em>a</em>, <em>b</em>) = 1.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>M&eacute;thode de simplification</h3>
+    <p>Pour rendre une fraction irr&eacute;ductible, on divise num&eacute;rateur et d&eacute;nominateur par leur PGCD :</p>
+    <div class="formula-box" style="text-align:center;font-size:1.05rem;">
+      <span class="frac"><span class="n"><em>a</em></span><span class="d"><em>b</em></span></span>
+      =
+      <span class="frac"><span class="n"><em>a</em> &divide; PGCD(<em>a</em>,<em>b</em>)</span><span class="d"><em>b</em> &divide; PGCD(<em>a</em>,<em>b</em>)</span></span>
+    </div>
+    <p><strong>Exemple :</strong>
+      <span class="frac"><span class="n">84</span><span class="d">120</span></span>
+      &rarr; PGCD(84, 120) = 12 &rarr;
+      <span class="frac"><span class="n">7</span><span class="d">10</span></span>
+    </p>
+  </div>
+
+  <div class="tip-box">
+    <strong>&#128161; Au Brevet :</strong> On demande souvent de &laquo;&nbsp;donner le r&eacute;sultat sous forme de fraction irr&eacute;ductible&nbsp;&raquo;. Il faut montrer le calcul du PGCD.
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Simplificateur de fractions</h4>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:8px">Entrez une fraction pour voir sa simplification &eacute;tape par &eacute;tape.</p>
+    <div class="input-row">
+      <label>Num&eacute;rateur :</label>
+      <input type="number" id="fracNum" min="1" max="100000" value="84" placeholder="84">
+      <label>D&eacute;nominateur :</label>
+      <input type="number" id="fracDen" min="1" max="100000" value="120" placeholder="120">
+      <button onclick="simplifierFraction()">Simplifier</button>
+    </div>
+    <div class="result-area" id="fracResult">Entrez une fraction.</div>
+  </div>
+</section>
+
+<!-- ==================== TAB 4 : Applications ==================== -->
+<section class="sec" id="sec4">
+  <h2>5. Applications concr&egrave;tes</h2>
+
+  <h3>Probl&egrave;me 1 : Pavage d&rsquo;un rectangle</h3>
+  <div class="card">
+    <p>On veut paver un rectangle de <em>L</em> &times; <em>l</em> cm avec des <strong>carr&eacute;s identiques les plus grands possibles</strong>, sans d&eacute;coupe.</p>
+    <div class="formula-box">
+      Le c&ocirc;t&eacute; du plus grand carr&eacute; possible est <strong>PGCD(<em>L</em>, <em>l</em>)</strong>.<br>
+      Nombre de carr&eacute;s : (<em>L</em> &divide; c) &times; (<em>l</em> &divide; c).
+    </div>
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Simulateur de pavage</h4>
+    <div class="input-row">
+      <label>Longueur :</label>
+      <input type="number" id="pavL" min="1" max="1000" value="180" placeholder="180">
+      <label>Largeur :</label>
+      <input type="number" id="pavl" min="1" max="1000" value="120" placeholder="120">
+      <button onclick="drawPavage()">Paver</button>
+    </div>
+    <canvas id="pavageCanvas" width="600" height="340"></canvas>
+    <div class="result-area" id="pavageInfo" style="display:none;"></div>
+  </div>
+
+  <h3>Probl&egrave;me 2 : R&eacute;partition &eacute;gale</h3>
+  <div class="card">
+    <p>Un fleuriste a 84 roses et 126 tulipes. Il veut faire des bouquets <strong>tous identiques</strong> en utilisant toutes les fleurs.</p>
+    <p><strong>R&eacute;ponse :</strong> PGCD(84, 126) = 42 bouquets.<br>
+    Chaque bouquet : 84 &divide; 42 = 2 roses et 126 &divide; 42 = 3 tulipes.</p>
+  </div>
+
+  <h3>Probl&egrave;me 3 : Engrenages</h3>
+  <div class="card">
+    <p>Deux roues dent&eacute;es entr&rsquo;engrennent. La roue A a <em>a</em> dents, la roue B en a <em>b</em>. Apr&egrave;s combien de tours les deux roues reviennent &agrave; leur position initiale ?</p>
+    <div class="formula-box">
+      PPCM(<em>a</em>, <em>b</em>) =
+      <span class="frac"><span class="n"><em>a</em> &times; <em>b</em></span><span class="d">PGCD(<em>a</em>, <em>b</em>)</span></span>
+      &nbsp;&nbsp; Tours de A :
+      <span class="frac"><span class="n">PPCM</span><span class="d"><em>a</em></span></span>
+      &nbsp;&nbsp; Tours de B :
+      <span class="frac"><span class="n">PPCM</span><span class="d"><em>b</em></span></span>
+    </div>
+  </div>
+
+  <div class="interactive-panel">
+    <h4>&#9997; Simulateur d&rsquo;engrenages</h4>
+    <div class="input-row">
+      <label>Dents roue A :</label>
+      <input type="number" id="gearA" min="4" max="80" value="12" placeholder="12">
+      <label>Dents roue B :</label>
+      <input type="number" id="gearB" min="4" max="80" value="18" placeholder="18">
+      <button onclick="drawGears()">Calculer</button>
+    </div>
+    <canvas id="gearCanvas" width="600" height="280"></canvas>
+    <div class="result-area" id="gearInfo" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- ==================== TAB 5 : Exercices ==================== -->
+<section class="sec" id="sec5">
+  <h2>6. Exercices</h2>
+
+  <div class="exercise">
+    <span class="ex-level ex-apply">Appliquer</span>
+    <h4>Exercice 1 &mdash; Crit&egrave;res de divisibilit&eacute;</h4>
+    <p>Parmi les nombres suivants, lesquels sont divisibles par 3 ? Par 9 ?<br>
+    <strong>243 &nbsp; 1&thinsp;572 &nbsp; 805 &nbsp; 4&thinsp;518 &nbsp; 7&thinsp;236</strong></p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p>On calcule la somme des chiffres :</p>
+        <p><strong>243</strong> : 2+4+3 = 9 &rarr; div. par 3 <strong>et</strong> par 9<br>
+        <strong>1&thinsp;572</strong> : 1+5+7+2 = 15 &rarr; div. par 3, <strong>pas</strong> par 9<br>
+        <strong>805</strong> : 8+0+5 = 13 &rarr; <strong>ni</strong> par 3, <strong>ni</strong> par 9<br>
+        <strong>4&thinsp;518</strong> : 4+5+1+8 = 18 &rarr; div. par 3 <strong>et</strong> par 9<br>
+        <strong>7&thinsp;236</strong> : 7+2+3+6 = 18 &rarr; div. par 3 <strong>et</strong> par 9</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <span class="ex-level ex-apply">Appliquer</span>
+    <h4>Exercice 2 &mdash; D&eacute;composition en facteurs premiers</h4>
+    <p>D&eacute;composer en produit de facteurs premiers : <strong>504</strong> et <strong>1&thinsp;260</strong>.</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>504 :</strong></p>
+        <div class="step-line">504 &divide; 2 = 252, 252 &divide; 2 = 126, 126 &divide; 2 = 63</div>
+        <div class="step-line">63 &divide; 3 = 21, 21 &divide; 3 = 7, 7 &divide; 7 = 1</div>
+        <p><strong>504 = 2<sup>3</sup> &times; 3<sup>2</sup> &times; 7</strong></p>
+        <p><strong>1&thinsp;260 :</strong></p>
+        <div class="step-line">1260 &divide; 2 = 630, 630 &divide; 2 = 315</div>
+        <div class="step-line">315 &divide; 3 = 105, 105 &divide; 3 = 35</div>
+        <div class="step-line">35 &divide; 5 = 7, 7 &divide; 7 = 1</div>
+        <p><strong>1&thinsp;260 = 2<sup>2</sup> &times; 3<sup>2</sup> &times; 5 &times; 7</strong></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <span class="ex-level ex-understand">Comprendre</span>
+    <h4>Exercice 3 &mdash; PGCD par l&rsquo;algorithme d&rsquo;Euclide</h4>
+    <p>Calculer PGCD(1&thinsp;092, 420) en d&eacute;taillant chaque &eacute;tape.</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <div class="step-line">1 092 = 420 &times; 2 + 252</div>
+        <div class="step-line">420 = 252 &times; 1 + 168</div>
+        <div class="step-line">252 = 168 &times; 1 + 84</div>
+        <div class="step-line">168 = 84 &times; 2 + 0</div>
+        <p><strong>PGCD(1&thinsp;092, 420) = 84</strong></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <span class="ex-level ex-understand">Comprendre</span>
+    <h4>Exercice 4 &mdash; Fraction irr&eacute;ductible</h4>
+    <p>Rendre irr&eacute;ductible la fraction
+      <span class="frac"><span class="n">468</span><span class="d">720</span></span>.</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p>Calculons PGCD(468, 720) :</p>
+        <div class="step-line">720 = 468 &times; 1 + 252</div>
+        <div class="step-line">468 = 252 &times; 1 + 216</div>
+        <div class="step-line">252 = 216 &times; 1 + 36</div>
+        <div class="step-line">216 = 36 &times; 6 + 0</div>
+        <p>PGCD = 36</p>
+        <p><span class="frac"><span class="n">468</span><span class="d">720</span></span>
+        =
+        <span class="frac"><span class="n">468 &divide; 36</span><span class="d">720 &divide; 36</span></span>
+        = <strong><span class="frac"><span class="n">13</span><span class="d">20</span></span></strong></p>
+        <p>V&eacute;rification : PGCD(13, 20) = 1.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <span class="ex-level ex-deepen">Approfondir</span>
+    <h4>Exercice 5 &mdash; Probl&egrave;me de pavage</h4>
+    <p>Une cour rectangulaire mesure 12,6 m &times; 8,4 m. On veut la paver avec des dalles carr&eacute;es les plus grandes possibles sans d&eacute;coupe. Quelle est la taille des dalles ? Combien en faut-il ?</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p>En cm : 1 260 &times; 840.</p>
+        <div class="step-line">1 260 = 840 &times; 1 + 420</div>
+        <div class="step-line">840 = 420 &times; 2 + 0</div>
+        <p>PGCD = 420. Dalles de <strong>420 cm = 4,20 m</strong>.</p>
+        <p>Nombre : (1260 &divide; 420) &times; (840 &divide; 420) = 3 &times; 2 = <strong>6 dalles</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <span class="ex-level ex-deepen">Approfondir</span>
+    <h4>Exercice 6 &mdash; Nombres premiers entre eux</h4>
+    <p>Montrer que pour tout entier naturel <em>n</em>, les nombres <em>n</em> et <em>n</em> + 1 sont premiers entre eux.</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p>Soit <em>d</em> un diviseur commun de <em>n</em> et <em>n</em> + 1.</p>
+        <p>Alors <em>d</em> divise (<em>n</em> + 1) &minus; <em>n</em> = 1.</p>
+        <p>Donc <em>d</em> = 1. Le seul diviseur commun positif est 1.</p>
+        <p><strong>PGCD(<em>n</em>, <em>n</em> + 1) = 1</strong> : ils sont premiers entre eux.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ==================== TAB 6 : QCM ==================== -->
+<section class="sec" id="sec6">
+  <h2>7. QCM &mdash; Testez vos connaissances</h2>
+  <p style="color:var(--muted);margin-bottom:10px">10 questions tir&eacute;es au hasard. Cliquez sur la bonne r&eacute;ponse.</p>
+  <div id="quizContainer"></div>
+  <div class="quiz-score" id="quizScore"></div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="btn" onclick="genererQuiz()">&#8635; Nouveau quiz</button>
+  </div>
+</section>
+
+</div><!-- container -->
+
+<script>
+/* ===== THEME ===== */
+function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function toggleTheme(){
+  var r=document.documentElement,t=r.getAttribute('data-theme');
+  if(t==='dark') r.setAttribute('data-theme','light');
+  else if(t==='light') r.removeAttribute('data-theme');
+  else r.setAttribute('data-theme','dark');
+  /* redraw active canvases */
+  var a=document.querySelector('.sec.active');
+  if(a){var idx=parseInt(a.id.replace('sec',''));redrawCanvases(idx);}
+}
+
+function redrawCanvases(idx){
+  if(idx===1 && cribleGrid.length) drawCribleCanvas();
+  if(idx===4){ if(pavageDrawn) drawPavage(); if(gearsDrawn) drawGears(); }
+}
+
+/* ===== TABS ===== */
+var sectionInited=[];
+function showTab(i){
+  var secs=document.querySelectorAll('.sec');
+  var btns=document.querySelectorAll('.tab-btn');
+  for(var j=0;j<secs.length;j++){secs[j].classList.remove('active');btns[j].classList.remove('active');}
+  secs[i].classList.add('active');btns[i].classList.add('active');
+  btns[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  initSection(i);
+}
+function initSection(i){
+  if(sectionInited[i]) return;
+  sectionInited[i]=true;
+  if(i===1) drawCribleInit();
+  if(i===6) genererQuiz();
+}
+initSection(0);
+
+/* ===== TAB 0: Diviseurs ===== */
+function getDiviseurs(n){
+  var d=[];
+  for(var i=1;i*i<=n;i++){if(n%i===0){d.push(i);if(i!==n/i)d.push(n/i);}}
+  return d.sort(function(a,b){return a-b;});
+}
+function analyserDiviseurs(){
+  var n=parseInt(document.getElementById('divInput').value);
+  var el=document.getElementById('divResult');
+  if(!n||n<1||n>100000){el.innerHTML='Entrez un nombre entre 1 et 100&thinsp;000.';return;}
+  var divs=getDiviseurs(n);
+  var digits=String(n).split('').map(Number);
+  var sum=digits.reduce(function(a,b){return a+b;},0);
+  var last=digits[digits.length-1];
+  var last2=n%100;
+  var html='<strong>Diviseurs de '+n+' :</strong> '+divs.join(', ')+' <em>('+divs.length+' diviseurs)</em><br><br>';
+  html+='<strong>Crit&egrave;res de divisibilit&eacute; :</strong><br>';
+  var checks=[
+    ['2',n%2===0,'Unit&eacute;s = '+last+(n%2===0?' (pair)':' (impair)')],
+    ['3',n%3===0,'Somme chiffres = '+sum+(n%3===0?' (div. par 3)':' (non div. par 3)')],
+    ['4',n%4===0,'Deux derniers = '+String(last2).padStart(2,'0')+(n%4===0?' (div. par 4)':' (non div. par 4)')],
+    ['5',n%5===0,'Unit&eacute;s = '+last+(n%5===0?' (0 ou 5)':' (ni 0 ni 5)')],
+    ['9',n%9===0,'Somme chiffres = '+sum+(n%9===0?' (div. par 9)':' (non div. par 9)')],
+    ['10',n%10===0,'Unit&eacute;s = '+last+(n%10===0?' (= 0)':' (&ne; 0)')]
+  ];
+  for(var i=0;i<checks.length;i++){
+    var c=checks[i];
+    html+='<span class="'+(c[1]?'ck-y':'ck-n')+'">'+(c[1]?'&#10003;':'&#10007;')+'</span> Div. par <strong>'+c[0]+'</strong> : '+c[2]+'<br>';
+  }
+  el.innerHTML=html;
+}
+
+/* ===== TAB 1: Crible ===== */
+var cribleGrid=[];
+var criblePrime=2;
+var cribleRunning=false;
+
+function drawCribleInit(){
+  cribleGrid=[];
+  for(var i=0;i<=100;i++) cribleGrid[i]=0;
+  cribleGrid[0]=2;cribleGrid[1]=2;
+  criblePrime=2;cribleRunning=false;
+  drawCribleCanvas();
+}
+
+function drawCribleCanvas(){
+  var canvas=document.getElementById('cribleCanvas');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var W=600,H=340;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.scale(dpr,dpr);
+
+  var bg=getCSS('--surface'),textC=getCSS('--text'),accentC=getCSS('--accent');
+  var successC=getCSS('--success'),mutedC=getCSS('--muted'),borderC=getCSS('--border');
+  var surface2=getCSS('--surface2'),errorC=getCSS('--error');
+
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  var cols=10,rows=10;
+  var pad=16;
+  var cellW=(W-2*pad)/cols,cellH=Math.min(cellW,(H-pad-30)/rows);
+  var startX=pad,startY=pad;
+
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      var n=r*cols+c+1;
+      if(n>100) continue;
+      var x=startX+c*cellW,y=startY+r*cellH;
+      /* background */
+      if(cribleGrid[n]===1){ctx.fillStyle=accentC;}
+      else if(cribleGrid[n]===2){ctx.fillStyle=surface2;}
+      else{ctx.fillStyle=bg;}
+      ctx.fillRect(x+0.5,y+0.5,cellW-1,cellH-1);
+      ctx.strokeStyle=borderC;ctx.lineWidth=1;ctx.strokeRect(x,y,cellW,cellH);
+      /* text */
+      ctx.font='600 '+Math.max(11,cellW*0.3)+'px Nunito Sans,sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      if(cribleGrid[n]===1) ctx.fillStyle='#fff';
+      else if(cribleGrid[n]===2){ctx.fillStyle=mutedC;ctx.globalAlpha=0.45;}
+      else ctx.fillStyle=textC;
+      ctx.fillText(String(n),x+cellW/2,y+cellH/2);
+      ctx.globalAlpha=1;
+      /* cross out */
+      if(cribleGrid[n]===2){
+        ctx.strokeStyle=errorC;ctx.lineWidth=1.5;ctx.globalAlpha=0.5;
+        ctx.beginPath();ctx.moveTo(x+4,y+4);ctx.lineTo(x+cellW-4,y+cellH-4);ctx.stroke();
+        ctx.globalAlpha=1;
+      }
+    }
+  }
+  /* legend */
+  var ly=startY+rows*cellH+8;
+  ctx.font='600 11px Nunito Sans,sans-serif';ctx.textAlign='left';
+  ctx.fillStyle=accentC;ctx.fillRect(startX,ly,12,12);
+  ctx.fillStyle=textC;ctx.fillText('Premier',startX+18,ly+10);
+  ctx.fillStyle=surface2;ctx.fillRect(startX+100,ly,12,12);
+  ctx.fillStyle=textC;ctx.fillText('Éliminé',startX+118,ly+10);
+}
+
+function lancerCrible(instant){
+  if(cribleRunning) return;
+  drawCribleInit();
+  cribleRunning=true;
+  document.getElementById('cribleBtn').textContent='En cours...';
+
+  if(instant){
+    var marked=new Array(101).fill(false);
+    for(var p=2;p<=100;p++){
+      if(!marked[p]){
+        cribleGrid[p]=1;
+        for(var m=p*2;m<=100;m+=p){marked[m]=true;cribleGrid[m]=2;}
+      }
+    }
+    drawCribleCanvas();
+    cribleRunning=false;
+    document.getElementById('cribleBtn').textContent='▶ Lancer';
+    var count=0;for(var i=2;i<=100;i++)if(cribleGrid[i]===1)count++;
+    document.getElementById('cribleStatus').textContent='Terminé ! '+count+' nombres premiers trouvés.';
+    return;
+  }
+  cribleStepAnim();
+}
+
+function cribleStepAnim(){
+  if(criblePrime>10){
+    for(var i=2;i<=100;i++){if(cribleGrid[i]===0)cribleGrid[i]=1;}
+    drawCribleCanvas();cribleRunning=false;
+    document.getElementById('cribleBtn').textContent='▶ Lancer';
+    var c=0;for(var j=2;j<=100;j++)if(cribleGrid[j]===1)c++;
+    document.getElementById('cribleStatus').textContent='Terminé ! '+c+' nombres premiers.';
+    return;
+  }
+  if(cribleGrid[criblePrime]===2){criblePrime++;cribleStepAnim();return;}
+  cribleGrid[criblePrime]=1;
+  document.getElementById('cribleStatus').textContent='Multiples de '+criblePrime+'...';
+  var mult=criblePrime*2;
+  function elim(){
+    if(mult>100){criblePrime++;setTimeout(cribleStepAnim,300);return;}
+    cribleGrid[mult]=2;drawCribleCanvas();mult+=criblePrime;setTimeout(elim,50);
+  }
+  drawCribleCanvas();setTimeout(elim,150);
+}
+
+function resetCrible(){
+  cribleRunning=false;drawCribleInit();
+  document.getElementById('cribleBtn').textContent='▶ Lancer';
+  document.getElementById('cribleStatus').textContent='';
+}
+
+/* ===== TAB 1: Décomposition ===== */
+function decomposer(){
+  var n=parseInt(document.getElementById('decompInput').value);
+  var el=document.getElementById('decompResult');
+  if(!n||n<2||n>100000){el.innerHTML='Entrez un nombre entre 2 et 100&thinsp;000.';return;}
+  var orig=n,factors=[],steps=[];
+  var d=2;
+  while(n>1){while(n%d===0){factors.push(d);steps.push({num:n,factor:d,result:n/d});n=n/d;}d++;}
+  var html='<strong>Décomposition de '+orig+' :</strong><br><br>';
+  html+='<div class="decomp-tree">';
+  for(var i=0;i<steps.length;i++){
+    html+='<div class="decomp-row"><span class="decomp-num">'+steps[i].num+'</span><span class="decomp-sep">|</span><span class="decomp-factor">'+steps[i].factor+'</span></div>';
+  }
+  html+='<div class="decomp-row"><span class="decomp-num">1</span><span class="decomp-sep">|</span><span class="decomp-factor"></span></div></div><br>';
+  var counts={};
+  for(var j=0;j<factors.length;j++){counts[factors[j]]=(counts[factors[j]]||0)+1;}
+  var parts=[];
+  for(var p in counts){parts.push(counts[p]===1?p:p+'<sup>'+counts[p]+'</sup>');}
+  html+='<div class="formula-box"><strong>'+orig+' = '+parts.join(' &times; ')+'</strong></div>';
+  if(factors.length===1) html+='<p><em>'+orig+' est un nombre premier !</em></p>';
+  el.innerHTML=html;
+}
+
+/* ===== TAB 2: PGCD Euclide step-by-step ===== */
+var pgcdState=null;
+function pgcdReset(){
+  pgcdState=null;
+  document.getElementById('pgcdResult').innerHTML='Cliquez pour démarrer l\'algorithme.';
+  document.getElementById('pgcdStepBtn').textContent='▶ Étape suivante';
+}
+function pgcdStep(){
+  if(!pgcdState){
+    var a=parseInt(document.getElementById('pgcdA').value);
+    var b=parseInt(document.getElementById('pgcdB').value);
+    if(!a||!b||a<1||b<1){document.getElementById('pgcdResult').innerHTML='Entrez deux entiers positifs.';return;}
+    if(a<b){var tmp=a;a=b;b=tmp;}
+    pgcdState={a:a,b:b,origA:a,origB:b,steps:[],done:false};
+  }
+  if(pgcdState.done) return;
+  var a=pgcdState.a,b=pgcdState.b;
+  if(b===0){pgcdState.done=true;renderPgcd();return;}
+  var q=Math.floor(a/b),r=a%b;
+  pgcdState.steps.push({a:a,b:b,q:q,r:r});
+  pgcdState.a=b;pgcdState.b=r;
+  if(r===0) pgcdState.done=true;
+  renderPgcd();
+}
+function renderPgcd(){
+  var s=pgcdState;
+  var html='<strong>PGCD('+s.origA+', '+s.origB+')</strong><br><br>';
+  for(var i=0;i<s.steps.length;i++){
+    var st=s.steps[i];
+    var bold=(i===s.steps.length-1&&s.done)?' style="color:var(--accent);font-weight:700"':'';
+    html+='<div class="step-line"'+bold+'>'+st.a+' = '+st.b+' &times; '+st.q+' + '+st.r+'</div>';
+  }
+  if(s.done){
+    var pgcd=s.steps[s.steps.length-1].b;
+    html+='<br><div class="formula-box"><strong>PGCD('+s.origA+', '+s.origB+') = '+pgcd+'</strong>';
+    if(pgcd===1) html+='<br><em>'+s.origA+' et '+s.origB+' sont premiers entre eux.</em>';
+    html+='</div>';
+    document.getElementById('pgcdStepBtn').textContent='✓ Terminé';
+  }
+  document.getElementById('pgcdResult').innerHTML=html;
+}
+
+/* ===== TAB 2: Soustractions successives ===== */
+function computeSubPGCD(){
+  var a=parseInt(document.getElementById('subA').value);
+  var b=parseInt(document.getElementById('subB').value);
+  var el=document.getElementById('subResult');
+  if(!a||!b||a<1||b<1){el.innerHTML='Entrez deux entiers positifs.';return;}
+  if(a>5000||b>5000){el.innerHTML='Nombres &le; 5000 svp.';return;}
+  var origA=a,origB=b,steps=[],max=200;
+  while(a!==b&&steps.length<max){
+    if(a>b){steps.push('('+a+', '+b+') &rarr; ('+(a-b)+', '+b+')');a=a-b;}
+    else{steps.push('('+a+', '+b+') &rarr; ('+a+', '+(b-a)+')');b=b-a;}
+  }
+  var html='<strong>PGCD('+origA+', '+origB+')</strong> par soustractions :<br><br>';
+  for(var i=0;i<steps.length;i++) html+='<div class="step-line">'+steps[i]+'</div>';
+  if(steps.length>=max) html+='<em>... trop d\'étapes.</em>';
+  html+='<br><div class="formula-box"><strong>PGCD('+origA+', '+origB+') = '+a+'</strong></div>';
+  el.innerHTML=html;
+}
+
+/* ===== TAB 3: Fractions ===== */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+function simplifierFraction(){
+  var num=parseInt(document.getElementById('fracNum').value);
+  var den=parseInt(document.getElementById('fracDen').value);
+  var el=document.getElementById('fracResult');
+  if(!num||!den||den===0){el.innerHTML='Entrez un numérateur et un dénominateur positifs.';return;}
+  var p=gcd(num,den);
+  var sNum=num/p,sDen=den/p;
+  /* Euclide steps */
+  var a=Math.max(Math.abs(num),Math.abs(den)),b=Math.min(Math.abs(num),Math.abs(den));
+  var steps=[];
+  while(b>0){var q=Math.floor(a/b);var r=a%b;steps.push({a:a,b:b,q:q,r:r});a=b;b=r;}
+  var html='<strong>Simplification de <span class="frac"><span class="n">'+num+'</span><span class="d">'+den+'</span></span> :</strong><br><br>';
+  html+='<em>Calcul du PGCD :</em><br>';
+  for(var i=0;i<steps.length;i++){
+    html+='<div class="step-line">'+steps[i].a+' = '+steps[i].b+' &times; '+steps[i].q+' + '+steps[i].r+'</div>';
+  }
+  html+='<br>PGCD('+Math.abs(num)+', '+Math.abs(den)+') = <strong>'+p+'</strong><br><br>';
+  if(p===1){
+    html+='<em>La fraction est déjà irréductible !</em>';
+  } else {
+    html+='<span class="frac"><span class="n">'+num+'</span><span class="d">'+den+'</span></span> = ';
+    html+='<span class="frac"><span class="n">'+num+' &divide; '+p+'</span><span class="d">'+den+' &divide; '+p+'</span></span> = ';
+    html+='<strong><span class="frac"><span class="n">'+sNum+'</span><span class="d">'+sDen+'</span></span></strong>';
+  }
+  el.innerHTML=html;
+}
+
+/* ===== TAB 4: Pavage ===== */
+var pavageDrawn=false;
+function drawPavage(){
+  var L=parseInt(document.getElementById('pavL').value)||180;
+  var l=parseInt(document.getElementById('pavl').value)||120;
+  if(L<1||l<1) return;
+  var g=gcd(L,l);
+  var nx=L/g,ny=l/g;
+
+  var canvas=document.getElementById('pavageCanvas');
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var W=580,H=320;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.scale(dpr,dpr);
+
+  var bg=getCSS('--surface'),textC=getCSS('--text'),accentC=getCSS('--accent');
+  var headingC=getCSS('--heading'),borderC=getCSS('--border');
+
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  var margin=45;
+  var maxW=W-2*margin,maxH=H-2*margin-10;
+  var sc=Math.min(maxW/L,maxH/l);
+  var dw=L*sc,dh=l*sc;
+  var ox=(W-dw)/2,oy=margin;
+
+  var colors=['rgba(160,82,45,0.14)','rgba(160,82,45,0.06)'];
+  for(var i=0;i<nx;i++){
+    for(var j=0;j<ny;j++){
+      var cx=ox+i*g*sc,cy=oy+j*g*sc,cs=g*sc;
+      ctx.fillStyle=colors[(i+j)%2];ctx.fillRect(cx,cy,cs,cs);
+      ctx.strokeStyle=accentC;ctx.lineWidth=1.5;ctx.strokeRect(cx,cy,cs,cs);
+    }
+  }
+  ctx.strokeStyle=headingC;ctx.lineWidth=2.5;ctx.strokeRect(ox,oy,dw,dh);
+
+  ctx.fillStyle=textC;ctx.font='600 12px Nunito Sans,sans-serif';ctx.textAlign='center';
+  ctx.fillText(L+' cm',ox+dw/2,oy+dh+22);
+  ctx.save();ctx.translate(ox-14,oy+dh/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText(l+' cm',0,0);ctx.restore();
+
+  if(g*sc>28){ctx.font='600 10px Nunito Sans,sans-serif';ctx.fillStyle=accentC;ctx.fillText(g,ox+g*sc/2,oy+g*sc/2+4);}
+
+  var info=document.getElementById('pavageInfo');
+  info.style.display='block';
+  info.innerHTML='PGCD('+L+', '+l+') = <strong>'+g+'</strong><br>Carrés de '+g+' cm de côté. Nombre : '+nx+' &times; '+ny+' = <strong>'+(nx*ny)+'</strong>';
+  pavageDrawn=true;
+}
+
+/* ===== TAB 4: Engrenages ===== */
+var gearsDrawn=false;
+function drawGears(){
+  var a=parseInt(document.getElementById('gearA').value)||12;
+  var b=parseInt(document.getElementById('gearB').value)||18;
+  if(a<4||b<4) return;
+  var g=gcd(a,b);
+  var ppcm=(a*b)/g;
+  var toursA=ppcm/a,toursB=ppcm/b;
+
+  var canvas=document.getElementById('gearCanvas');
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var W=580,H=260;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.scale(dpr,dpr);
+
+  var bg=getCSS('--surface'),textC=getCSS('--text'),accentC=getCSS('--accent');
+  var headingC=getCSS('--heading'),successC=getCSS('--success'),borderC=getCSS('--border');
+
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  var rA=Math.min(80,2.5*a),rB=Math.min(80,2.5*b);
+  var gap=rA+rB+6;
+  var cx1=W/2-gap/2+rA,cy=H/2;
+  var cx2=cx1+rA+rB+4;
+
+  /* Gear A */
+  ctx.beginPath();ctx.arc(cx1,cy,rA,0,2*Math.PI);
+  ctx.fillStyle='rgba(160,82,45,0.08)';ctx.fill();
+  ctx.strokeStyle=accentC;ctx.lineWidth=2.5;ctx.stroke();
+  for(var i=0;i<a;i++){
+    var ang=(2*Math.PI*i)/a;
+    ctx.beginPath();ctx.moveTo(cx1+(rA-4)*Math.cos(ang),cy+(rA-4)*Math.sin(ang));
+    ctx.lineTo(cx1+(rA+5)*Math.cos(ang),cy+(rA+5)*Math.sin(ang));
+    ctx.strokeStyle=accentC;ctx.lineWidth=2;ctx.stroke();
+  }
+  ctx.fillStyle=headingC;ctx.font='700 15px Cormorant Garamond,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('A',cx1,cy-8);
+  ctx.font='600 11px Nunito Sans,sans-serif';ctx.fillStyle=textC;ctx.fillText(a+' dents',cx1,cy+10);
+
+  /* Gear B */
+  ctx.beginPath();ctx.arc(cx2,cy,rB,0,2*Math.PI);
+  ctx.fillStyle='rgba(46,125,66,0.06)';ctx.fill();
+  ctx.strokeStyle=successC;ctx.lineWidth=2.5;ctx.stroke();
+  for(var j=0;j<b;j++){
+    var ang2=(2*Math.PI*j)/b;
+    ctx.beginPath();ctx.moveTo(cx2+(rB-4)*Math.cos(ang2),cy+(rB-4)*Math.sin(ang2));
+    ctx.lineTo(cx2+(rB+5)*Math.cos(ang2),cy+(rB+5)*Math.sin(ang2));
+    ctx.strokeStyle=successC;ctx.lineWidth=2;ctx.stroke();
+  }
+  ctx.fillStyle=headingC;ctx.font='700 15px Cormorant Garamond,serif';
+  ctx.fillText('B',cx2,cy-8);
+  ctx.font='600 11px Nunito Sans,sans-serif';ctx.fillStyle=textC;ctx.fillText(b+' dents',cx2,cy+10);
+
+  var info=document.getElementById('gearInfo');
+  info.style.display='block';
+  info.innerHTML='PGCD('+a+', '+b+') = <strong>'+g+'</strong> &nbsp; PPCM = <strong>'+ppcm+'</strong><br>Retour position initiale : roue A = <strong>'+toursA+' tour(s)</strong>, roue B = <strong>'+toursB+' tour(s)</strong>';
+  gearsDrawn=true;
+}
+
+/* ===== TAB 6: QCM ===== */
+var quizPool=[
+  {q:"Combien de diviseurs poss&egrave;de le nombre 1 ?",opts:["0","1","2","Infini"],ans:1,fb:"1 n'a qu'un seul diviseur : lui-même."},
+  {q:"Le nombre 2 est :",opts:["Premier et pair","Premier et impair","Composé","Ni premier ni pair"],ans:0,fb:"2 est le seul nombre premier pair."},
+  {q:"PGCD(48, 36) = ?",opts:["6","12","18","4"],ans:1,fb:"48 = 36×1 + 12, 36 = 12×3 + 0. PGCD = 12."},
+  {q:"Le nombre 51 est-il premier ?",opts:["Oui","Non, divisible par 3","Non, divisible par 7","Non, divisible par 11"],ans:1,fb:"5+1 = 6, divisible par 3. 51 = 3 × 17."},
+  {q:"La d&eacute;composition de 60 en facteurs premiers est :",opts:["2² × 3 × 5","2 × 3² × 5","2² × 15","4 × 15"],ans:0,fb:"60 = 4×15 = 2²×3×5."},
+  {q:"Quelle fraction est irr&eacute;ductible ?",opts:["12/18","7/21","5/13","8/12"],ans:2,fb:"PGCD(5,13) = 1, donc 5/13 est irréductible."},
+  {q:"Un nombre divisible par 9 est toujours divisible par :",opts:["2","6","3","5"],ans:2,fb:"9 = 3×3, donc si 9|n alors 3|n."},
+  {q:"PGCD(17, 5) = ?",opts:["1","5","17","85"],ans:0,fb:"17 = 5×3 + 2, 5 = 2×2 + 1, 2 = 1×2 + 0. PGCD = 1."},
+  {q:"Pour simplifier une fraction, on divise par :",opts:["Le PPCM","Le PGCD","Le produit","La somme"],ans:1,fb:"On divise numérateur et dénominateur par leur PGCD."},
+  {q:"Le plus petit nombre premier est :",opts:["0","1","2","3"],ans:2,fb:"2 est le plus petit nombre premier."},
+  {q:"Combien y a-t-il de nombres premiers entre 1 et 20 ?",opts:["6","7","8","9"],ans:2,fb:"2,3,5,7,11,13,17,19 : il y en a 8."},
+  {q:"Deux nombres sont premiers entre eux si :",opts:["Ils sont tous deux premiers","Leur PGCD vaut 1","Leur somme est première","Leur produit est premier"],ans:1,fb:"Premiers entre eux ⇔ PGCD = 1."},
+  {q:"La simplification de 84/120 donne :",opts:["7/10","14/20","42/60","21/30"],ans:0,fb:"PGCD(84,120) = 12. 84÷12 = 7, 120÷12 = 10."},
+  {q:"Le crit&egrave;re de divisibilit&eacute; par 4 porte sur :",opts:["La somme des chiffres","Le chiffre des unités","Les deux derniers chiffres","Le chiffre des dizaines"],ans:2,fb:"Divisible par 4 si les deux derniers chiffres forment un nombre div. par 4."},
+  {q:"PGCD(0, 15) = ?",opts:["0","1","15","Indéfini"],ans:2,fb:"PGCD(0, n) = n pour tout n > 0."},
+  {q:"La d&eacute;composition de 100 est :",opts:["2² × 5²","2 × 50","4 × 25","10²"],ans:0,fb:"100 = 4×25 = 2²×5²."},
+  {q:"Si PGCD(a, b) = b, alors :",opts:["a est multiple de b","b est multiple de a","a = b","a et b sont premiers entre eux"],ans:0,fb:"Si b divise a, alors PGCD(a,b) = b."},
+  {q:"Le nombre 97 est :",opts:["Composé","Divisible par 7","Premier","Divisible par 3"],ans:2,fb:"97 n'est div. par aucun premier ≤ 9. Il est premier."}
+];
+
+var quizAnswered=0,quizCorrect=0,quizTotal=10;
+
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+function genererQuiz(){
+  var selected=shuffle(quizPool).slice(0,quizTotal);
+  quizAnswered=0;quizCorrect=0;
+  var container=document.getElementById('quizContainer');
+  container.innerHTML='';
+  document.getElementById('quizScore').textContent='';
+  for(var i=0;i<selected.length;i++){
+    var q=selected[i];
+    var div=document.createElement('div');
+    div.className='quiz-question';
+    div.setAttribute('data-ans',q.ans);
+    div.setAttribute('data-fb',q.fb);
+    div.setAttribute('data-answered','0');
+    var p=document.createElement('p');
+    p.innerHTML=(i+1)+'. '+q.q;
+    div.appendChild(p);
+    var opts=document.createElement('div');
+    opts.className='quiz-options';
+    for(var j=0;j<q.opts.length;j++){
+      var btn=document.createElement('button');
+      btn.className='quiz-option';
+      btn.textContent=q.opts[j];
+      btn.setAttribute('data-idx',j);
+      btn.onclick=(function(qdiv,idx){return function(){quizAnswer(qdiv,idx);};})(div,j);
+      opts.appendChild(btn);
+    }
+    div.appendChild(opts);
+    container.appendChild(div);
+  }
+}
+
+function quizAnswer(qdiv,idx){
+  if(qdiv.getAttribute('data-answered')==='1') return;
+  qdiv.setAttribute('data-answered','1');
+  var ans=parseInt(qdiv.getAttribute('data-ans'));
+  var fb=qdiv.getAttribute('data-fb');
+  var btns=qdiv.querySelectorAll('.quiz-option');
+  for(var i=0;i<btns.length;i++){
+    btns[i].style.cursor='default';
+    if(i===ans) btns[i].classList.add('correct');
+    if(i===idx&&i!==ans) btns[i].classList.add('wrong');
+  }
+  if(idx===ans) quizCorrect++;
+  quizAnswered++;
+  var fbDiv=document.createElement('div');
+  fbDiv.className='quiz-feedback';
+  fbDiv.textContent=fb;
+  qdiv.appendChild(fbDiv);
+  if(quizAnswered>=quizTotal){
+    var pct=Math.round(100*quizCorrect/quizTotal);
+    var msg='';
+    if(pct>=90) msg='Excellent !';
+    else if(pct>=70) msg='Bien, quelques points à revoir.';
+    else if(pct>=50) msg='Passable. Revoyez le cours.';
+    else msg='Il faut retravailler ce chapitre.';
+    document.getElementById('quizScore').innerHTML=quizCorrect+' / '+quizTotal+' ('+pct+'%)<br><span style="font-size:0.9rem;font-weight:400;color:var(--muted)">'+msg+'</span>';
+  }
+}
+</script>
+</body>
+</html>

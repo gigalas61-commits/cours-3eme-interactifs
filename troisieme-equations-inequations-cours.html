@@ -1,0 +1,1134 @@
+<title>Équations et Inéquations</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#ffffff;--heading:#8b4513;--accent:#a0522d;
+  --text:#2c2418;--muted:#6b5a48;--border:#d4c8b8;--surface2:#ebe6de;
+  --accent-light:#faf5ef;--tip:#b8860b;--tip-bg:#fdf8ef;
+  --success:#2e7d42;--error:#c62828;
+  --shadow:0 2px 8px rgba(139,69,19,0.07);--radius:6px;
+  --font-heading:'Cormorant Garamond',Georgia,serif;
+  --font-body:'Nunito Sans','Segoe UI',sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1410;--surface:#252019;--heading:#d4a574;--accent:#c8845a;
+    --text:#e8e0d4;--muted:#a0937e;--border:#3a3228;--surface2:#2a241c;
+    --accent-light:#2a2218;--tip:#d4a030;--tip-bg:#2a2418;
+    --success:#66bb6a;--error:#ef5350;
+    --shadow:0 2px 8px rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1a1410;--surface:#252019;--heading:#d4a574;--accent:#c8845a;
+  --text:#e8e0d4;--muted:#a0937e;--border:#3a3228;--surface2:#2a241c;
+  --accent-light:#2a2218;--tip:#d4a030;--tip-bg:#2a2418;
+  --success:#66bb6a;--error:#ef5350;
+  --shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:16px;line-height:1.7;padding-inline:16px;padding-block:0;
+  max-width:900px;margin:0 auto;
+}
+*,*::before,*::after{box-sizing:border-box}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--heading);margin:0 0 .5em;text-wrap:balance;line-height:1.3}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.6rem;font-weight:600;border-bottom:2px solid var(--border);padding-bottom:.3em;margin-top:1.5em}
+h3{font-size:1.25rem;font-weight:600;margin-top:1.2em}
+p{margin:0 0 1em}
+.badge{
+  display:inline-block;background:var(--accent);color:#fff;
+  font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:12px;
+  letter-spacing:.05em;text-transform:uppercase;vertical-align:middle;
+  margin-left:8px;font-family:var(--font-body);
+}
+.header-area{text-align:center;padding:1.5em 0 1em}
+.header-area h1{font-size:2.2rem;margin-bottom:.2em}
+.header-area p{color:var(--muted);font-size:.95rem;margin:0}
+
+/* Tabs */
+.tab-bar{
+  display:flex;gap:0;overflow-x:auto;border-bottom:2px solid var(--border);
+  margin:0 -16px;padding:0 16px;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;position:sticky;top:env(safe-area-inset-top,0px);
+  background:var(--bg);z-index:10;
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex-shrink:0;background:none;border:none;border-bottom:3px solid transparent;
+  padding:10px 14px;font-family:var(--font-body);font-size:.85rem;font-weight:600;
+  color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .2s;
+}
+.tab-btn:hover{color:var(--heading)}
+.tab-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:1em 0 2em;animation:fadeIn .3s ease}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Components */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2em;margin:1em 0;box-shadow:var(--shadow);
+}
+.formula-box{
+  background:var(--accent-light);border-left:4px solid var(--accent);
+  padding:1em 1.2em;margin:1em 0;border-radius:0 var(--radius) var(--radius) 0;
+  font-size:1.05em;
+}
+.tip-box{
+  background:var(--tip-bg);border-left:4px solid var(--tip);
+  padding:1em 1.2em;margin:1em 0;border-radius:0 var(--radius) var(--radius) 0;
+}
+.tip-box::before{content:"Astuce";display:block;font-weight:700;color:var(--tip);font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.3em}
+.exercise{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2em;margin:1em 0;box-shadow:var(--shadow);
+  counter-increment:exo;
+}
+.exercise::before{
+  content:"Exercice " counter(exo);display:block;font-family:var(--font-heading);
+  font-weight:700;color:var(--accent);font-size:1.1rem;margin-bottom:.5em;
+}
+.exercise[data-label]::before{content:"Exercice " counter(exo) " \2014  " attr(data-label)}
+details{margin:.8em 0}
+details summary{
+  cursor:pointer;font-weight:600;color:var(--accent);padding:6px 0;
+  list-style:none;display:flex;align-items:center;gap:6px;
+}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"\25B6";font-size:.7em;transition:transform .2s;display:inline-block}
+details[open] summary::before{transform:rotate(90deg)}
+details .correction{padding:.8em 1em;background:var(--surface2);border-radius:var(--radius);margin-top:.4em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;font-size:.9em}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;line-height:1.2}
+.frac .den{padding:2px 4px 0;line-height:1.2}
+
+/* Interactive */
+.interactive-zone{
+  background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
+  padding:1.2em;margin:1.2em 0;
+}
+.interactive-zone h4{margin-top:0;color:var(--accent)}
+label.field-label{display:block;font-weight:600;margin-bottom:4px;font-size:.9rem;color:var(--muted)}
+input[type="text"],input[type="number"],select{
+  font-family:var(--font-body);font-size:1rem;padding:8px 12px;
+  border:1.5px solid var(--border);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);width:100%;max-width:300px;
+}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+button.btn{
+  font-family:var(--font-body);font-size:.9rem;font-weight:600;
+  padding:8px 20px;border:none;border-radius:var(--radius);cursor:pointer;
+  background:var(--accent);color:#fff;transition:background .2s;
+}
+button.btn:hover{filter:brightness(1.1)}
+button.btn:focus-visible{outline:2px solid var(--heading);outline-offset:2px}
+.result-box{
+  margin-top:1em;padding:1em;border-radius:var(--radius);
+  background:var(--surface2);min-height:2em;line-height:1.8;
+}
+.step{margin:.4em 0;padding:.4em .6em;border-radius:4px}
+.step-highlight{background:var(--accent-light)}
+.sol-positive{color:var(--success);font-weight:700}
+.sol-negative{color:var(--error);font-weight:700}
+canvas{
+  display:block;width:100%;max-width:100%;border:1px solid var(--border);
+  border-radius:var(--radius);background:var(--surface);margin:.8em 0;
+}
+
+/* Quiz */
+.quiz-q{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1em 1.2em;margin:.8em 0;box-shadow:var(--shadow);
+  counter-increment:quiz;
+}
+.quiz-q .q-title{font-weight:700;color:var(--heading);margin-bottom:.6em}
+.quiz-q .q-title::before{content:"Question " counter(quiz) ". ";color:var(--accent)}
+.quiz-option{
+  display:flex;align-items:center;gap:8px;padding:6px 10px;margin:4px 0;
+  border-radius:var(--radius);cursor:pointer;border:1.5px solid var(--border);
+  transition:all .15s;
+}
+.quiz-option:hover{border-color:var(--accent);background:var(--accent-light)}
+.quiz-option input{accent-color:var(--accent);width:16px;height:16px;flex-shrink:0}
+.quiz-option.correct{border-color:var(--success);background:rgba(46,125,66,.1)}
+.quiz-option.wrong{border-color:var(--error);background:rgba(198,40,40,.08)}
+.quiz-feedback{margin-top:.5em;font-weight:600;font-size:.9rem;min-height:1.4em}
+.quiz-score{
+  text-align:center;padding:1.5em;background:var(--surface);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin:1.5em 0;
+}
+.quiz-score .big-num{font-size:2.5rem;font-weight:700;color:var(--accent);font-family:var(--font-heading)}
+.progress-bar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin:1em 0}
+.progress-bar .fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+
+/* Grid helpers */
+.input-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:.8em 0}
+.input-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px}
+.input-group input,.input-group select{max-width:none}
+
+/* Theme toggle */
+.theme-toggle{
+  position:fixed;top:env(safe-area-inset-top,0px);right:16px;
+  margin-top:10px;z-index:100;background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:6px 12px;cursor:pointer;font-size:.85rem;
+  color:var(--muted);box-shadow:var(--shadow);font-family:var(--font-body);
+}
+.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@media(max-width:600px){
+  .tab-btn{padding:8px 10px;font-size:.78rem}
+  h1{font-size:1.6rem}
+  h2{font-size:1.3rem}
+  .input-row{flex-direction:column}
+  .input-group{min-width:100%}
+  .header-area h1{font-size:1.7rem}
+}
+</style>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le th&egrave;me">&#9788; Th&egrave;me</button>
+
+<div class="header-area">
+  <h1>&Eacute;quations et In&eacute;quations <span class="badge">3&egrave;me</span></h1>
+  <p>Cours interactif &mdash; R&eacute;soudre, mod&eacute;liser, d&eacute;montrer</p>
+</div>
+
+<nav class="tab-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab(0)" role="tab">&Eacute;q. 1er degr&eacute;</button>
+  <button class="tab-btn" onclick="showTab(1)" role="tab">&Eacute;q. produit nul</button>
+  <button class="tab-btn" onclick="showTab(2)" role="tab">Mise en &eacute;quation</button>
+  <button class="tab-btn" onclick="showTab(3)" role="tab">In&eacute;quations</button>
+  <button class="tab-btn" onclick="showTab(4)" role="tab">Syst&egrave;mes</button>
+  <button class="tab-btn" onclick="showTab(5)" role="tab">Exercices</button>
+  <button class="tab-btn" onclick="showTab(6)" role="tab">QCM</button>
+</nav>
+
+<!-- ==================== TAB 0: Equations 1er degre ==================== -->
+<section class="tab-content active" id="tab0">
+<h2>I. &Eacute;quations du premier degr&eacute;</h2>
+
+<div class="card">
+<h3>D&eacute;finition</h3>
+<p>Une <strong>&eacute;quation du premier degr&eacute;</strong> &agrave; une inconnue <em>x</em> est une &eacute;galit&eacute; de la forme <strong>ax + b = 0</strong>, o&ugrave; <em>a</em> et <em>b</em> sont des nombres donn&eacute;s et <em>a</em> &ne; 0.</p>
+<p><strong>R&eacute;soudre</strong> une &eacute;quation, c&rsquo;est trouver toutes les valeurs de <em>x</em> qui rendent l&rsquo;&eacute;galit&eacute; vraie. Ces valeurs sont les <strong>solutions</strong>.</p>
+</div>
+
+<div class="formula-box">
+<strong>R&egrave;gles fondamentales :</strong><br>
+&bull; On peut <strong>ajouter</strong> ou <strong>soustraire</strong> un m&ecirc;me nombre aux deux membres.<br>
+&bull; On peut <strong>multiplier</strong> ou <strong>diviser</strong> les deux membres par un m&ecirc;me nombre <strong>non nul</strong>.
+</div>
+
+<h3>M&eacute;thode pas &agrave; pas : r&eacute;soudre ax + b = cx + d</h3>
+<div class="card">
+<p><strong>&Eacute;tape 1 :</strong> Regrouper les termes en <em>x</em> d&rsquo;un c&ocirc;t&eacute; (soustraire <em>cx</em> des deux membres).</p>
+<p><strong>&Eacute;tape 2 :</strong> Regrouper les constantes de l&rsquo;autre c&ocirc;t&eacute; (soustraire <em>b</em> des deux membres).</p>
+<p><strong>&Eacute;tape 3 :</strong> Diviser par le coefficient de <em>x</em>.</p>
+<p><strong>&Eacute;tape 4 :</strong> V&eacute;rifier en rempla&ccedil;ant <em>x</em> par la solution trouv&eacute;e.</p>
+</div>
+
+<div class="tip-box">
+Pensez &agrave; l&rsquo;image d&rsquo;une balance : ce que vous faites &agrave; gauche, vous devez le faire &agrave; droite pour maintenir l&rsquo;&eacute;quilibre.
+</div>
+
+<h3>Exemple d&eacute;taill&eacute;</h3>
+<div class="card">
+R&eacute;soudre : <strong>3x + 7 = x + 15</strong>
+<div class="step step-highlight">3x + 7 &minus; x = x + 15 &minus; x &nbsp;&rArr;&nbsp; 2x + 7 = 15</div>
+<div class="step step-highlight">2x + 7 &minus; 7 = 15 &minus; 7 &nbsp;&rArr;&nbsp; 2x = 8</div>
+<div class="step step-highlight">x = <span class="frac"><span class="num">8</span><span class="den">2</span></span> = 4</div>
+<p><strong>V&eacute;rification :</strong> 3&times;4 + 7 = 19 et 4 + 15 = 19 &#10003;</p>
+</div>
+
+<!-- Interactive solver -->
+<div class="interactive-zone">
+<h4>R&eacute;solveur interactif</h4>
+<p>Entrez une &eacute;quation de la forme <em>ax + b = cx + d</em> :</p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="eq1a">a</label><input type="number" id="eq1a" value="3" step="any"></div>
+  <div class="input-group"><label class="field-label" for="eq1b">x +&ensp;b</label><input type="number" id="eq1b" value="7" step="any"></div>
+  <div class="input-group"><label class="field-label" for="eq1c">=&ensp;c</label><input type="number" id="eq1c" value="1" step="any"></div>
+  <div class="input-group"><label class="field-label" for="eq1d">x +&ensp;d</label><input type="number" id="eq1d" value="15" step="any"></div>
+</div>
+<button class="btn" onclick="solveLinear()">R&eacute;soudre pas &agrave; pas</button>
+<div class="result-box" id="eq1result"></div>
+</div>
+
+<!-- Balance canvas -->
+<div class="interactive-zone">
+<h4>Visualisation : la balance</h4>
+<p>Observez l&rsquo;&eacute;quilibre se r&eacute;tablir &agrave; chaque &eacute;tape de la r&eacute;solution.</p>
+<canvas id="balanceCanvas" width="600" height="280"></canvas>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+  <button class="btn" onclick="balanceStep(-1)">&larr; Pr&eacute;c&eacute;dent</button>
+  <button class="btn" onclick="balanceStep(1)">Suivant &rarr;</button>
+</div>
+<p id="balanceText" style="font-weight:600;color:var(--accent);margin-top:.5em"></p>
+</div>
+</section>
+
+<!-- ==================== TAB 1: Equation produit nul ==================== -->
+<section class="tab-content" id="tab1">
+<h2>II. &Eacute;quations produit nul</h2>
+
+<div class="card">
+<h3>Propri&eacute;t&eacute; fondamentale</h3>
+<p>Un produit de facteurs est nul si et seulement si <strong>au moins un des facteurs est nul</strong>.</p>
+</div>
+
+<div class="formula-box">
+<strong>A &times; B = 0 &hArr; A = 0 ou B = 0</strong>
+</div>
+
+<h3>M&eacute;thode</h3>
+<div class="card">
+<p><strong>1.</strong> Mettre l&rsquo;&eacute;quation sous forme factoris&eacute;e : (ax + b)(cx + d) = 0</p>
+<p><strong>2.</strong> Appliquer la propri&eacute;t&eacute; : r&eacute;soudre ax + b = 0 et cx + d = 0 s&eacute;par&eacute;ment.</p>
+<p><strong>3.</strong> L&rsquo;&eacute;quation admet <strong>deux solutions</strong> (ou une solution double si les deux &eacute;quations donnent la m&ecirc;me valeur).</p>
+</div>
+
+<h3>Exemple 1</h3>
+<div class="card">
+R&eacute;soudre : <strong>(2x &minus; 6)(x + 4) = 0</strong>
+<div class="step step-highlight">Soit 2x &minus; 6 = 0 &rArr; 2x = 6 &rArr; x = 3</div>
+<div class="step step-highlight">Soit x + 4 = 0 &rArr; x = &minus;4</div>
+<p>L&rsquo;&eacute;quation admet <strong>deux solutions</strong> : <span class="sol-positive">x = 3</span> et <span class="sol-positive">x = &minus;4</span>.</p>
+</div>
+
+<h3>Cas particulier : factorisation pr&eacute;alable</h3>
+<div class="card">
+R&eacute;soudre : <strong>x&sup2; &minus; 5x = 0</strong>
+<div class="step step-highlight">On factorise par x : x(x &minus; 5) = 0</div>
+<div class="step step-highlight">Soit x = 0, soit x &minus; 5 = 0 &rArr; x = 5</div>
+<p>Solutions : <span class="sol-positive">x = 0</span> et <span class="sol-positive">x = 5</span>.</p>
+</div>
+
+<h3>Exemple avec identit&eacute; remarquable</h3>
+<div class="card">
+R&eacute;soudre : <strong>x&sup2; &minus; 9 = 0</strong>
+<div class="step step-highlight">On reconna&icirc;t a&sup2; &minus; b&sup2; = (a &minus; b)(a + b) avec a = x et b = 3</div>
+<div class="step step-highlight">(x &minus; 3)(x + 3) = 0</div>
+<div class="step step-highlight">x = 3 ou x = &minus;3</div>
+</div>
+
+<div class="tip-box">
+Avant d&rsquo;appliquer cette propri&eacute;t&eacute;, le second membre doit &ecirc;tre <strong>z&eacute;ro</strong>. Si ce n&rsquo;est pas le cas, d&eacute;veloppez, r&eacute;duisez, passez tout &agrave; gauche, puis factorisez.
+</div>
+
+<!-- Interactive -->
+<div class="interactive-zone">
+<h4>R&eacute;solveur &mdash; &eacute;quation produit nul</h4>
+<p>Entrez les coefficients de (ax + b)(cx + d) = 0 :</p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="pn_a">a</label><input type="number" id="pn_a" value="2" step="any"></div>
+  <div class="input-group"><label class="field-label" for="pn_b">b</label><input type="number" id="pn_b" value="-6" step="any"></div>
+  <div class="input-group"><label class="field-label" for="pn_c">c</label><input type="number" id="pn_c" value="1" step="any"></div>
+  <div class="input-group"><label class="field-label" for="pn_d">d</label><input type="number" id="pn_d" value="4" step="any"></div>
+</div>
+<button class="btn" onclick="solveProduitNul()">R&eacute;soudre</button>
+<div class="result-box" id="pnResult"></div>
+</div>
+</section>
+
+<!-- ==================== TAB 2: Mise en equation ==================== -->
+<section class="tab-content" id="tab2">
+<h2>III. Mise en &eacute;quation de probl&egrave;mes</h2>
+
+<div class="card">
+<h3>M&eacute;thode g&eacute;n&eacute;rale</h3>
+<p><strong>1. Choix de l&rsquo;inconnue :</strong> identifier la grandeur cherch&eacute;e et la noter <em>x</em>.</p>
+<p><strong>2. Mise en &eacute;quation :</strong> traduire l&rsquo;&eacute;nonc&eacute; en une &eacute;galit&eacute; math&eacute;matique.</p>
+<p><strong>3. R&eacute;solution :</strong> r&eacute;soudre l&rsquo;&eacute;quation obtenue.</p>
+<p><strong>4. V&eacute;rification et conclusion :</strong> v&eacute;rifier que la solution a du sens dans le contexte et r&eacute;diger une phrase-r&eacute;ponse.</p>
+</div>
+
+<div class="formula-box">
+<strong>Lexique de traduction :</strong><br>
+&laquo;&nbsp;la somme de&nbsp;&raquo; &rarr; <strong>+</strong>&emsp;
+&laquo;&nbsp;la diff&eacute;rence&nbsp;&raquo; &rarr; <strong>&minus;</strong>&emsp;
+&laquo;&nbsp;le double&nbsp;&raquo; &rarr; <strong>2x</strong>&emsp;
+&laquo;&nbsp;le triple&nbsp;&raquo; &rarr; <strong>3x</strong><br>
+&laquo;&nbsp;la moiti&eacute;&nbsp;&raquo; &rarr; <span class="frac"><span class="num">x</span><span class="den">2</span></span>&emsp;
+&laquo;&nbsp;le tiers&nbsp;&raquo; &rarr; <span class="frac"><span class="num">x</span><span class="den">3</span></span>&emsp;
+&laquo;&nbsp;de plus que&nbsp;&raquo; &rarr; <strong>+</strong>&emsp;
+&laquo;&nbsp;de moins que&nbsp;&raquo; &rarr; <strong>&minus;</strong>
+</div>
+
+<h3>Probl&egrave;me 1 &mdash; &Acirc;ges</h3>
+<div class="card">
+<p><em>Paul a 14 ans. Son p&egrave;re a 42 ans. Dans combien d&rsquo;ann&eacute;es l&rsquo;&acirc;ge du p&egrave;re sera-t-il le double de celui de Paul ?</em></p>
+<details><summary>Solution guid&eacute;e</summary><div class="correction">
+<p><strong>Inconnue :</strong> <em>x</em> = nombre d&rsquo;ann&eacute;es cherch&eacute;.</p>
+<p><strong>&Eacute;quation :</strong> Dans <em>x</em> ann&eacute;es, Paul aura 14 + x ans et son p&egrave;re 42 + x ans.</p>
+<div class="step step-highlight">42 + x = 2(14 + x)</div>
+<div class="step step-highlight">42 + x = 28 + 2x</div>
+<div class="step step-highlight">42 &minus; 28 = 2x &minus; x &rArr; 14 = x</div>
+<p><strong>R&eacute;ponse :</strong> Dans <span class="sol-positive">14 ans</span>, le p&egrave;re aura le double de l&rsquo;&acirc;ge de Paul.</p>
+<p><strong>V&eacute;rification :</strong> Paul aura 28 ans, son p&egrave;re 56 ans. 56 = 2 &times; 28 &#10003;</p>
+</div></details>
+</div>
+
+<h3>Probl&egrave;me 2 &mdash; G&eacute;om&eacute;trie</h3>
+<div class="card">
+<p><em>Un rectangle a un p&eacute;rim&egrave;tre de 54 cm. Sa longueur d&eacute;passe sa largeur de 7 cm. Quelles sont ses dimensions ?</em></p>
+<details><summary>Solution guid&eacute;e</summary><div class="correction">
+<p><strong>Inconnue :</strong> <em>x</em> = largeur en cm. Alors longueur = x + 7.</p>
+<div class="step step-highlight">P = 2(x + x + 7) = 54</div>
+<div class="step step-highlight">2(2x + 7) = 54 &rArr; 2x + 7 = 27</div>
+<div class="step step-highlight">2x = 20 &rArr; x = 10</div>
+<p><strong>R&eacute;ponse :</strong> Largeur = <span class="sol-positive">10 cm</span>, longueur = <span class="sol-positive">17 cm</span>.</p>
+<p><strong>V&eacute;rification :</strong> 2 &times; (10 + 17) = 2 &times; 27 = 54 &#10003;</p>
+</div></details>
+</div>
+
+<h3>Probl&egrave;me 3 &mdash; Prix</h3>
+<div class="card">
+<p><em>Un commer&ccedil;ant vend des cahiers et des stylos. Un cahier co&ucirc;te 2&nbsp;&euro; de plus qu&rsquo;un stylo. Julie ach&egrave;te 3 cahiers et 5 stylos pour 29&nbsp;&euro;. Quel est le prix d&rsquo;un stylo ?</em></p>
+<details><summary>Solution guid&eacute;e</summary><div class="correction">
+<p><strong>Inconnue :</strong> <em>x</em> = prix d&rsquo;un stylo en euros. Prix d&rsquo;un cahier = x + 2.</p>
+<div class="step step-highlight">3(x + 2) + 5x = 29</div>
+<div class="step step-highlight">3x + 6 + 5x = 29 &rArr; 8x = 23</div>
+<div class="step step-highlight">x = <span class="frac"><span class="num">23</span><span class="den">8</span></span> = 2,875</div>
+<p><strong>R&eacute;ponse :</strong> Un stylo co&ucirc;te <span class="sol-positive">2,88 &euro;</span> (arrondi au centime) et un cahier <span class="sol-positive">4,88 &euro;</span>.</p>
+</div></details>
+</div>
+
+<!-- Guided problem solver -->
+<div class="interactive-zone">
+<h4>Atelier guid&eacute;</h4>
+<p><em>La somme de trois nombres entiers cons&eacute;cutifs est 96. Quels sont ces nombres ?</em></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="me_var">&Eacute;tape 1 : quel nom pour l&rsquo;inconnue ?</label><input type="text" id="me_var" placeholder="x"></div>
+</div>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="me_eq">&Eacute;tape 2 : &eacute;crivez l&rsquo;&eacute;quation</label><input type="text" id="me_eq" placeholder="x + (x+1) + (x+2) = 96"></div>
+</div>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="me_sol">&Eacute;tape 3 : valeur de x ?</label><input type="number" id="me_sol" placeholder="?" step="any"></div>
+</div>
+<button class="btn" onclick="checkMiseEnEq()">V&eacute;rifier</button>
+<div class="result-box" id="meResult"></div>
+</div>
+</section>
+
+<!-- ==================== TAB 3: Inequations ==================== -->
+<section class="tab-content" id="tab3">
+<h2>IV. In&eacute;quations</h2>
+
+<div class="card">
+<h3>D&eacute;finition</h3>
+<p>Une <strong>in&eacute;quation</strong> est une in&eacute;galit&eacute; comportant une inconnue. R&eacute;soudre une in&eacute;quation, c&rsquo;est trouver <strong>toutes les valeurs</strong> de l&rsquo;inconnue qui v&eacute;rifient l&rsquo;in&eacute;galit&eacute;.</p>
+<p>L&rsquo;ensemble des solutions est un <strong>intervalle</strong>, repr&eacute;sent&eacute; sur une droite gradu&eacute;e.</p>
+</div>
+
+<div class="formula-box">
+<strong>R&egrave;gle capitale :</strong> quand on <strong>multiplie ou divise</strong> les deux membres par un nombre <strong>n&eacute;gatif</strong>, on <strong>change le sens</strong> de l&rsquo;in&eacute;galit&eacute;.
+</div>
+
+<h3>Exemple 1</h3>
+<div class="card">
+R&eacute;soudre : <strong>3x &minus; 5 &gt; 7</strong>
+<div class="step step-highlight">3x &gt; 7 + 5 &rArr; 3x &gt; 12</div>
+<div class="step step-highlight">x &gt; 4</div>
+<p>L&rsquo;ensemble des solutions est <strong>]4 ; +&infin;[</strong>.</p>
+</div>
+
+<h3>Exemple 2 (attention au signe !)</h3>
+<div class="card">
+R&eacute;soudre : <strong>&minus;2x + 3 &le; 9</strong>
+<div class="step step-highlight">&minus;2x &le; 9 &minus; 3 &rArr; &minus;2x &le; 6</div>
+<div class="step step-highlight">On divise par &minus;2 : on <strong>change le sens</strong></div>
+<div class="step step-highlight">x &ge; &minus;3</div>
+<p>L&rsquo;ensemble des solutions est <strong>[&minus;3 ; +&infin;[</strong>.</p>
+</div>
+
+<h3>Notation sur la droite gradu&eacute;e</h3>
+<div class="card">
+<p>&bull; Un <strong>point plein</strong> &#9679; signifie que la borne est <strong>incluse</strong> (&ge; ou &le;).</p>
+<p>&bull; Un <strong>point vide</strong> &#9675; signifie que la borne est <strong>exclue</strong> (&gt; ou &lt;).</p>
+<p>&bull; La zone color&eacute;e repr&eacute;sente l&rsquo;ensemble des solutions.</p>
+</div>
+
+<div class="tip-box">
+Pour retenir le changement de sens : quand on multiplie par un n&eacute;gatif, les grands deviennent petits et les petits deviennent grands. Exemple : 2 &lt; 5 mais &minus;2 &gt; &minus;5.
+</div>
+
+<!-- Interactive inequation solver + number line -->
+<div class="interactive-zone">
+<h4>R&eacute;solveur d&rsquo;in&eacute;quations</h4>
+<p>Entrez une in&eacute;quation de la forme <em>ax + b &nbsp;(signe)&nbsp; c</em> :</p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="ineq_a">a</label><input type="number" id="ineq_a" value="3" step="any"></div>
+  <div class="input-group"><label class="field-label" for="ineq_b">x +&ensp;b</label><input type="number" id="ineq_b" value="-5" step="any"></div>
+  <div class="input-group"><label class="field-label" for="ineq_sign">signe</label>
+    <select id="ineq_sign"><option value="gt">&gt;</option><option value="ge">&ge;</option><option value="lt">&lt;</option><option value="le">&le;</option></select>
+  </div>
+  <div class="input-group"><label class="field-label" for="ineq_c">c</label><input type="number" id="ineq_c" value="7" step="any"></div>
+</div>
+<button class="btn" onclick="solveIneq()">R&eacute;soudre et tracer</button>
+<div class="result-box" id="ineqResult"></div>
+<canvas id="numberLineCanvas" width="600" height="100"></canvas>
+</div>
+</section>
+
+<!-- ==================== TAB 4: Systemes ==================== -->
+<section class="tab-content" id="tab4">
+<h2>V. Syst&egrave;mes d&rsquo;&eacute;quations (initiation)</h2>
+
+<div class="card">
+<h3>Qu&rsquo;est-ce qu&rsquo;un syst&egrave;me ?</h3>
+<p>Un <strong>syst&egrave;me de deux &eacute;quations &agrave; deux inconnues</strong> est un ensemble de deux &eacute;quations que l&rsquo;on doit v&eacute;rifier <em>simultan&eacute;ment</em>.</p>
+<p>Graphiquement, r&eacute;soudre un syst&egrave;me revient &agrave; trouver le <strong>point d&rsquo;intersection</strong> de deux droites.</p>
+</div>
+
+<div class="formula-box">
+<strong>M&eacute;thode par substitution :</strong><br>
+1. Exprimer une inconnue en fonction de l&rsquo;autre dans l&rsquo;une des &eacute;quations.<br>
+2. Remplacer dans l&rsquo;autre &eacute;quation.<br>
+3. R&eacute;soudre l&rsquo;&eacute;quation obtenue (une seule inconnue).<br>
+4. En d&eacute;duire la valeur de l&rsquo;autre inconnue.
+</div>
+
+<h3>Exemple</h3>
+<div class="card">
+R&eacute;soudre le syst&egrave;me :
+<div class="step" style="font-weight:600">y = 2x + 1 &emsp;(1)</div>
+<div class="step" style="font-weight:600">3x + y = 11 &emsp;(2)</div>
+<p style="margin-top:.8em"><strong>Substitution de (1) dans (2) :</strong></p>
+<div class="step step-highlight">3x + (2x + 1) = 11</div>
+<div class="step step-highlight">5x + 1 = 11 &rArr; 5x = 10 &rArr; x = 2</div>
+<div class="step step-highlight">y = 2 &times; 2 + 1 = 5</div>
+<p>La solution est <span class="sol-positive">(x ; y) = (2 ; 5)</span>.</p>
+</div>
+
+<div class="tip-box">
+Choisissez d&rsquo;exprimer l&rsquo;inconnue qui a le coefficient le plus simple (id&eacute;alement 1) pour faciliter la substitution.
+</div>
+
+<h3>Interpr&eacute;tation graphique</h3>
+<div class="card">
+<p>Chaque &eacute;quation du syst&egrave;me repr&eacute;sente une <strong>droite</strong> dans le plan.</p>
+<p>&bull; Si les droites se coupent : <strong>une solution unique</strong> (le point d&rsquo;intersection).</p>
+<p>&bull; Si les droites sont parall&egrave;les : <strong>aucune solution</strong>.</p>
+<p>&bull; Si les droites sont confondues : <strong>infinit&eacute; de solutions</strong>.</p>
+</div>
+
+<!-- Interactive system solver + graph -->
+<div class="interactive-zone">
+<h4>R&eacute;solveur graphique</h4>
+<p>Droite D&#x2081; : y = a&#x2081;x + b&#x2081; &emsp; Droite D&#x2082; : y = a&#x2082;x + b&#x2082;</p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="sys_a1">a&#x2081;</label><input type="number" id="sys_a1" value="2" step="any"></div>
+  <div class="input-group"><label class="field-label" for="sys_b1">b&#x2081;</label><input type="number" id="sys_b1" value="1" step="any"></div>
+  <div class="input-group"><label class="field-label" for="sys_a2">a&#x2082;</label><input type="number" id="sys_a2" value="-1" step="any"></div>
+  <div class="input-group"><label class="field-label" for="sys_b2">b&#x2082;</label><input type="number" id="sys_b2" value="7" step="any"></div>
+</div>
+<button class="btn" onclick="solveSystem()">Tracer et r&eacute;soudre</button>
+<div class="result-box" id="sysResult"></div>
+<canvas id="systemCanvas" width="600" height="400"></canvas>
+</div>
+</section>
+
+<!-- ==================== TAB 5: Exercices ==================== -->
+<section class="tab-content" id="tab5">
+<h2>VI. Exercices progressifs (type Brevet)</h2>
+<div style="counter-reset:exo">
+
+<div class="exercise" data-label="Niveau 1">
+<p>R&eacute;soudre l&rsquo;&eacute;quation : <strong>5x &minus; 3 = 2x + 9</strong></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo1">x =</label><input type="number" id="exo1" step="any"></div>
+  <button class="btn" onclick="checkExo(1,4)">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo1r"></div>
+<details><summary>Correction</summary><div class="correction">
+5x &minus; 2x = 9 + 3 &rArr; 3x = 12 &rArr; <strong>x = 4</strong><br>
+V&eacute;rification : 5&times;4 &minus; 3 = 17 et 2&times;4 + 9 = 17 &#10003;
+</div></details>
+</div>
+
+<div class="exercise" data-label="Niveau 1">
+<p>R&eacute;soudre : <strong>(x &minus; 3)(2x + 8) = 0</strong></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo2a">x&#x2081; =</label><input type="number" id="exo2a" step="any"></div>
+  <div class="input-group"><label class="field-label" for="exo2b">x&#x2082; =</label><input type="number" id="exo2b" step="any"></div>
+  <button class="btn" onclick="checkExo2()">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo2r"></div>
+<details><summary>Correction</summary><div class="correction">
+x &minus; 3 = 0 &rArr; x = 3 &emsp;ou&emsp; 2x + 8 = 0 &rArr; x = &minus;4<br>
+Solutions : <strong>x = 3</strong> et <strong>x = &minus;4</strong>.
+</div></details>
+</div>
+
+<div class="exercise" data-label="Niveau 2">
+<p>R&eacute;soudre l&rsquo;in&eacute;quation : <strong>4x + 1 &ge; 2x &minus; 7</strong></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo3">x &ge;</label><input type="number" id="exo3" step="any"></div>
+  <button class="btn" onclick="checkExo(3,-4)">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo3r"></div>
+<details><summary>Correction</summary><div class="correction">
+4x &minus; 2x &ge; &minus;7 &minus; 1 &rArr; 2x &ge; &minus;8 &rArr; <strong>x &ge; &minus;4</strong><br>
+Ensemble des solutions : [&minus;4 ; +&infin;[
+</div></details>
+</div>
+
+<div class="exercise" data-label="Niveau 2 &mdash; Probl&egrave;me">
+<p>Un rectangle a une longueur qui mesure le triple de sa largeur. Son p&eacute;rim&egrave;tre est 56 cm. Trouvez la largeur.</p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo4">Largeur (cm) =</label><input type="number" id="exo4" step="any"></div>
+  <button class="btn" onclick="checkExo(4,7)">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo4r"></div>
+<details><summary>Correction</summary><div class="correction">
+Soit x la largeur. Longueur = 3x.<br>
+P = 2(x + 3x) = 56 &rArr; 8x = 56 &rArr; <strong>x = 7 cm</strong>.<br>
+Largeur = 7 cm, longueur = 21 cm. V&eacute;rification : 2&times;(7+21) = 56 &#10003;
+</div></details>
+</div>
+
+<div class="exercise" data-label="Niveau 3 &mdash; Brevet">
+<p>D&eacute;velopper puis r&eacute;soudre : <strong>(x + 3)&sup2; &minus; (x &minus; 2)&sup2; = 25</strong></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo5">x =</label><input type="number" id="exo5" step="any"></div>
+  <button class="btn" onclick="checkExo(5,2)">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo5r"></div>
+<details><summary>Correction</summary><div class="correction">
+(x+3)&sup2; = x&sup2; + 6x + 9 &emsp; (x&minus;2)&sup2; = x&sup2; &minus; 4x + 4<br>
+x&sup2; + 6x + 9 &minus; (x&sup2; &minus; 4x + 4) = 25<br>
+x&sup2; + 6x + 9 &minus; x&sup2; + 4x &minus; 4 = 25<br>
+10x + 5 = 25 &rArr; 10x = 20 &rArr; <strong>x = 2</strong><br>
+V&eacute;rification : (2+3)&sup2; &minus; (2&minus;2)&sup2; = 25 &minus; 0 = 25 &#10003;
+</div></details>
+</div>
+
+<div class="exercise" data-label="Niveau 3 &mdash; Brevet">
+<p>R&eacute;soudre le syst&egrave;me par substitution :<br>
+<strong>x + y = 10</strong> &emsp; et &emsp; <strong>2x &minus; y = 5</strong></p>
+<div class="input-row">
+  <div class="input-group"><label class="field-label" for="exo6x">x =</label><input type="number" id="exo6x" step="any"></div>
+  <div class="input-group"><label class="field-label" for="exo6y">y =</label><input type="number" id="exo6y" step="any"></div>
+  <button class="btn" onclick="checkExo6()">V&eacute;rifier</button>
+</div>
+<div class="result-box" id="exo6r"></div>
+<details><summary>Correction</summary><div class="correction">
+De la premi&egrave;re &eacute;quation : y = 10 &minus; x. On remplace dans la seconde :<br>
+2x &minus; (10 &minus; x) = 5 &rArr; 2x &minus; 10 + x = 5 &rArr; 3x = 15 &rArr; x = 5<br>
+y = 10 &minus; 5 = 5<br>
+Solution : <strong>(x ; y) = (5 ; 5)</strong>.<br>
+V&eacute;rification : 5 + 5 = 10 &#10003; &emsp; 2&times;5 &minus; 5 = 5 &#10003;
+</div></details>
+</div>
+
+</div>
+</section>
+
+<!-- ==================== TAB 6: QCM ==================== -->
+<section class="tab-content" id="tab6">
+<h2>VII. QCM &mdash; Teste tes connaissances</h2>
+<p style="color:var(--muted)">16 questions couvrant tout le chapitre. Choisis la bonne r&eacute;ponse pour chaque question.</p>
+<div class="progress-bar"><div class="fill" id="quizProgress" style="width:0%"></div></div>
+<div id="quizContainer"></div>
+<div class="quiz-score" id="quizScore" hidden>
+  <p>Ton score :</p>
+  <div class="big-num" id="quizScoreNum"></div>
+  <p id="quizMsg"></p>
+  <button class="btn" onclick="resetQuiz()" style="margin-top:1em">Recommencer</button>
+</div>
+</section>
+
+<script>
+/* ===== Helpers ===== */
+function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function fmt(n){return n<0?'('+n+')':''+n}
+function fmtDec(n){return Math.abs(n-Math.round(n))<1e-9?''+Math.round(n):''+Math.round(n*10000)/10000}
+function fmtFrac(num,den){
+  if(den<0){num=-num;den=-den}
+  var g=gcd(Math.abs(num),Math.abs(den));
+  num=num/g;den=den/g;
+  if(den===1)return ''+num;
+  return '<span class="frac"><span class="num">'+num+'</span><span class="den">'+den+'</span></span>';
+}
+function gcd(a,b){return b?gcd(b,a%b):a}
+
+/* ===== Theme ===== */
+function toggleTheme(){
+  var r=document.documentElement,t=r.getAttribute('data-theme');
+  r.setAttribute('data-theme',t==='dark'?'light':'dark');
+  try{localStorage.setItem('eqi-theme',r.getAttribute('data-theme'))}catch(e){}
+  reinitActiveCanvas();
+}
+(function(){try{var t=localStorage.getItem('eqi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})();
+
+/* ===== Tabs ===== */
+var currentTab=0;
+function showTab(i){
+  document.querySelectorAll('.tab-content').forEach(function(s,j){s.classList.toggle('active',j===i)});
+  document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)});
+  currentTab=i;
+  var btn=document.querySelectorAll('.tab-btn')[i];
+  btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  initSection(i);
+  try{localStorage.setItem('eqi-tab',''+i)}catch(e){}
+}
+function initSection(i){
+  if(i===0)drawBalance();
+  if(i===3)drawNumberLine(null,null,null);
+  if(i===4)drawSystem();
+}
+function reinitActiveCanvas(){setTimeout(function(){initSection(currentTab)},60)}
+
+/* ===== Tab 0: Linear Equation Solver ===== */
+function solveLinear(){
+  var a=parseFloat(document.getElementById('eq1a').value)||0;
+  var b=parseFloat(document.getElementById('eq1b').value)||0;
+  var c=parseFloat(document.getElementById('eq1c').value)||0;
+  var d=parseFloat(document.getElementById('eq1d').value)||0;
+  var out=document.getElementById('eq1result');
+  if(a===c){
+    out.innerHTML=b===d?'<span class="sol-positive">Identit&eacute; : infinit&eacute; de solutions (tout r&eacute;el est solution).</span>':'<span class="sol-negative">Aucune solution (l\'&eacute;quation est impossible).</span>';
+    return;
+  }
+  var html='<div class="step step-highlight"><strong>&Eacute;quation :</strong> '+a+'x + ('+b+') = '+c+'x + ('+d+')</div>';
+  html+='<div class="step step-highlight"><strong>&Eacute;tape 1 :</strong> On regroupe les x &agrave; gauche et les constantes &agrave; droite</div>';
+  var coeff=a-c, rhs=d-b;
+  html+='<div class="step step-highlight">'+a+'x &minus; '+c+'x = '+d+' &minus; ('+b+') &nbsp;&rArr;&nbsp; '+(coeff)+'x = '+rhs+'</div>';
+  var sol=rhs/coeff;
+  html+='<div class="step step-highlight"><strong>&Eacute;tape 2 :</strong> x = '+fmtFrac(rhs,coeff);
+  if(Math.abs(sol-Math.round(sol))>1e-9) html+=' = '+fmtDec(sol);
+  html+='</div>';
+  html+='<p><strong class="sol-positive">Solution : x = '+fmtDec(sol)+'</strong></p>';
+  var lhs2=a*sol+b, rhs2=c*sol+d;
+  html+='<p><strong>V&eacute;rification :</strong> '+a+'&times;'+fmtDec(sol)+' + ('+b+') = '+fmtDec(lhs2)+' et '+c+'&times;'+fmtDec(sol)+' + ('+d+') = '+fmtDec(rhs2);
+  html+=Math.abs(lhs2-rhs2)<1e-9?' &#10003;</p>':' &#10007;</p>';
+  out.innerHTML=html;
+  drawBalanceWith(a,b,c,d);
+}
+
+/* Balance visualization */
+var balSteps=[], balIdx=0;
+function drawBalanceWith(a,b,c,d){
+  var coeff=a-c, rhs=d-b;
+  balSteps=[
+    {l:a+'x + ('+b+')',r:c+'x + ('+d+')',label:'Équation initiale'},
+    {l:(a-c)+'x + ('+b+')',r:''+d,label:'On soustrait '+c+'x des deux côtés'},
+    {l:(a-c)+'x',r:''+rhs,label:'On soustrait ('+b+') des deux côtés'}
+  ];
+  if(coeff!==0){
+    balSteps.push({l:'x',r:fmtDec(rhs/coeff),label:'On divise par '+(a-c)});
+  }
+  balIdx=0;
+  drawBalance();
+}
+function balanceStep(dir){
+  balIdx=Math.max(0,Math.min(balSteps.length-1,balIdx+dir));
+  drawBalance();
+}
+function drawBalance(){
+  var canvas=document.getElementById('balanceCanvas');
+  if(!canvas)return;
+  var dpr=window.devicePixelRatio||1;
+  var rect=canvas.parentElement;
+  var displayW=Math.min(600,rect.clientWidth-4);
+  canvas.style.width=displayW+'px';canvas.style.height='280px';
+  canvas.width=displayW*dpr;canvas.height=280*dpr;
+  var ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  var W=displayW,H=280;
+  var bg=getCSS('--surface'),fg=getCSS('--text'),accent=getCSS('--accent'),heading=getCSS('--heading'),border=getCSS('--border');
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  // fulcrum
+  ctx.fillStyle=heading;
+  ctx.beginPath();ctx.moveTo(W/2,H-50);ctx.lineTo(W/2-18,H-30);ctx.lineTo(W/2+18,H-30);ctx.closePath();ctx.fill();
+  // base
+  ctx.fillStyle=border;
+  ctx.fillRect(W/2-70,H-30,140,10);
+  // beam
+  ctx.strokeStyle=heading;ctx.lineWidth=4;
+  var bw=Math.min(200,W*0.4);
+  ctx.beginPath();ctx.moveTo(W/2-bw,H-80);ctx.lineTo(W/2+bw,H-80);ctx.stroke();
+  // vertical support
+  ctx.strokeStyle=heading;ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(W/2,H-50);ctx.lineTo(W/2,H-80);ctx.stroke();
+  // pans
+  function drawPan(cx,cy){
+    ctx.strokeStyle=accent;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx-30,cy);ctx.lineTo(cx-40,cy+25);ctx.lineTo(cx+40,cy+25);ctx.lineTo(cx+30,cy);ctx.stroke();
+    ctx.fillStyle=accent+'22';ctx.fill();
+    // strings
+    ctx.strokeStyle=accent;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(cx-30,cy);ctx.lineTo(cx,cy-20);ctx.lineTo(cx+30,cy);ctx.stroke();
+  }
+  drawPan(W/2-bw,H-60);
+  drawPan(W/2+bw,H-60);
+  // text on pans
+  if(balSteps.length>0){
+    var s=balSteps[balIdx];
+    ctx.font='bold '+Math.min(18,W*0.032)+'px "Nunito Sans",sans-serif';
+    ctx.fillStyle=heading;ctx.textAlign='center';
+    ctx.fillText(s.l.replace(/&minus;/g,'−'),W/2-bw,H-105);
+    ctx.fillText(s.r,W/2+bw,H-105);
+    document.getElementById('balanceText').innerHTML=s.label+' ('+(balIdx+1)+'/'+balSteps.length+')';
+  } else {
+    document.getElementById('balanceText').innerHTML='Entrez une équation ci-dessus et cliquez Résoudre.';
+  }
+  ctx.fillStyle=fg;ctx.font='bold 14px "Nunito Sans",sans-serif';ctx.textAlign='center';
+  ctx.fillText('=',W/2,H-85);
+}
+
+/* ===== Tab 1: Produit Nul ===== */
+function solveProduitNul(){
+  var a=parseFloat(document.getElementById('pn_a').value)||0;
+  var b=parseFloat(document.getElementById('pn_b').value)||0;
+  var c=parseFloat(document.getElementById('pn_c').value)||0;
+  var d=parseFloat(document.getElementById('pn_d').value)||0;
+  var out=document.getElementById('pnResult');
+  var html='<div class="step step-highlight"><strong>&Eacute;quation :</strong> ('+a+'x + ('+b+'))('+c+'x + ('+d+')) = 0</div>';
+  html+='<p>Propri&eacute;t&eacute; du produit nul : A &times; B = 0 &hArr; A = 0 ou B = 0</p>';
+  var sols=[];
+  if(a!==0){
+    var s1=-b/a;
+    html+='<div class="step step-highlight"><strong>1er facteur :</strong> '+a+'x + ('+b+') = 0 &rArr; x = '+fmtFrac(-b,a)+' = '+fmtDec(s1)+'</div>';
+    sols.push(fmtDec(s1));
+  } else {
+    html+=b===0?'<div class="step">Premier facteur : 0 = 0, toujours vrai.</div>':'<div class="step"><span class="sol-negative">Premier facteur : '+b+' = 0, impossible.</span></div>';
+  }
+  if(c!==0){
+    var s2=-d/c;
+    html+='<div class="step step-highlight"><strong>2nd facteur :</strong> '+c+'x + ('+d+') = 0 &rArr; x = '+fmtFrac(-d,c)+' = '+fmtDec(s2)+'</div>';
+    sols.push(fmtDec(s2));
+  } else {
+    html+=d===0?'<div class="step">Second facteur : 0 = 0, toujours vrai.</div>':'<div class="step"><span class="sol-negative">Second facteur : '+d+' = 0, impossible.</span></div>';
+  }
+  if(sols.length>0){
+    html+='<p class="sol-positive"><strong>Solutions : x = '+sols.join(' ou x = ')+'</strong></p>';
+  } else if((a===0&&b===0)||(c===0&&d===0)){
+    html+='<p class="sol-positive"><strong>Tout r&eacute;el est solution.</strong></p>';
+  } else {
+    html+='<p class="sol-negative"><strong>Aucune solution.</strong></p>';
+  }
+  out.innerHTML=html;
+}
+
+/* ===== Tab 2: Mise en equation check ===== */
+function checkMiseEnEq(){
+  var v=document.getElementById('me_var').value.trim().toLowerCase();
+  var sol=parseFloat(document.getElementById('me_sol').value);
+  var out=document.getElementById('meResult');
+  var html='';
+  if(v==='x'||v==='n'){
+    html+='<p class="sol-positive">&#10003; Bon choix de variable !</p>';
+  } else if(v){
+    html+='<p>Variable choisie : '+v+'. Classiquement on utilise <em>x</em> ou <em>n</em>.</p>';
+  }
+  if(Math.abs(sol-31)<0.01){
+    html+='<p class="sol-positive"><strong>&#10003; Correct ! x = 31.</strong></p>';
+    html+='<p>Les trois nombres sont <strong>31, 32 et 33</strong>.</p>';
+    html+='<p>V&eacute;rification : 31 + 32 + 33 = 96 &#10003;</p>';
+  } else if(!isNaN(sol)){
+    html+='<p class="sol-negative">&#10007; Ce n\'est pas la bonne valeur.</p>';
+    html+='<p>Indice : l\'équation est x + (x+1) + (x+2) = 96, soit 3x + 3 = 96.</p>';
+  }
+  out.innerHTML=html;
+}
+
+/* ===== Tab 3: Inequation solver ===== */
+var signSymbols={gt:'>',ge:'≥',lt:'<',le:'≤'};
+var signFlip={gt:'lt',ge:'le',lt:'gt',le:'ge'};
+
+function solveIneq(){
+  var a=parseFloat(document.getElementById('ineq_a').value)||0;
+  var b=parseFloat(document.getElementById('ineq_b').value)||0;
+  var signKey=document.getElementById('ineq_sign').value;
+  var c=parseFloat(document.getElementById('ineq_c').value)||0;
+  var out=document.getElementById('ineqResult');
+  var sym=signSymbols[signKey];
+  if(a===0){
+    var ok=false;
+    if(signKey==='gt')ok=b>c;else if(signKey==='ge')ok=b>=c;
+    else if(signKey==='lt')ok=b<c;else ok=b<=c;
+    out.innerHTML=ok?'<span class="sol-positive">Vrai pour tout réel x.</span>':'<span class="sol-negative">Aucune solution.</span>';
+    drawNumberLine(null,null,null);return;
+  }
+  var rhs=c-b;
+  var html='<div class="step step-highlight"><strong>&Eacute;quation :</strong> '+a+'x + ('+b+') '+sym+' '+c+'</div>';
+  html+='<div class="step step-highlight">'+a+'x '+sym+' '+c+' &minus; ('+b+') = '+rhs+'</div>';
+  var flipped=a<0;
+  var finalSign=flipped?signFlip[signKey]:signKey;
+  var finalSym=signSymbols[finalSign];
+  if(flipped){
+    html+='<div class="step step-highlight">On divise par '+a+' <strong>(n&eacute;gatif &rArr; on change le sens !)</strong></div>';
+  } else {
+    html+='<div class="step step-highlight">On divise par '+a+'</div>';
+  }
+  var sol=rhs/a;
+  html+='<div class="step step-highlight"><strong>x '+finalSym+' '+fmtDec(sol)+'</strong></div>';
+  var inclusive=finalSign==='ge'||finalSign==='le';
+  var goRight=finalSign==='gt'||finalSign==='ge';
+  if(goRight){
+    html+='<p class="sol-positive"><strong>Ensemble des solutions : '+(inclusive?'[':']')+fmtDec(sol)+' ; +∞[</strong></p>';
+  } else {
+    html+='<p class="sol-positive"><strong>Ensemble des solutions : ]−∞ ; '+fmtDec(sol)+(inclusive?']':'[')+'</strong></p>';
+  }
+  out.innerHTML=html;
+  drawNumberLine(sol,goRight,inclusive);
+}
+
+function drawNumberLine(val,goRight,inclusive){
+  var canvas=document.getElementById('numberLineCanvas');
+  if(!canvas)return;
+  var dpr=window.devicePixelRatio||1;
+  var displayW=Math.min(600,canvas.parentElement.clientWidth-4);
+  canvas.style.width=displayW+'px';canvas.style.height='100px';
+  canvas.width=displayW*dpr;canvas.height=100*dpr;
+  var ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  var W=displayW,H=100;
+  var bg=getCSS('--surface'),fg=getCSS('--text'),accent=getCSS('--accent'),success=getCSS('--success');
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  var y=H/2,pad=40;
+  // main axis
+  ctx.strokeStyle=fg;ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  // arrows
+  ctx.beginPath();ctx.moveTo(W-pad,y);ctx.lineTo(W-pad-8,y-5);ctx.moveTo(W-pad,y);ctx.lineTo(W-pad-8,y+5);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+8,y-5);ctx.moveTo(pad,y);ctx.lineTo(pad+8,y+5);ctx.stroke();
+  if(val===null){
+    ctx.fillStyle=fg+'88';ctx.font='13px "Nunito Sans",sans-serif';ctx.textAlign='center';
+    ctx.fillText('Résolvez une inéquation pour voir la droite graduée',W/2,y+35);
+    return;
+  }
+  // compute range
+  var range=Math.max(Math.abs(val)*2,10);
+  var min=val-range/2, max=val+range/2;
+  var step=1;
+  if(max-min>20)step=Math.ceil((max-min)/10);
+  if(max-min>100)step=Math.ceil((max-min)/20)*2;
+  var firstTick=Math.ceil(min/step)*step;
+  ctx.fillStyle=fg;ctx.font='11px "Nunito Sans",sans-serif';ctx.textAlign='center';
+  for(var t=firstTick;t<=max;t+=step){
+    var px=pad+(t-min)/(max-min)*(W-2*pad);
+    ctx.strokeStyle=fg+'66';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(px,y-4);ctx.lineTo(px,y+4);ctx.stroke();
+    ctx.fillStyle=fg;
+    ctx.fillText(Math.round(t*100)/100,px,y+18);
+  }
+  // solution region
+  var valPx=pad+(val-min)/(max-min)*(W-2*pad);
+  ctx.globalAlpha=0.25;ctx.fillStyle=success;
+  if(goRight){
+    ctx.fillRect(valPx,y-16,W-pad-valPx,32);
+  } else {
+    ctx.fillRect(pad,y-16,valPx-pad,32);
+  }
+  ctx.globalAlpha=1;
+  // point
+  ctx.beginPath();ctx.arc(valPx,y,7,0,Math.PI*2);
+  if(inclusive){ctx.fillStyle=success;ctx.fill()}
+  else{ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle=success;ctx.lineWidth=2.5;ctx.stroke()}
+  // label
+  ctx.fillStyle=accent;ctx.font='bold 13px "Nunito Sans",sans-serif';ctx.textAlign='center';
+  ctx.fillText(fmtDec(val),valPx,y-24);
+}
+
+/* ===== Tab 4: System solver ===== */
+function solveSystem(){
+  var a1=parseFloat(document.getElementById('sys_a1').value)||0;
+  var b1=parseFloat(document.getElementById('sys_b1').value)||0;
+  var a2=parseFloat(document.getElementById('sys_a2').value)||0;
+  var b2=parseFloat(document.getElementById('sys_b2').value)||0;
+  var out=document.getElementById('sysResult');
+  if(a1===a2){
+    out.innerHTML=b1===b2?'<span class="sol-positive">Droites confondues &mdash; infinit&eacute; de solutions.</span>':'<span class="sol-negative">Droites parall&egrave;les &mdash; aucune solution.</span>';
+    drawSystemCanvas(a1,b1,a2,b2,null);return;
+  }
+  var x=(b2-b1)/(a1-a2);
+  var y=a1*x+b1;
+  var html='<div class="step step-highlight"><strong>D&#x2081; :</strong> y = '+a1+'x + ('+b1+') &emsp; <strong>D&#x2082; :</strong> y = '+a2+'x + ('+b2+')</div>';
+  html+='<div class="step step-highlight">&Agrave; l\'intersection : '+a1+'x + ('+b1+') = '+a2+'x + ('+b2+')</div>';
+  html+='<div class="step step-highlight">'+(a1-a2)+'x = '+(b2-b1)+' &rArr; x = '+fmtDec(x)+'</div>';
+  html+='<div class="step step-highlight">y = '+a1+' &times; '+fmtDec(x)+' + ('+b1+') = '+fmtDec(y)+'</div>';
+  html+='<p class="sol-positive"><strong>Solution : ('+fmtDec(x)+' ; '+fmtDec(y)+')</strong></p>';
+  out.innerHTML=html;
+  drawSystemCanvas(a1,b1,a2,b2,{x:x,y:y});
+}
+function drawSystemCanvas(a1,b1,a2,b2,sol){
+  var canvas=document.getElementById('systemCanvas');
+  if(!canvas)return;
+  var dpr=window.devicePixelRatio||1;
+  var displayW=Math.min(600,canvas.parentElement.clientWidth-4);
+  var displayH=Math.min(400,displayW*0.67);
+  canvas.style.width=displayW+'px';canvas.style.height=displayH+'px';
+  canvas.width=displayW*dpr;canvas.height=displayH*dpr;
+  var ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  var W=displayW,H=displayH;
+  var bg=getCSS('--surface'),fg=getCSS('--text'),accent=getCSS('--accent'),heading=getCSS('--heading'),success=getCSS('--success'),border=getCSS('--border');
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  var cx=sol?sol.x:0,cy=sol?sol.y:0;
+  var range=Math.max(Math.abs(cx),Math.abs(cy),5)*2+4;
+  var xMin=cx-range,xMax=cx+range,yMin=cy-range,yMax=cy+range;
+  function toX(v){return (v-xMin)/(xMax-xMin)*W}
+  function toY(v){return H-(v-yMin)/(yMax-yMin)*H}
+  // grid
+  var gs=Math.max(1,Math.ceil(range/5));
+  ctx.strokeStyle=border;ctx.lineWidth=0.5;
+  for(var g=Math.ceil(xMin/gs)*gs;g<=xMax;g+=gs){ctx.beginPath();ctx.moveTo(toX(g),0);ctx.lineTo(toX(g),H);ctx.stroke()}
+  for(var g2=Math.ceil(yMin/gs)*gs;g2<=yMax;g2+=gs){ctx.beginPath();ctx.moveTo(0,toY(g2));ctx.lineTo(W,toY(g2));ctx.stroke()}
+  // axes
+  ctx.strokeStyle=fg+'88';ctx.lineWidth=1.5;
+  if(yMin<0&&yMax>0){ctx.beginPath();ctx.moveTo(0,toY(0));ctx.lineTo(W,toY(0));ctx.stroke()}
+  if(xMin<0&&xMax>0){ctx.beginPath();ctx.moveTo(toX(0),0);ctx.lineTo(toX(0),H);ctx.stroke()}
+  // axis labels
+  ctx.fillStyle=fg+'aa';ctx.font='10px "Nunito Sans",sans-serif';ctx.textAlign='center';
+  for(var t=Math.ceil(xMin/gs)*gs;t<=xMax;t+=gs){
+    if(t===0)continue;
+    var ty=yMin<0&&yMax>0?toY(0)+13:H-4;
+    ctx.fillText(t,toX(t),ty);
+  }
+  ctx.textAlign='right';
+  for(var t2=Math.ceil(yMin/gs)*gs;t2<=yMax;t2+=gs){
+    if(t2===0)continue;
+    var tx=xMin<0&&xMax>0?toX(0)-4:4;
+    ctx.textAlign=xMin<0&&xMax>0?'right':'left';
+    ctx.fillText(t2,tx,toY(t2)+4);
+  }
+  // lines
+  function drawLine(a,b,color,label){
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();
+    ctx.moveTo(toX(xMin),toY(a*xMin+b));ctx.lineTo(toX(xMax),toY(a*xMax+b));ctx.stroke();
+    ctx.fillStyle=color;ctx.font='bold 13px "Nunito Sans",sans-serif';ctx.textAlign='left';
+    var lx=xMax-range*0.2;
+    var ly=a*lx+b;
+    if(toY(ly)<15)ly=yMax-range*0.1;
+    if(toY(ly)>H-15)ly=yMin+range*0.1;
+    ctx.fillText(label,toX(lx)+4,toY(ly)-8);
+  }
+  drawLine(a1,b1,accent,'D₁');
+  drawLine(a2,b2,heading,'D₂');
+  // intersection
+  if(sol){
+    ctx.fillStyle=success;ctx.beginPath();ctx.arc(toX(sol.x),toY(sol.y),6,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=bg;ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle=success;ctx.font='bold 13px "Nunito Sans",sans-serif';ctx.textAlign='left';
+    ctx.fillText('('+fmtDec(sol.x)+' ; '+fmtDec(sol.y)+')',toX(sol.x)+10,toY(sol.y)-10);
+  }
+  // origin label
+  if(xMin<0&&xMax>0&&yMin<0&&yMax>0){
+    ctx.fillStyle=fg+'88';ctx.font='10px "Nunito Sans",sans-serif';ctx.textAlign='right';
+    ctx.fillText('O',toX(0)-4,toY(0)+13);
+  }
+}
+function drawSystem(){drawSystemCanvas(2,1,-1,7,{x:2,y:5})}
+
+/* ===== Tab 5: Exercise checks ===== */
+function checkExo(n,answer){
+  var val=parseFloat(document.getElementById('exo'+n).value);
+  var out=document.getElementById('exo'+n+'r');
+  if(isNaN(val)){out.innerHTML='<span class="sol-negative">Entrez une valeur numérique.</span>';return}
+  if(Math.abs(val-answer)<0.01){
+    out.innerHTML='<span class="sol-positive">&#10003; Bravo ! La réponse est bien '+answer+'.</span>';
+  } else {
+    out.innerHTML='<span class="sol-negative">&#10007; Incorrect. Réessaie ou consulte la correction ci-dessous.</span>';
+  }
+}
+function checkExo2(){
+  var a=parseFloat(document.getElementById('exo2a').value);
+  var b=parseFloat(document.getElementById('exo2b').value);
+  var out=document.getElementById('exo2r');
+  if(isNaN(a)||isNaN(b)){out.innerHTML='<span class="sol-negative">Entrez les deux solutions.</span>';return}
+  var ok=(Math.abs(a-3)<0.01&&Math.abs(b+4)<0.01)||(Math.abs(a+4)<0.01&&Math.abs(b-3)<0.01);
+  out.innerHTML=ok?'<span class="sol-positive">&#10003; Bravo ! x = 3 et x = −4.</span>':'<span class="sol-negative">&#10007; Vérifie tes calculs. Pense à la propriété du produit nul.</span>';
+}
+function checkExo6(){
+  var x=parseFloat(document.getElementById('exo6x').value);
+  var y=parseFloat(document.getElementById('exo6y').value);
+  var out=document.getElementById('exo6r');
+  if(isNaN(x)||isNaN(y)){out.innerHTML='<span class="sol-negative">Entrez les deux valeurs.</span>';return}
+  out.innerHTML=(Math.abs(x-5)<0.01&&Math.abs(y-5)<0.01)?'<span class="sol-positive">&#10003; Bravo ! (5 ; 5) est la solution.</span>':'<span class="sol-negative">&#10007; Incorrect. Vérifie ta substitution.</span>';
+}
+
+/* ===== Tab 6: QCM ===== */
+var quizData=[
+  {q:"Quelle est la solution de 2x + 5 = 11 ?",o:["x = 8","x = 3","x = 2","x = 5,5"],a:1},
+  {q:"Résoudre : 4x − 1 = 3x + 6",o:["x = 5","x = 7","x = −7","x = 1"],a:1},
+  {q:"Si (x − 2)(x + 5) = 0, alors :",o:["x = 2 ou x = −5","x = −2 ou x = 5","x = 2 uniquement","x = 10"],a:0},
+  {q:"Quelle propriété permet de résoudre A × B = 0 ?",o:["Propriété du produit nul","Propriété de la somme nulle","Distributivité","Théorème de Pythagore"],a:0},
+  {q:"Résoudre x² − 9 = 0 :",o:["x = 3 ou x = −3","x = 9","x = 3","x = ±9"],a:0},
+  {q:"« Le double d’un nombre augmenté de 5 » se traduit par :",o:["2x + 5","2(x + 5)","x + 10","5x + 2"],a:0},
+  {q:"Un rectangle a un périmètre de 30 cm et une longueur x. Sa largeur vaut :",o:["15 − x","30 − x","30 − 2x","x − 15"],a:0},
+  {q:"Résoudre l’inéquation −3x > 12 :",o:["x < −4","x > −4","x > 4","x < 4"],a:0},
+  {q:"Quand on multiplie une inéquation par un nombre négatif :",o:["On change le sens de l’inégalité","On garde le même sens","On annule l’inégalité","On obtient une égalité"],a:0},
+  {q:"L’ensemble des solutions de x ≥ 3 est :",o:["[3 ; +∞[","]3 ; +∞[","]−∞ ; 3]","]−∞ ; 3["],a:0},
+  {q:"Résoudre : y = x + 1 et y = 2x − 3. Le couple solution est :",o:["(4 ; 5)","(3 ; 4)","(2 ; 1)","(1 ; 2)"],a:0},
+  {q:"Que signifie « résoudre une équation » ?",o:["Trouver les valeurs de x qui vérifient l’égalité","Calculer le résultat","Simplifier l’expression","Développer et réduire"],a:0},
+  {q:"Combien de solutions a l’équation 3x + 1 = 3x + 5 ?",o:["Aucune","Une seule","Deux","Une infinité"],a:0},
+  {q:"Résoudre : 5(x − 2) = 3x + 4",o:["x = 7","x = 6","x = −7","x = 3"],a:0},
+  {q:"La factorisation de x² − 4x est :",o:["x(x − 4)","(x − 2)²","(x + 2)(x − 2)","x(x + 4)"],a:0},
+  {q:"Si 2x + 3 ≤ 11, alors :",o:["x ≤ 4","x ≥ 4","x ≤ 7","x ≥ 7"],a:0}
+];
+
+var quizAnswered=0,quizCorrect=0;
+function buildQuiz(){
+  var c=document.getElementById('quizContainer');
+  c.innerHTML='';quizAnswered=0;quizCorrect=0;
+  document.getElementById('quizScore').hidden=true;
+  document.getElementById('quizProgress').style.width='0%';
+  quizData.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='quiz-q';div.id='qq'+qi;
+    var html='<div class="q-title">'+q.q+'</div>';
+    q.o.forEach(function(opt,oi){
+      html+='<label class="quiz-option" id="qo'+qi+'_'+oi+'"><input type="radio" name="q'+qi+'" onchange="answerQuiz('+qi+','+oi+')"> '+opt+'</label>';
+    });
+    html+='<div class="quiz-feedback" id="qf'+qi+'"></div>';
+    div.innerHTML=html;c.appendChild(div);
+  });
+}
+function answerQuiz(qi,oi){
+  if(document.getElementById('qq'+qi).dataset.done)return;
+  document.getElementById('qq'+qi).dataset.done='1';
+  quizAnswered++;
+  var correct=quizData[qi].a;
+  if(oi===correct){
+    quizCorrect++;
+    document.getElementById('qo'+qi+'_'+oi).classList.add('correct');
+    document.getElementById('qf'+qi).innerHTML='<span class="sol-positive">&#10003; Correct !</span>';
+  } else {
+    document.getElementById('qo'+qi+'_'+oi).classList.add('wrong');
+    document.getElementById('qo'+qi+'_'+correct).classList.add('correct');
+    document.getElementById('qf'+qi).innerHTML='<span class="sol-negative">&#10007; La bonne réponse était : '+quizData[qi].o[correct]+'</span>';
+  }
+  document.querySelectorAll('#qq'+qi+' input').forEach(function(r){r.disabled=true});
+  document.getElementById('quizProgress').style.width=(quizAnswered/quizData.length*100)+'%';
+  if(quizAnswered===quizData.length){
+    var sc=document.getElementById('quizScore');sc.hidden=false;
+    document.getElementById('quizScoreNum').textContent=quizCorrect+' / '+quizData.length;
+    var pct=quizCorrect/quizData.length;
+    var msg=pct>=0.875?'Excellent ! Tu maîtrises parfaitement ce chapitre.':
+            pct>=0.625?'Bien ! Quelques points à revoir, mais tu es sur la bonne voie.':
+            pct>=0.375?'Des bases à consolider. Relis le cours et refais les exercices.':
+            'Il faut reprendre le cours depuis le début. Courage !';
+    document.getElementById('quizMsg').textContent=msg;
+    sc.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+}
+function resetQuiz(){buildQuiz()}
+
+/* ===== Init ===== */
+balSteps=[
+  {l:'3x + 7',r:'x + 15',label:'Équation initiale'},
+  {l:'2x + 7',r:'15',label:'On soustrait x des deux côtés'},
+  {l:'2x',r:'8',label:'On soustrait 7 des deux côtés'},
+  {l:'x',r:'4',label:'On divise par 2'}
+];
+drawBalance();
+buildQuiz();
+
+/* Restore tab */
+(function(){try{var t=parseInt(localStorage.getItem('eqi-tab'));if(t>0&&t<7)showTab(t)}catch(e){}})();
+
+/* Responsive canvases */
+window.addEventListener('resize',function(){reinitActiveCanvas()});
+</script>

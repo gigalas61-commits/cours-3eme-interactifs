@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion de fonction &mdash; 3&egrave;me</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#ffffff;--heading:#8b4513;--accent:#a0522d;
+  --text:#2c2418;--muted:#6b5a48;--border:#d4c8b8;--surface2:#ebe6de;
+  --accent-light:#faf5ef;--tip:#b8860b;--tip-bg:#fdf8ef;
+  --success:#2e7d42;--error:#c62828;
+  --shadow:0 2px 8px rgba(139,69,19,0.07);--radius:6px;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1612;--surface:#262019;--heading:#d4a574;--accent:#c4835a;
+    --text:#e8ddd0;--muted:#a89882;--border:#3d342a;--surface2:#2e2720;
+    --accent-light:#2a2218;--tip:#d4a030;--tip-bg:#2a2418;
+    --success:#66bb6a;--error:#ef5350;
+    --shadow:0 2px 8px rgba(0,0,0,0.3);--radius:6px;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1a1612;--surface:#262019;--heading:#d4a574;--accent:#c4835a;
+  --text:#e8ddd0;--muted:#a89882;--border:#3d342a;--surface2:#2e2720;
+  --accent-light:#2a2218;--tip:#d4a030;--tip-bg:#2a2418;
+  --success:#66bb6a;--error:#ef5350;
+  --shadow:0 2px 8px rgba(0,0,0,0.3);--radius:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Nunito Sans',sans-serif;font-size:16px;line-height:1.7;
+  color:var(--text);background:var(--bg);min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;color:var(--heading);font-weight:700;}
+h1{font-size:1.8rem;margin-bottom:.5rem;}
+h2{font-size:1.5rem;margin:1.5rem 0 .8rem;border-bottom:2px solid var(--border);padding-bottom:.3rem;}
+h3{font-size:1.2rem;margin:1.2rem 0 .5rem;}
+.wrapper{max-width:900px;margin:0 auto;padding:16px;}
+/* Level badge */
+.level-badge{
+  display:inline-block;background:var(--accent);color:#fff;
+  padding:3px 14px;border-radius:20px;font-size:.85rem;font-weight:700;
+  margin-bottom:.5rem;letter-spacing:.5px;
+}
+/* Theme toggle */
+.theme-toggle{
+  position:fixed;top:12px;right:12px;z-index:100;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;cursor:pointer;font-size:1.1rem;
+  box-shadow:var(--shadow);color:var(--text);
+}
+/* Tab bar */
+.tab-bar{
+  display:flex;flex-wrap:wrap;gap:4px;margin:1rem 0;
+  border-bottom:2px solid var(--border);padding-bottom:0;
+}
+.tab-btn{
+  padding:8px 14px;border:none;background:transparent;cursor:pointer;
+  font-family:'Nunito Sans',sans-serif;font-size:.85rem;font-weight:600;
+  color:var(--muted);border-bottom:3px solid transparent;
+  transition:all .2s;border-radius:var(--radius) var(--radius) 0 0;
+}
+.tab-btn:hover{background:var(--accent-light);color:var(--accent);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-light);}
+.sec{display:none;animation:fadeIn .3s ease;}
+.sec.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+/* Cards */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.2rem;margin:1rem 0;
+  box-shadow:var(--shadow);
+}
+.formula-box{
+  background:var(--accent-light);border-left:4px solid var(--accent);
+  padding:1rem 1.2rem;margin:1rem 0;border-radius:0 var(--radius) var(--radius) 0;
+  font-size:1.05rem;
+}
+.tip-box{
+  background:var(--tip-bg);border-left:4px solid var(--tip);
+  padding:.8rem 1.2rem;margin:1rem 0;border-radius:0 var(--radius) var(--radius) 0;
+}
+.tip-box::before{content:"Astuce : ";font-weight:700;color:var(--tip);}
+/* Fractions */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;}
+.frac .num{border-bottom:2px solid var(--text);padding:0 4px 2px;}
+.frac .den{padding:2px 4px 0;}
+/* Exercise */
+.exercise{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.2rem;margin:1rem 0;
+  box-shadow:var(--shadow);
+}
+.exercise h3{color:var(--accent);margin-top:0;}
+details{margin:.8rem 0;}
+details summary{
+  cursor:pointer;color:var(--accent);font-weight:600;padding:.5rem;
+  background:var(--accent-light);border-radius:var(--radius);
+}
+details summary:hover{background:var(--surface2);}
+details .correction{padding:.8rem;background:var(--surface);border-radius:var(--radius);margin-top:.3rem;border:1px solid var(--border);}
+/* Inputs & buttons */
+input[type="number"],input[type="text"]{
+  padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font-size:.95rem;
+  font-family:'Nunito Sans',sans-serif;width:80px;
+}
+button{
+  padding:8px 18px;border:none;border-radius:var(--radius);
+  background:var(--accent);color:#fff;font-weight:600;cursor:pointer;
+  font-family:'Nunito Sans',sans-serif;font-size:.9rem;transition:opacity .2s;
+}
+button:hover{opacity:.85;}
+.btn-sm{padding:5px 12px;font-size:.82rem;}
+.btn-success{background:var(--success);}
+.btn-reset{background:var(--muted);}
+/* Feedback */
+.feedback{padding:8px 12px;border-radius:var(--radius);margin:.5rem 0;font-weight:600;}
+.feedback.correct{background:#e8f5e9;color:var(--success);}
+.feedback.wrong{background:#ffebee;color:var(--error);}
+:root[data-theme="dark"] .feedback.correct,
+:root:not([data-theme="light"]) .feedback.correct{background:#1b3a1b;}
+:root[data-theme="dark"] .feedback.wrong,
+:root:not([data-theme="light"]) .feedback.wrong{background:#3a1b1b;}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .feedback.correct{background:#1b3a1b;}
+  :root:not([data-theme="light"]) .feedback.wrong{background:#3a1b1b;}
+}
+/* Canvas */
+canvas{
+  display:block;max-width:100%;border:1px solid var(--border);
+  border-radius:var(--radius);margin:.8rem auto;background:var(--surface);
+}
+/* Slider */
+.slider-row{display:flex;align-items:center;gap:12px;margin:.6rem 0;flex-wrap:wrap;}
+.slider-row label{font-weight:600;min-width:60px;}
+input[type="range"]{flex:1;min-width:120px;accent-color:var(--accent);}
+.slider-val{font-weight:700;color:var(--accent);min-width:40px;}
+/* QCM */
+.qcm-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin:.8rem 0;}
+.qcm-item p{font-weight:600;margin-bottom:.5rem;}
+.qcm-options label{display:block;padding:6px 10px;cursor:pointer;border-radius:var(--radius);transition:background .15s;margin:2px 0;}
+.qcm-options label:hover{background:var(--accent-light);}
+.qcm-options input{margin-right:8px;}
+/* Machine animation */
+.machine-box{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  flex-wrap:wrap;margin:1rem 0;
+}
+.machine-part{
+  text-align:center;padding:12px 18px;border-radius:var(--radius);
+  font-size:1.1rem;font-weight:700;min-width:60px;
+}
+.machine-input-box{background:#e3f2fd;color:#1565c0;border:2px solid #1565c0;}
+.machine-body{background:var(--accent-light);color:var(--accent);border:2px dashed var(--accent);padding:12px 24px;font-size:1rem;}
+.machine-output-box{background:#e8f5e9;color:var(--success);border:2px solid var(--success);}
+.machine-arrow{font-size:1.5rem;color:var(--muted);}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .machine-input-box{background:#0d2137;color:#64b5f6;border-color:#64b5f6;}
+  :root:not([data-theme="light"]) .machine-output-box{background:#1b3a1b;color:var(--success);border-color:var(--success);}
+}
+:root[data-theme="dark"] .machine-input-box{background:#0d2137;color:#64b5f6;border-color:#64b5f6;}
+:root[data-theme="dark"] .machine-output-box{background:#1b3a1b;color:var(--success);border-color:var(--success);}
+/* Table */
+table{border-collapse:collapse;margin:.8rem 0;width:100%;}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:center;}
+th{background:var(--accent-light);color:var(--accent);font-weight:700;}
+td input{width:60px;text-align:center;border:1px solid var(--border);border-radius:4px;padding:4px;background:var(--surface);color:var(--text);}
+/* Score */
+.score-bar{
+  display:flex;align-items:center;gap:12px;margin:1rem 0;
+  padding:12px 16px;background:var(--surface);border-radius:var(--radius);
+  border:1px solid var(--border);
+}
+.score-bar .score-num{font-size:1.3rem;font-weight:700;color:var(--accent);}
+/* Responsive */
+@media(max-width:600px){
+  .tab-btn{padding:6px 8px;font-size:.75rem;}
+  h1{font-size:1.4rem;}
+  h2{font-size:1.25rem;}
+  .wrapper{padding:12px 16px;}
+  .machine-box{flex-direction:column;}
+  .machine-arrow{transform:rotate(90deg);}
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le th&egrave;me">&#9681;</button>
+
+<div class="wrapper">
+  <span class="level-badge">3&egrave;me</span>
+  <h1>Notion de fonction</h1>
+  <p style="color:var(--muted);margin-bottom:.5rem;">Cours interactif &mdash; Coll&egrave;ge &mdash; Pr&eacute;paration Brevet</p>
+
+  <nav class="tab-bar" id="tabBar">
+    <button class="tab-btn active" onclick="showTab(0)">Image &amp; ant&eacute;c&eacute;dent</button>
+    <button class="tab-btn" onclick="showTab(1)">Lecture graphique</button>
+    <button class="tab-btn" onclick="showTab(2)">Tableau de valeurs</button>
+    <button class="tab-btn" onclick="showTab(3)">Fonctions lin&eacute;aires</button>
+    <button class="tab-btn" onclick="showTab(4)">Fonctions affines</button>
+    <button class="tab-btn" onclick="showTab(5)">Exercices</button>
+    <button class="tab-btn" onclick="showTab(6)">QCM</button>
+  </nav>
+
+  <!-- ========== TAB 0: Image et antécédent ========== -->
+  <section class="sec active" id="sec0">
+    <h2>1. Qu&rsquo;est-ce qu&rsquo;une fonction&nbsp;?</h2>
+    <div class="card">
+      <p>Une <strong>fonction</strong> est un proc&eacute;d&eacute; qui, &agrave; chaque nombre d&rsquo;un ensemble de d&eacute;part, associe <strong>un unique</strong> nombre.</p>
+      <p>On note g&eacute;n&eacute;ralement une fonction <em>f</em>, et on &eacute;crit&nbsp;:</p>
+    </div>
+
+    <div class="formula-box">
+      <strong>Notation :</strong> <em>f</em>&nbsp;: <em>x</em> &mapsto; <em>f</em>(<em>x</em>)<br>
+      On lit &laquo;&nbsp;<em>f</em> est la fonction qui &agrave; <em>x</em> associe <em>f</em>(<em>x</em>)&nbsp;&raquo;.
+    </div>
+
+    <h3>Vocabulaire essentiel</h3>
+    <div class="card">
+      <ul>
+        <li><strong>Image</strong>&nbsp;: <em>f</em>(<em>x</em>) est l&rsquo;<strong>image</strong> de <em>x</em> par la fonction <em>f</em>.</li>
+        <li><strong>Ant&eacute;c&eacute;dent</strong>&nbsp;: <em>x</em> est un <strong>ant&eacute;c&eacute;dent</strong> de <em>f</em>(<em>x</em>) par <em>f</em>.</li>
+        <li>Un nombre a <strong>toujours une seule image</strong>, mais peut avoir <strong>plusieurs ant&eacute;c&eacute;dents</strong> (ou aucun).</li>
+      </ul>
+    </div>
+
+    <div class="formula-box">
+      <strong>Exemple :</strong> Soit <em>f</em>(<em>x</em>) = 2<em>x</em> + 3.<br>
+      L&rsquo;image de 4 est <em>f</em>(4) = 2 &times; 4 + 3 = <strong>11</strong>.<br>
+      11 est l&rsquo;image de 4 par <em>f</em>. 4 est un ant&eacute;c&eacute;dent de 11 par <em>f</em>.
+    </div>
+
+    <div class="tip-box">
+      Pour trouver l&rsquo;image, on <strong>remplace</strong> <em>x</em> par la valeur donn&eacute;e dans l&rsquo;expression de <em>f</em>(<em>x</em>).
+    </div>
+
+    <h3>La machine &agrave; fonctions</h3>
+    <p>Teste la fonction <em>f</em>(<em>x</em>) = 2<em>x</em> + 3 en entrant une valeur de <em>x</em>&nbsp;:</p>
+
+    <div style="display:flex;align-items:center;gap:10px;margin:.8rem 0;flex-wrap:wrap;">
+      <label><strong><em>x</em> =</strong></label>
+      <input type="number" id="machineInput" value="4" style="width:80px;">
+      <button onclick="runMachine()">Calculer &rarr;</button>
+    </div>
+
+    <div class="machine-box" id="machineDisplay">
+      <div class="machine-part machine-input-box" id="machineX">4</div>
+      <div class="machine-arrow">&rarr;</div>
+      <div class="machine-part machine-body"><em>f</em>(<em>x</em>) = 2<em>x</em> + 3</div>
+      <div class="machine-arrow">&rarr;</div>
+      <div class="machine-part machine-output-box" id="machineY">11</div>
+    </div>
+    <p id="machineText" style="text-align:center;font-weight:600;color:var(--accent);">
+      L&rsquo;image de 4 par <em>f</em> est <strong>11</strong>.
+    </p>
+
+    <h3>Changer la fonction</h3>
+    <p>Choisis une autre fonction pour explorer&nbsp;:</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:.5rem 0;">
+      <button class="btn-sm" onclick="setMachineFunc('2*x+3','2x + 3')">f(x) = 2x + 3</button>
+      <button class="btn-sm" onclick="setMachineFunc('x*x','x&sup2;')">f(x) = x&sup2;</button>
+      <button class="btn-sm" onclick="setMachineFunc('3*x-1','3x &minus; 1')">f(x) = 3x &minus; 1</button>
+      <button class="btn-sm" onclick="setMachineFunc('-x+5','&minus;x + 5')">f(x) = &minus;x + 5</button>
+    </div>
+
+    <h3>Exercice rapide</h3>
+    <div class="exercise">
+      <p>Soit <em>g</em>(<em>x</em>) = 3<em>x</em> &minus; 7. Calcule <em>g</em>(5)&nbsp;:</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:.5rem 0;">
+        <label><em>g</em>(5) =</label>
+        <input type="number" id="exQuick1">
+        <button class="btn-sm" onclick="checkQuick1()">V&eacute;rifier</button>
+      </div>
+      <div id="fbQuick1"></div>
+    </div>
+  </section>
+
+  <!-- ========== TAB 1: Lecture graphique ========== -->
+  <section class="sec" id="sec1">
+    <h2>2. Lecture graphique</h2>
+    <div class="card">
+      <p>La <strong>courbe repr&eacute;sentative</strong> d&rsquo;une fonction <em>f</em> est l&rsquo;ensemble des points de coordonn&eacute;es (<em>x</em>&nbsp;; <em>f</em>(<em>x</em>)).</p>
+    </div>
+
+    <div class="formula-box">
+      <strong>Lire une image :</strong> &agrave; partir d&rsquo;une valeur de <em>x</em> sur l&rsquo;axe horizontal, on monte (ou descend) jusqu&rsquo;&agrave; la courbe, puis on lit la valeur sur l&rsquo;axe vertical.<br><br>
+      <strong>Lire un ant&eacute;c&eacute;dent :</strong> &agrave; partir d&rsquo;une valeur de <em>y</em> sur l&rsquo;axe vertical, on trace une horizontale ; chaque intersection avec la courbe donne un ant&eacute;c&eacute;dent.
+    </div>
+
+    <div class="tip-box">
+      Un point M(<em>a</em>&nbsp;; <em>b</em>) appartient &agrave; la courbe de <em>f</em> si et seulement si <em>f</em>(<em>a</em>) = <em>b</em>.
+    </div>
+
+    <h3>Graphique interactif</h3>
+    <p>D&eacute;place le curseur sur la courbe pour lire les coordonn&eacute;es&nbsp;:</p>
+    <canvas id="canvasLecture" width="560" height="400"></canvas>
+    <p id="lectureCoords" style="text-align:center;font-weight:600;color:var(--accent);min-height:1.5em;">
+      Survole le graphique pour lire les coordonn&eacute;es.
+    </p>
+
+    <h3>Exercice de lecture</h3>
+    <div class="exercise">
+      <p>En utilisant le graphique ci-dessus (fonction <em>f</em>(<em>x</em>) = &minus;0,2<em>x</em>&sup2; + 3), donne&nbsp;:</p>
+      <div style="margin:.5rem 0;">
+        <label><em>f</em>(0) = </label>
+        <input type="number" id="lect1" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkLect(1, 3)">V&eacute;rifier</button>
+        <span id="fbLect1"></span>
+      </div>
+      <div style="margin:.5rem 0;">
+        <label><em>f</em>(2) = </label>
+        <input type="number" id="lect2" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkLect(2, 2.2)">V&eacute;rifier</button>
+        <span id="fbLect2"></span>
+      </div>
+      <div style="margin:.5rem 0;">
+        <label><em>f</em>(&minus;3) = </label>
+        <input type="number" id="lect3" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkLect(3, 1.2)">V&eacute;rifier</button>
+        <span id="fbLect3"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TAB 2: Tableau de valeurs ========== -->
+  <section class="sec" id="sec2">
+    <h2>3. Tableau de valeurs</h2>
+    <div class="card">
+      <p>Un <strong>tableau de valeurs</strong> regroupe des couples (<em>x</em>&nbsp;; <em>f</em>(<em>x</em>)). Il permet de repr&eacute;senter graphiquement une fonction en pla&ccedil;ant les points correspondants.</p>
+    </div>
+
+    <div class="formula-box">
+      <strong>M&eacute;thode :</strong> Pour chaque valeur de <em>x</em>, on calcule <em>f</em>(<em>x</em>) et on reporte le r&eacute;sultat dans le tableau.
+    </div>
+
+    <h3>Compl&egrave;te le tableau</h3>
+    <p>Fonction&nbsp;: <em>f</em>(<em>x</em>) = <em>x</em>&sup2; &minus; 2<em>x</em></p>
+
+    <div style="overflow-x:auto;">
+      <table id="tabValeurs">
+        <tr><th><em>x</em></th><td>&minus;2</td><td>&minus;1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+        <tr><th><em>f</em>(<em>x</em>)</th>
+          <td><input type="number" data-x="-2" step="0.1"></td>
+          <td><input type="number" data-x="-1" step="0.1"></td>
+          <td><input type="number" data-x="0" step="0.1"></td>
+          <td><input type="number" data-x="1" step="0.1"></td>
+          <td><input type="number" data-x="2" step="0.1"></td>
+          <td><input type="number" data-x="3" step="0.1"></td>
+          <td><input type="number" data-x="4" step="0.1"></td>
+        </tr>
+      </table>
+    </div>
+    <div style="display:flex;gap:8px;margin:.5rem 0;flex-wrap:wrap;">
+      <button onclick="checkTableau()">V&eacute;rifier le tableau</button>
+      <button class="btn-reset" onclick="resetTableau()">Effacer</button>
+    </div>
+    <div id="fbTableau"></div>
+
+    <h3>Graphique synchronis&eacute;</h3>
+    <p>Les points que tu as correctement remplis s&rsquo;affichent sur le graphique&nbsp;:</p>
+    <canvas id="canvasTableau" width="560" height="400"></canvas>
+
+    <div class="tip-box">
+      Rappel&nbsp;: (<em>x</em>)&sup2; est toujours positif ou nul. Attention aux signes lors du calcul !
+    </div>
+  </section>
+
+  <!-- ========== TAB 3: Fonctions linéaires ========== -->
+  <section class="sec" id="sec3">
+    <h2>4. Fonctions lin&eacute;aires</h2>
+    <div class="card">
+      <p>Une <strong>fonction lin&eacute;aire</strong> est une fonction de la forme&nbsp;:</p>
+    </div>
+
+    <div class="formula-box">
+      <em>f</em>(<em>x</em>) = <em>a</em><em>x</em><br>
+      o&ugrave; <em>a</em> est un nombre appel&eacute; <strong>coefficient</strong>.
+    </div>
+
+    <div class="card">
+      <h3>Propri&eacute;t&eacute;s</h3>
+      <ul>
+        <li>La repr&eacute;sentation graphique est une <strong>droite passant par l&rsquo;origine</strong> O(0&nbsp;; 0).</li>
+        <li><em>f</em>(0) = 0 toujours.</li>
+        <li>Une situation de <strong>proportionnalit&eacute;</strong> se traduit par une fonction lin&eacute;aire.</li>
+        <li>Le coefficient <em>a</em> se calcule&nbsp;: <em>a</em> = <span class="frac"><span class="num"><em>f</em>(<em>x</em>)</span><span class="den"><em>x</em></span></span> pour tout <em>x</em> &ne; 0.</li>
+      </ul>
+    </div>
+
+    <div class="tip-box">
+      Si <em>a</em> &gt; 0, la fonction est <strong>croissante</strong>. Si <em>a</em> &lt; 0, elle est <strong>d&eacute;croissante</strong>.
+    </div>
+
+    <h3>Graphique interactif</h3>
+    <div class="slider-row">
+      <label>a =</label>
+      <input type="range" id="sliderA3" min="-3" max="3" step="0.1" value="1">
+      <span class="slider-val" id="valA3">1</span>
+    </div>
+    <p style="text-align:center;font-weight:600;color:var(--accent);" id="eqLin">f(x) = 1x</p>
+    <canvas id="canvasLineaire" width="560" height="400"></canvas>
+
+    <h3>Exercice</h3>
+    <div class="exercise">
+      <p>Soit <em>f</em> la fonction lin&eacute;aire telle que <em>f</em>(3) = 12. D&eacute;termine le coefficient <em>a</em>.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:.5rem 0;">
+        <label><em>a</em> =</label>
+        <input type="number" id="exLin1" step="0.1">
+        <button class="btn-sm" onclick="checkLin1()">V&eacute;rifier</button>
+      </div>
+      <div id="fbLin1"></div>
+      <details>
+        <summary>Voir la correction</summary>
+        <div class="correction">
+          <em>a</em> = <span class="frac"><span class="num"><em>f</em>(3)</span><span class="den">3</span></span> = <span class="frac"><span class="num">12</span><span class="den">3</span></span> = <strong>4</strong>.<br>
+          Donc <em>f</em>(<em>x</em>) = 4<em>x</em>.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== TAB 4: Fonctions affines ========== -->
+  <section class="sec" id="sec4">
+    <h2>5. Fonctions affines</h2>
+    <div class="card">
+      <p>Une <strong>fonction affine</strong> est une fonction de la forme&nbsp;:</p>
+    </div>
+
+    <div class="formula-box">
+      <em>f</em>(<em>x</em>) = <em>a</em><em>x</em> + <em>b</em><br>
+      <ul style="margin-top:.5rem;list-style:none;padding:0;">
+        <li>&bull; <em>a</em> est le <strong>coefficient directeur</strong> (pente de la droite)</li>
+        <li>&bull; <em>b</em> est l&rsquo;<strong>ordonn&eacute;e &agrave; l&rsquo;origine</strong> (point o&ugrave; la droite coupe l&rsquo;axe des ordonn&eacute;es)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Cas particuliers</h3>
+      <ul>
+        <li>Si <em>b</em> = 0&nbsp;: fonction <strong>lin&eacute;aire</strong> <em>f</em>(<em>x</em>) = <em>a</em><em>x</em></li>
+        <li>Si <em>a</em> = 0&nbsp;: fonction <strong>constante</strong> <em>f</em>(<em>x</em>) = <em>b</em></li>
+      </ul>
+    </div>
+
+    <div class="formula-box">
+      <strong>Coefficient directeur :</strong>
+      <em>a</em> = <span class="frac"><span class="num"><em>f</em>(<em>x</em><sub>2</sub>) &minus; <em>f</em>(<em>x</em><sub>1</sub>)</span><span class="den"><em>x</em><sub>2</sub> &minus; <em>x</em><sub>1</sub></span></span>
+      = <span class="frac"><span class="num">&Delta;<em>y</em></span><span class="den">&Delta;<em>x</em></span></span>
+    </div>
+
+    <div class="tip-box">
+      L&rsquo;ordonn&eacute;e &agrave; l&rsquo;origine <em>b</em> se lit directement sur le graphique&nbsp;: c&rsquo;est la valeur de <em>f</em>(0).
+    </div>
+
+    <h3>Graphique interactif</h3>
+    <div class="slider-row">
+      <label>a =</label>
+      <input type="range" id="sliderA4" min="-3" max="3" step="0.1" value="1">
+      <span class="slider-val" id="valA4">1</span>
+    </div>
+    <div class="slider-row">
+      <label>b =</label>
+      <input type="range" id="sliderB4" min="-5" max="5" step="0.5" value="2">
+      <span class="slider-val" id="valB4">2</span>
+    </div>
+    <p style="text-align:center;font-weight:600;color:var(--accent);" id="eqAff">f(x) = 1x + 2</p>
+    <canvas id="canvasAffine" width="560" height="400"></canvas>
+
+    <h3>Exercice</h3>
+    <div class="exercise">
+      <p>Une droite passe par A(1&nbsp;; 5) et B(3&nbsp;; 11). D&eacute;termine <em>a</em> et <em>b</em>.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:.5rem 0;flex-wrap:wrap;">
+        <label><em>a</em> =</label>
+        <input type="number" id="exAff1" step="0.1" style="width:70px;">
+        <label><em>b</em> =</label>
+        <input type="number" id="exAff2" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkAff1()">V&eacute;rifier</button>
+      </div>
+      <div id="fbAff1"></div>
+      <details>
+        <summary>Voir la correction</summary>
+        <div class="correction">
+          <em>a</em> = <span class="frac"><span class="num">11 &minus; 5</span><span class="den">3 &minus; 1</span></span> = <span class="frac"><span class="num">6</span><span class="den">2</span></span> = <strong>3</strong>.<br>
+          <em>f</em>(<em>x</em>) = 3<em>x</em> + <em>b</em>. Or <em>f</em>(1) = 5, donc 3 &times; 1 + <em>b</em> = 5, soit <em>b</em> = <strong>2</strong>.<br>
+          Conclusion&nbsp;: <em>f</em>(<em>x</em>) = 3<em>x</em> + 2.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== TAB 5: Exercices ========== -->
+  <section class="sec" id="sec5">
+    <h2>6. Exercices type Brevet</h2>
+
+    <div class="exercise">
+      <h3>Exercice 1 &mdash; Calcul d&rsquo;images</h3>
+      <p>Soit <em>f</em>(<em>x</em>) = 4<em>x</em> &minus; 3. Calcule&nbsp;:</p>
+      <div style="margin:.4rem 0;">
+        <label><em>f</em>(2) = </label>
+        <input type="number" id="ex1a" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx('ex1a',5)">V&eacute;rifier</button>
+        <span id="fbex1a"></span>
+      </div>
+      <div style="margin:.4rem 0;">
+        <label><em>f</em>(&minus;1) = </label>
+        <input type="number" id="ex1b" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx('ex1b',-7)">V&eacute;rifier</button>
+        <span id="fbex1b"></span>
+      </div>
+      <div style="margin:.4rem 0;">
+        <label><em>f</em>(0) = </label>
+        <input type="number" id="ex1c" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx('ex1c',-3)">V&eacute;rifier</button>
+        <span id="fbex1c"></span>
+      </div>
+      <details>
+        <summary>Correction compl&egrave;te</summary>
+        <div class="correction">
+          <em>f</em>(2) = 4&times;2 &minus; 3 = 8 &minus; 3 = <strong>5</strong><br>
+          <em>f</em>(&minus;1) = 4&times;(&minus;1) &minus; 3 = &minus;4 &minus; 3 = <strong>&minus;7</strong><br>
+          <em>f</em>(0) = 4&times;0 &minus; 3 = <strong>&minus;3</strong>
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <h3>Exercice 2 &mdash; Ant&eacute;c&eacute;dents</h3>
+      <p>Soit <em>f</em>(<em>x</em>) = 2<em>x</em> + 1. Quel est l&rsquo;ant&eacute;c&eacute;dent de 9 par <em>f</em>&nbsp;?</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:.5rem 0;">
+        <label><em>x</em> =</label>
+        <input type="number" id="ex2a" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx('ex2a',4)">V&eacute;rifier</button>
+        <span id="fbex2a"></span>
+      </div>
+      <details>
+        <summary>Correction</summary>
+        <div class="correction">
+          On cherche <em>x</em> tel que <em>f</em>(<em>x</em>) = 9.<br>
+          2<em>x</em> + 1 = 9 &rArr; 2<em>x</em> = 8 &rArr; <em>x</em> = <strong>4</strong>.<br>
+          L&rsquo;ant&eacute;c&eacute;dent de 9 par <em>f</em> est 4.
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <h3>Exercice 3 &mdash; Fonction lin&eacute;aire et proportionnalit&eacute;</h3>
+      <p>Le prix d&rsquo;entr&eacute;e &agrave; une piscine est de 3,50 &euro; par personne.</p>
+      <p>a) Exprime le prix total <em>P</em> en fonction du nombre <em>n</em> de personnes.</p>
+      <p>b) Quel est le prix pour 8 personnes&nbsp;?</p>
+      <div style="margin:.5rem 0;">
+        <label><em>P</em>(8) = </label>
+        <input type="number" id="ex3a" step="0.01" style="width:80px;"> &euro;
+        <button class="btn-sm" onclick="checkEx('ex3a',28)">V&eacute;rifier</button>
+        <span id="fbex3a"></span>
+      </div>
+      <details>
+        <summary>Correction</summary>
+        <div class="correction">
+          a) <em>P</em>(<em>n</em>) = 3,5<em>n</em> &mdash; c&rsquo;est une fonction lin&eacute;aire de coefficient 3,5.<br>
+          b) <em>P</em>(8) = 3,5 &times; 8 = <strong>28 &euro;</strong>.
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <h3>Exercice 4 &mdash; Fonction affine</h3>
+      <p>Un plombier facture 40 &euro; de d&eacute;placement plus 25 &euro; par heure de travail.</p>
+      <p>a) D&eacute;termine l&rsquo;expression de <em>f</em>(<em>t</em>), le co&ucirc;t total en fonction du temps <em>t</em> (en heures).</p>
+      <p>b) Calcule le co&ucirc;t pour 3 heures de travail.</p>
+      <div style="margin:.5rem 0;">
+        <label><em>f</em>(3) = </label>
+        <input type="number" id="ex4a" style="width:80px;"> &euro;
+        <button class="btn-sm" onclick="checkEx('ex4a',115)">V&eacute;rifier</button>
+        <span id="fbex4a"></span>
+      </div>
+      <details>
+        <summary>Correction</summary>
+        <div class="correction">
+          a) <em>f</em>(<em>t</em>) = 25<em>t</em> + 40 &mdash; fonction affine avec <em>a</em> = 25 et <em>b</em> = 40.<br>
+          b) <em>f</em>(3) = 25 &times; 3 + 40 = 75 + 40 = <strong>115 &euro;</strong>.
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <h3>Exercice 5 &mdash; Lecture graphique (Brevet)</h3>
+      <p>La courbe ci-dessous repr&eacute;sente une fonction <em>g</em> d&eacute;finie sur [&minus;3&nbsp;; 5].</p>
+      <canvas id="canvasEx5" width="500" height="340"></canvas>
+      <p>a) D&eacute;termine <em>g</em>(1).</p>
+      <div style="margin:.4rem 0;">
+        <label><em>g</em>(1) = </label>
+        <input type="number" id="ex5a" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx('ex5a',2)">V&eacute;rifier</button>
+        <span id="fbex5a"></span>
+      </div>
+      <p>b) Donne un ant&eacute;c&eacute;dent de 0 par <em>g</em>.</p>
+      <div style="margin:.4rem 0;">
+        <label><em>x</em> = </label>
+        <input type="number" id="ex5b" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkExAntec()">V&eacute;rifier</button>
+        <span id="fbex5b"></span>
+      </div>
+      <details>
+        <summary>Correction</summary>
+        <div class="correction">
+          La fonction est <em>g</em>(<em>x</em>) = &minus;(<em>x</em> &minus; 1)&sup2; + 2 (pas besoin de conna&icirc;tre la formule pour lire le graphique).<br>
+          a) <em>g</em>(1) = <strong>2</strong> (sommet de la parabole).<br>
+          b) On cherche <em>x</em> tel que <em>g</em>(<em>x</em>) = 0. Par lecture graphique, <em>x</em> &approx; &minus;0,4 ou <em>x</em> &approx; 2,4.
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <h3>Exercice 6 &mdash; D&eacute;terminer une fonction affine</h3>
+      <p>Soit <em>f</em> une fonction affine telle que <em>f</em>(2) = 7 et <em>f</em>(5) = 16.</p>
+      <p>D&eacute;termine <em>a</em> et <em>b</em> tels que <em>f</em>(<em>x</em>) = <em>a</em><em>x</em> + <em>b</em>.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:.5rem 0;flex-wrap:wrap;">
+        <label><em>a</em> =</label>
+        <input type="number" id="ex6a" step="0.1" style="width:70px;">
+        <label><em>b</em> =</label>
+        <input type="number" id="ex6b" step="0.1" style="width:70px;">
+        <button class="btn-sm" onclick="checkEx6()">V&eacute;rifier</button>
+      </div>
+      <div id="fbex6"></div>
+      <details>
+        <summary>Correction</summary>
+        <div class="correction">
+          <em>a</em> = <span class="frac"><span class="num">16 &minus; 7</span><span class="den">5 &minus; 2</span></span> = <span class="frac"><span class="num">9</span><span class="den">3</span></span> = <strong>3</strong>.<br>
+          <em>f</em>(2) = 3&times;2 + <em>b</em> = 7 &rArr; <em>b</em> = 7 &minus; 6 = <strong>1</strong>.<br>
+          Donc <em>f</em>(<em>x</em>) = 3<em>x</em> + 1.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== TAB 6: QCM ========== -->
+  <section class="sec" id="sec6">
+    <h2>7. QCM &mdash; Teste tes connaissances</h2>
+    <p>R&eacute;ponds aux 15 questions puis clique sur &laquo;&nbsp;Corriger&nbsp;&raquo;.</p>
+
+    <div id="qcmContainer"></div>
+
+    <div style="display:flex;gap:10px;margin:1rem 0;flex-wrap:wrap;">
+      <button onclick="corrigerQCM()">Corriger le QCM</button>
+      <button class="btn-reset" onclick="resetQCM()">R&eacute;initialiser</button>
+    </div>
+
+    <div class="score-bar" id="scoreBar" style="display:none;">
+      <span>Score&nbsp;:</span>
+      <span class="score-num" id="scoreNum">0/15</span>
+      <span id="scoreMsg" style="color:var(--muted);"></span>
+    </div>
+  </section>
+
+</div><!-- /wrapper -->
+
+<script>
+/* ===== Theme ===== */
+function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function toggleTheme(){
+  var r=document.documentElement;
+  var t=r.getAttribute('data-theme');
+  if(t==='dark'){r.setAttribute('data-theme','light');}
+  else if(t==='light'){r.removeAttribute('data-theme');}
+  else{r.setAttribute('data-theme','dark');}
+  drawAllCanvases();
+}
+
+/* ===== Tabs ===== */
+var currentTab=0;
+function showTab(i){
+  currentTab=i;
+  document.querySelectorAll('.sec').forEach(function(s,j){s.classList.toggle('active',j===i);});
+  document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i);});
+  initSection(i);
+}
+var inited={};
+function initSection(i){
+  if(inited[i])return;
+  inited[i]=true;
+  if(i===1)drawLecture();
+  if(i===2)drawTableauCanvas();
+  if(i===3)drawLineaire();
+  if(i===4)drawAffine();
+  if(i===5)drawEx5();
+  if(i===6)buildQCM();
+}
+
+/* ===== Helpers ===== */
+function fb(id,ok,msg){
+  var el=document.getElementById(id);
+  if(!el){el=document.createElement('div');el.id=id;}
+  el.className='feedback '+(ok?'correct':'wrong');
+  el.textContent=msg||'';
+  if(!el.parentNode){/* inline spans */}
+  return el;
+}
+function setFB(id,ok,msg){
+  var el=document.getElementById(id);
+  if(el.tagName==='SPAN'){el.innerHTML=' '+(ok?'&#10003;':'&#10007;')+' '+msg;el.style.color=ok?getCSS('--success'):getCSS('--error');el.style.fontWeight='700';}
+  else{el.className='feedback '+(ok?'correct':'wrong');el.textContent=msg;}
+}
+
+/* ===== TAB 0: Machine ===== */
+var machineFuncStr='2*x+3', machineFuncLabel='2x + 3';
+function setMachineFunc(str,label){
+  machineFuncStr=str;machineFuncLabel=label;
+  document.querySelector('.machine-body').innerHTML='<em>f</em>(<em>x</em>) = '+label;
+  runMachine();
+}
+function evalFunc(expr,x){
+  try{return Function('x','return '+expr)(x);}catch(e){return NaN;}
+}
+function runMachine(){
+  var x=parseFloat(document.getElementById('machineInput').value);
+  if(isNaN(x))return;
+  var y=evalFunc(machineFuncStr,x);
+  var yStr=Number.isInteger(y)?y:Math.round(y*1000)/1000;
+  document.getElementById('machineX').textContent=x;
+  var outEl=document.getElementById('machineY');
+  outEl.textContent='...';
+  outEl.style.transform='scale(0.8)';outEl.style.opacity='0.3';
+  setTimeout(function(){
+    outEl.textContent=yStr;outEl.style.transform='scale(1.1)';outEl.style.opacity='1';
+    setTimeout(function(){outEl.style.transform='scale(1)';},200);
+  },400);
+  document.getElementById('machineText').innerHTML=
+    "L’image de "+x+" par <em>f</em> est <strong>"+yStr+"</strong>.";
+}
+function checkQuick1(){
+  var v=parseFloat(document.getElementById('exQuick1').value);
+  setFB('fbQuick1',v===8,v===8?'Bravo ! g(5) = 3×5 − 7 = 8':'Incorrect. Calcule 3×5 − 7.');
+}
+
+/* ===== TAB 1: Lecture graphique ===== */
+function drawLecture(){
+  var c=document.getElementById('canvasLecture');
+  var ctx=c.getContext('2d');
+  var W=c.width,H=c.height;
+  var ox=W/2,oy=H/2;
+  var scaleX=W/12,scaleY=H/10;
+  function toCanvas(x,y){return[ox+x*scaleX,oy-y*scaleY];}
+
+  function draw(mx,my){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=getCSS('--surface')||'#fff';ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle=getCSS('--border')||'#ddd';ctx.lineWidth=0.5;
+    for(var gx=-6;gx<=6;gx++){var p=toCanvas(gx,0);ctx.beginPath();ctx.moveTo(p[0],0);ctx.lineTo(p[0],H);ctx.stroke();}
+    for(var gy=-5;gy<=5;gy++){var p2=toCanvas(0,gy);ctx.beginPath();ctx.moveTo(0,p2[1]);ctx.lineTo(W,p2[1]);ctx.stroke();}
+    // axes
+    ctx.strokeStyle=getCSS('--text')||'#333';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+    // labels
+    ctx.fillStyle=getCSS('--muted')||'#666';ctx.font='12px Nunito Sans,sans-serif';ctx.textAlign='center';
+    for(var lx=-5;lx<=5;lx++){if(lx===0)continue;var lp=toCanvas(lx,0);ctx.fillText(lx,lp[0],lp[1]+16);}
+    ctx.textAlign='right';
+    for(var ly=-4;ly<=4;ly++){if(ly===0)continue;var lp2=toCanvas(0,ly);ctx.fillText(ly,lp2[0]-8,lp2[1]+4);}
+    ctx.fillText('O',ox-8,oy+16);
+    // curve: f(x) = -0.2x^2 + 3
+    ctx.strokeStyle=getCSS('--accent')||'#a0522d';ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for(var px=-6;px<=6;px+=0.05){
+      var fy=-0.2*px*px+3;
+      var cp=toCanvas(px,fy);
+      if(px===-6)ctx.moveTo(cp[0],cp[1]);else ctx.lineTo(cp[0],cp[1]);
+    }
+    ctx.stroke();
+    // cursor
+    if(mx!==undefined&&my!==undefined){
+      var rx=(mx-ox)/scaleX;
+      var ry=-0.2*rx*rx+3;
+      var cp2=toCanvas(rx,ry);
+      // dashed lines
+      ctx.setLineDash([4,4]);ctx.strokeStyle=getCSS('--tip')||'#b8860b';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(cp2[0],oy);ctx.lineTo(cp2[0],cp2[1]);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ox,cp2[1]);ctx.lineTo(cp2[0],cp2[1]);ctx.stroke();
+      ctx.setLineDash([]);
+      // point
+      ctx.fillStyle=getCSS('--accent')||'#a0522d';
+      ctx.beginPath();ctx.arc(cp2[0],cp2[1],5,0,Math.PI*2);ctx.fill();
+      var rxR=Math.round(rx*10)/10,ryR=Math.round(ry*10)/10;
+      document.getElementById('lectureCoords').innerHTML=
+        'Point : (<strong>'+rxR+'</strong> ; <strong>'+ryR+'</strong>) &mdash; f('+rxR+') = '+ryR;
+    }
+  }
+  draw();
+  c.addEventListener('mousemove',function(e){
+    var rect=c.getBoundingClientRect();
+    var sx=c.width/rect.width;
+    draw(((e.clientX-rect.left)*sx),(e.clientY-rect.top)*c.height/rect.height);
+  });
+  c.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    var rect=c.getBoundingClientRect();var t=e.touches[0];
+    var sx=c.width/rect.width;
+    draw(((t.clientX-rect.left)*sx),(t.clientY-rect.top)*c.height/rect.height);
+  },{passive:false});
+  c.addEventListener('mouseleave',function(){
+    draw();
+    document.getElementById('lectureCoords').textContent='Survole le graphique pour lire les coordonnées.';
+  });
+}
+function checkLect(n,expected){
+  var v=parseFloat(document.getElementById('lect'+n).value);
+  var ok=Math.abs(v-expected)<0.2;
+  setFB('fbLect'+n,ok,ok?'Correct !':'Réponse attendue : '+expected);
+}
+
+/* ===== TAB 2: Tableau de valeurs ===== */
+function tabFunc(x){return x*x-2*x;}
+function checkTableau(){
+  var inputs=document.querySelectorAll('#tabValeurs input');
+  var allOk=true,count=0;
+  inputs.forEach(function(inp){
+    var x=parseFloat(inp.getAttribute('data-x'));
+    var expected=tabFunc(x);
+    var v=parseFloat(inp.value);
+    if(isNaN(v)){inp.style.borderColor='';return;}
+    if(Math.abs(v-expected)<0.1){inp.style.borderColor=getCSS('--success');count++;}
+    else{inp.style.borderColor=getCSS('--error');allOk=false;}
+  });
+  setFB('fbTableau',allOk&&count===7,
+    allOk&&count===7?'Bravo ! Tableau complètement rempli.':
+    count+'/7 correct(s). Vérifie tes calculs.');
+  drawTableauCanvas();
+}
+function resetTableau(){
+  document.querySelectorAll('#tabValeurs input').forEach(function(inp){inp.value='';inp.style.borderColor='';});
+  document.getElementById('fbTableau').textContent='';
+  drawTableauCanvas();
+}
+function drawTableauCanvas(){
+  var c=document.getElementById('canvasTableau');
+  var ctx=c.getContext('2d');
+  var W=c.width,H=c.height;
+  var ox=120,oy=H-60;
+  var scaleX=(W-160)/6,scaleY=(H-100)/10;
+  function toC(x,y){return[ox+(x+2)*scaleX,oy-y*scaleY];}
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle=getCSS('--surface')||'#fff';ctx.fillRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle=getCSS('--border')||'#ddd';ctx.lineWidth=0.5;
+  for(var gx=-2;gx<=4;gx++){var p=toC(gx,0);ctx.beginPath();ctx.moveTo(p[0],20);ctx.lineTo(p[0],oy+20);ctx.stroke();}
+  for(var gy=-2;gy<=8;gy++){var p2=toC(-2,gy);ctx.beginPath();ctx.moveTo(p2[0]-20,p2[1]);ctx.lineTo(toC(4,gy)[0]+20,p2[1]);ctx.stroke();}
+  // axes
+  ctx.strokeStyle=getCSS('--text')||'#333';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(ox-20,oy);ctx.lineTo(W-20,oy);ctx.stroke();
+  var axisX=toC(0,0);
+  ctx.beginPath();ctx.moveTo(axisX[0],oy+20);ctx.lineTo(axisX[0],20);ctx.stroke();
+  // labels
+  ctx.fillStyle=getCSS('--muted')||'#666';ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='center';
+  for(var lx=-2;lx<=4;lx++){var lp=toC(lx,0);ctx.fillText(lx,lp[0],oy+16);}
+  ctx.textAlign='right';
+  for(var ly=-1;ly<=8;ly++){if(ly===0)continue;var lp2=toC(-2,ly);ctx.fillText(ly,axisX[0]-8,lp2[1]+4);}
+  // curve
+  ctx.strokeStyle=getCSS('--accent')||'#a0522d';ctx.lineWidth=2;ctx.beginPath();
+  for(var px=-2;px<=4;px+=0.05){
+    var fy=tabFunc(px);var cp=toC(px,fy);
+    if(px===-2)ctx.moveTo(cp[0],cp[1]);else ctx.lineTo(cp[0],cp[1]);
+  }
+  ctx.stroke();
+  // points from table
+  var inputs=document.querySelectorAll('#tabValeurs input');
+  inputs.forEach(function(inp){
+    var x=parseFloat(inp.getAttribute('data-x'));
+    var expected=tabFunc(x);
+    var v=parseFloat(inp.value);
+    if(!isNaN(v)&&Math.abs(v-expected)<0.1){
+      var cp2=toC(x,expected);
+      ctx.fillStyle=getCSS('--success')||'green';
+      ctx.beginPath();ctx.arc(cp2[0],cp2[1],5,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=getCSS('--text');ctx.font='11px Nunito Sans';ctx.textAlign='center';
+      ctx.fillText('('+x+';'+expected+')',cp2[0],cp2[1]-10);
+    }
+  });
+}
+
+/* ===== TAB 3: Fonctions linéaires ===== */
+function drawLineaire(){
+  var slider=document.getElementById('sliderA3');
+  function draw(){
+    var a=parseFloat(slider.value);
+    document.getElementById('valA3').textContent=a;
+    var aStr=a===1?'':a===-1?'−':a;
+    document.getElementById('eqLin').innerHTML='f(x) = '+aStr+'x';
+    var c=document.getElementById('canvasLineaire');
+    var ctx=c.getContext('2d');var W=c.width,H=c.height;
+    var ox=W/2,oy=H/2,scX=W/12,scY=H/10;
+    function toC(x,y){return[ox+x*scX,oy-y*scY];}
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=getCSS('--surface')||'#fff';ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle=getCSS('--border');ctx.lineWidth=0.5;
+    for(var gx=-6;gx<=6;gx++){var p=toC(gx,0);ctx.beginPath();ctx.moveTo(p[0],0);ctx.lineTo(p[0],H);ctx.stroke();}
+    for(var gy=-5;gy<=5;gy++){var p2=toC(0,gy);ctx.beginPath();ctx.moveTo(0,p2[1]);ctx.lineTo(W,p2[1]);ctx.stroke();}
+    ctx.strokeStyle=getCSS('--text');ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+    ctx.fillStyle=getCSS('--muted');ctx.font='12px Nunito Sans,sans-serif';ctx.textAlign='center';
+    for(var lx=-5;lx<=5;lx++){if(lx===0)continue;ctx.fillText(lx,toC(lx,0)[0],oy+16);}
+    ctx.textAlign='right';
+    for(var ly=-4;ly<=4;ly++){if(ly===0)continue;ctx.fillText(ly,ox-8,toC(0,ly)[1]+4);}
+    // line
+    ctx.strokeStyle=getCSS('--accent');ctx.lineWidth=2.5;
+    ctx.beginPath();var p1=toC(-6,-6*a),p2b=toC(6,6*a);
+    ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2b[0],p2b[1]);ctx.stroke();
+    // origin
+    ctx.fillStyle=getCSS('--accent');ctx.beginPath();ctx.arc(ox,oy,4,0,Math.PI*2);ctx.fill();
+    // show coefficient
+    if(a!==0){
+      var px=2,py=a*2;var cp=toC(px,py);
+      ctx.fillStyle=getCSS('--tip');ctx.font='bold 13px Nunito Sans';ctx.textAlign='left';
+      ctx.fillText('('+px+' ; '+(Math.round(py*10)/10)+')',cp[0]+8,cp[1]-8);
+      ctx.fillStyle=getCSS('--accent');ctx.beginPath();ctx.arc(cp[0],cp[1],4,0,Math.PI*2);ctx.fill();
+    }
+  }
+  slider.addEventListener('input',draw);
+  draw();
+}
+
+/* ===== TAB 4: Fonctions affines ===== */
+function drawAffine(){
+  var sA=document.getElementById('sliderA4'),sB=document.getElementById('sliderB4');
+  function draw(){
+    var a=parseFloat(sA.value),b=parseFloat(sB.value);
+    document.getElementById('valA4').textContent=a;
+    document.getElementById('valB4').textContent=b;
+    var aStr=a===1?'':a===-1?'−':a;
+    var bStr=b>0?' + '+b:b<0?' − '+Math.abs(b):'';
+    document.getElementById('eqAff').innerHTML='f(x) = '+aStr+'x'+bStr;
+    var c=document.getElementById('canvasAffine');
+    var ctx=c.getContext('2d');var W=c.width,H=c.height;
+    var ox=W/2,oy=H/2,scX=W/12,scY=H/12;
+    function toC(x,y){return[ox+x*scX,oy-y*scY];}
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=getCSS('--surface')||'#fff';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=getCSS('--border');ctx.lineWidth=0.5;
+    for(var gx=-6;gx<=6;gx++){var p=toC(gx,0);ctx.beginPath();ctx.moveTo(p[0],0);ctx.lineTo(p[0],H);ctx.stroke();}
+    for(var gy=-6;gy<=6;gy++){var p2=toC(0,gy);ctx.beginPath();ctx.moveTo(0,p2[1]);ctx.lineTo(W,p2[1]);ctx.stroke();}
+    ctx.strokeStyle=getCSS('--text');ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+    ctx.fillStyle=getCSS('--muted');ctx.font='12px Nunito Sans,sans-serif';ctx.textAlign='center';
+    for(var lx=-5;lx<=5;lx++){if(lx===0)continue;ctx.fillText(lx,toC(lx,0)[0],oy+16);}
+    ctx.textAlign='right';
+    for(var ly=-5;ly<=5;ly++){if(ly===0)continue;ctx.fillText(ly,ox-8,toC(0,ly)[1]+4);}
+    // line
+    ctx.strokeStyle=getCSS('--accent');ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.moveTo(toC(-6,-6*a+b)[0],toC(-6,-6*a+b)[1]);
+    ctx.lineTo(toC(6,6*a+b)[0],toC(6,6*a+b)[1]);
+    ctx.stroke();
+    // b point
+    var bP=toC(0,b);
+    ctx.fillStyle='#1565c0';ctx.beginPath();ctx.arc(bP[0],bP[1],5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#1565c0';ctx.font='bold 12px Nunito Sans';ctx.textAlign='left';
+    ctx.fillText('b = '+b,bP[0]+8,bP[1]-6);
+    // slope triangle
+    if(a!==0){
+      var x1=1,y1=a+b,x2=2,y2=2*a+b;
+      var c1=toC(x1,y1),c2=toC(x2,y1),c3=toC(x2,y2);
+      ctx.setLineDash([4,3]);ctx.strokeStyle=getCSS('--tip');ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(c1[0],c1[1]);ctx.lineTo(c2[0],c2[1]);ctx.lineTo(c3[0],c3[1]);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=getCSS('--tip');ctx.font='bold 11px Nunito Sans';ctx.textAlign='center';
+      ctx.fillText('1',(c1[0]+c2[0])/2,c1[1]+14);
+      ctx.fillText('a='+a,c2[0]+20,(c2[1]+c3[1])/2+4);
+    }
+  }
+  sA.addEventListener('input',draw);
+  sB.addEventListener('input',draw);
+  draw();
+}
+function checkLin1(){
+  var v=parseFloat(document.getElementById('exLin1').value);
+  setFB('fbLin1',v===4,v===4?'Correct ! a = 12/3 = 4':'Incorrect. Pense à a = f(3)/3.');
+}
+function checkAff1(){
+  var a=parseFloat(document.getElementById('exAff1').value);
+  var b=parseFloat(document.getElementById('exAff2').value);
+  var ok=a===3&&b===2;
+  setFB('fbAff1',ok,ok?'Bravo ! f(x) = 3x + 2':'Vérifie : a = (11−5)/(3−1), puis b = f(1) − a×1.');
+}
+
+/* ===== TAB 5: Exercice 5 canvas ===== */
+function drawEx5(){
+  var c=document.getElementById('canvasEx5');
+  var ctx=c.getContext('2d');var W=c.width,H=c.height;
+  var ox=100,oy=H-60,scX=(W-140)/8,scY=(H-100)/5;
+  function toC(x,y){return[ox+(x+3)*scX,oy-y*scY];}
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=getCSS('--surface')||'#fff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=getCSS('--border');ctx.lineWidth=0.5;
+  for(var gx=-3;gx<=5;gx++){var p=toC(gx,0);ctx.beginPath();ctx.moveTo(p[0],20);ctx.lineTo(p[0],oy+10);ctx.stroke();}
+  for(var gy=-2;gy<=3;gy++){var p2=toC(-3,gy);ctx.beginPath();ctx.moveTo(p2[0]-10,p2[1]);ctx.lineTo(toC(5,gy)[0]+10,p2[1]);ctx.stroke();}
+  ctx.strokeStyle=getCSS('--text');ctx.lineWidth=1.5;
+  var axisO=toC(0,0);
+  ctx.beginPath();ctx.moveTo(toC(-3,0)[0]-10,axisO[1]);ctx.lineTo(toC(5,0)[0]+10,axisO[1]);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(axisO[0],20);ctx.lineTo(axisO[0],oy+10);ctx.stroke();
+  ctx.fillStyle=getCSS('--muted');ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='center';
+  for(var lx=-3;lx<=5;lx++){if(lx===0)continue;ctx.fillText(lx,toC(lx,0)[0],axisO[1]+16);}
+  ctx.textAlign='right';
+  for(var ly=-1;ly<=3;ly++){if(ly===0)continue;ctx.fillText(ly,axisO[0]-6,toC(0,ly)[1]+4);}
+  ctx.fillText('O',axisO[0]-6,axisO[1]+16);
+  // g(x) = -(x-1)^2 + 2
+  ctx.strokeStyle=getCSS('--accent');ctx.lineWidth=2.5;ctx.beginPath();
+  for(var px=-3;px<=5;px+=0.05){
+    var fy=-(px-1)*(px-1)+2;var cp=toC(px,fy);
+    if(px===-3)ctx.moveTo(cp[0],cp[1]);else ctx.lineTo(cp[0],cp[1]);
+  }
+  ctx.stroke();
+  ctx.fillStyle=getCSS('--muted');ctx.font='italic 13px Cormorant Garamond,serif';ctx.textAlign='left';
+  ctx.fillText('Courbe de g',toC(2.5,1.5)[0],toC(2.5,1.5)[1]);
+}
+function checkEx(id,expected){
+  var v=parseFloat(document.getElementById(id).value);
+  var ok=Math.abs(v-expected)<0.2;
+  setFB('fb'+id,ok,ok?'Correct !':'Incorrect, réponse : '+expected);
+}
+function checkExAntec(){
+  var v=parseFloat(document.getElementById('ex5b').value);
+  // g(x)=0 => -(x-1)^2+2=0 => x=1-sqrt(2) or x=1+sqrt(2)
+  var a1=1-Math.sqrt(2),a2=1+Math.sqrt(2);
+  var ok=Math.abs(v-a1)<0.3||Math.abs(v-a2)<0.3;
+  setFB('fbex5b',ok,ok?'Correct ! (valeurs possibles : ≈'+(Math.round(a1*10)/10)+' ou ≈'+(Math.round(a2*10)/10)+')':
+    'Essaie de lire sur le graphique où la courbe coupe l’axe des abscisses.');
+}
+function checkEx6(){
+  var a=parseFloat(document.getElementById('ex6a').value);
+  var b=parseFloat(document.getElementById('ex6b').value);
+  var ok=a===3&&b===1;
+  setFB('fbex6',ok,ok?'Bravo ! f(x) = 3x + 1':'Vérifie : a = (16−7)/(5−2) = 3, puis b = 7 − 3×2 = 1.');
+}
+
+/* ===== TAB 6: QCM ===== */
+var qcmData=[
+  {q:"Soit f(x) = 3x − 5. Quelle est l’image de 2 ?",o:["1","6","−1","11"],a:0},
+  {q:"f(x) = x². L’image de −3 est :",o:["9","−9","6","−6"],a:0},
+  {q:"Si f(4) = 7, alors 4 est :",o:["l’image de 7","un antécédent de 7","le coefficient directeur","l’ordonnée à l’origine"],a:1},
+  {q:"Une fonction linéaire passe toujours par :",o:["le point (1;1)","l’origine O(0;0)","le point (0;1)","aucun point fixe"],a:1},
+  {q:"f(x) = 2x est une fonction :",o:["affine","linéaire","constante","quadratique"],a:1},
+  {q:"Soit f(x) = −4x + 1. f(0) vaut :",o:["0","−4","1","4"],a:2},
+  {q:"Le coefficient directeur de f(x) = −3x + 7 est :",o:["7","−3","3","−7"],a:1},
+  {q:"L’ordonnée à l’origine de f(x) = 5x − 2 est :",o:["5","−2","2","−5"],a:1},
+  {q:"f(x) = 4 est une fonction :",o:["linéaire","affine","constante","croissante"],a:2},
+  {q:"Si f(x) = ax + b avec a > 0, la fonction est :",o:["décroissante","constante","croissante","nulle"],a:2},
+  {q:"Combien d’images un nombre peut-il avoir par une fonction ?",o:["Aucune","Une seule","Deux","Une infinité"],a:1},
+  {q:"Combien d’antécédents un nombre peut-il avoir par une fonction ?",o:["Un seul","Toujours deux","Zéro, un ou plusieurs","Exactement trois"],a:2},
+  {q:"f(x) = 2x + 3 : l’antécédent de 9 est :",o:["3","6","4.5","2"],a:0},
+  {q:"La droite d’équation y = −x + 4 coupe l’axe des ordonnées en :",o:["(0;4)","(4;0)","(0;−1)","(−4;0)"],a:0},
+  {q:"Si f est linéaire et f(5) = 15, alors f(1) = :",o:["5","3","15","1"],a:1}
+];
+function buildQCM(){
+  var cont=document.getElementById('qcmContainer');
+  cont.innerHTML='';
+  qcmData.forEach(function(q,i){
+    var div=document.createElement('div');div.className='qcm-item';
+    var p=document.createElement('p');p.textContent=(i+1)+'. '+q.q;div.appendChild(p);
+    var opts=document.createElement('div');opts.className='qcm-options';
+    q.o.forEach(function(opt,j){
+      var lbl=document.createElement('label');
+      var inp=document.createElement('input');inp.type='radio';inp.name='qcm'+i;inp.value=j;
+      lbl.appendChild(inp);lbl.appendChild(document.createTextNode(' '+opt));
+      opts.appendChild(lbl);
+    });
+    div.appendChild(opts);
+    var fbDiv=document.createElement('div');fbDiv.id='qcmFb'+i;div.appendChild(fbDiv);
+    cont.appendChild(div);
+  });
+}
+function corrigerQCM(){
+  var score=0;
+  qcmData.forEach(function(q,i){
+    var sel=document.querySelector('input[name="qcm'+i+'"]:checked');
+    var fbEl=document.getElementById('qcmFb'+i);
+    if(!sel){fbEl.className='feedback wrong';fbEl.textContent='Pas de réponse sélectionnée.';return;}
+    var ok=parseInt(sel.value)===q.a;
+    if(ok)score++;
+    fbEl.className='feedback '+(ok?'correct':'wrong');
+    fbEl.textContent=ok?'Correct !'
+      :'Incorrect. Réponse : '+q.o[q.a];
+  });
+  var bar=document.getElementById('scoreBar');bar.style.display='flex';
+  document.getElementById('scoreNum').textContent=score+'/15';
+  var msg='';
+  if(score>=13)msg='Excellent ! Tu maîtrise bien les fonctions.';
+  else if(score>=10)msg='Bien ! Encore quelques révisions.';
+  else if(score>=7)msg='Pas mal, mais revois les points difficiles.';
+  else msg='Il faut retravailler le cours. Courage !';
+  document.getElementById('scoreMsg').textContent=msg;
+}
+function resetQCM(){
+  document.querySelectorAll('#qcmContainer input').forEach(function(inp){inp.checked=false;});
+  qcmData.forEach(function(_,i){var fb=document.getElementById('qcmFb'+i);if(fb){fb.className='';fb.textContent='';}});
+  document.getElementById('scoreBar').style.display='none';
+}
+
+/* ===== Redraw all canvases on theme change ===== */
+function drawAllCanvases(){
+  if(inited[1])drawLecture();
+  if(inited[2])drawTableauCanvas();
+  if(inited[3]){document.getElementById('sliderA3').dispatchEvent(new Event('input'));}
+  if(inited[4]){document.getElementById('sliderA4').dispatchEvent(new Event('input'));}
+  if(inited[5])drawEx5();
+}
+
+/* ===== Init ===== */
+initSection(0);
+</script>
+</body>
+</html>

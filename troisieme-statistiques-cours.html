@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistiques — Cours 3ème</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --text: #2c2418;
+  --muted: #6b5a48;
+  --border: #d4c8b8;
+  --surface2: #ebe6de;
+  --accent-light: #faf5ef;
+  --tip: #b8860b;
+  --tip-bg: #fdf8ef;
+  --success: #2e7d42;
+  --error: #c62828;
+  --shadow: 0 2px 8px rgba(139,69,19,0.07);
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1510;
+    --surface: #2a2218;
+    --heading: #d4a06a;
+    --accent: #c8845a;
+    --text: #e8ddd0;
+    --muted: #a89880;
+    --border: #4a3e30;
+    --surface2: #332a20;
+    --accent-light: #2e2518;
+    --tip: #d4a840;
+    --tip-bg: #2e2810;
+    --success: #4caf50;
+    --error: #ef5350;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --radius: 6px;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1a1510;
+  --surface: #2a2218;
+  --heading: #d4a06a;
+  --accent: #c8845a;
+  --text: #e8ddd0;
+  --muted: #a89880;
+  --border: #4a3e30;
+  --surface2: #332a20;
+  --accent-light: #2e2518;
+  --tip: #d4a840;
+  --tip-bg: #2e2810;
+  --success: #4caf50;
+  --error: #ef5350;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: var(--heading); }
+.container { max-width: 900px; margin: 0 auto; padding: 16px; }
+header {
+  text-align: center;
+  padding: 2rem 16px 1rem;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+  position: relative;
+}
+header h1 { font-size: 2.2rem; margin-bottom: 0.3rem; }
+header p { color: var(--muted); font-size: 1rem; }
+.level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+.theme-toggle {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--surface2);
+  padding: 6px;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+}
+.tab-btn {
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+  text-align: center;
+}
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+}
+.tab-btn:hover:not(.active) { color: var(--text); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow);
+}
+.formula-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.05rem;
+  text-align: center;
+}
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.tip-box::before { content: "Astuce : "; font-weight: 700; color: var(--tip); }
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+.exercise h4 { margin-bottom: 0.5rem; }
+details {
+  margin-top: 0.8rem;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+}
+details summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+details summary:hover { text-decoration: underline; }
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 4px;
+  font-size: 0.95em;
+}
+.frac .num { border-bottom: 1.5px solid var(--text); padding: 0 4px 2px; line-height: 1.2; }
+.frac .den { padding: 2px 4px 0; line-height: 1.2; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8rem 0;
+  font-size: 0.95rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  text-align: center;
+}
+th { background: var(--surface2); font-weight: 700; color: var(--heading); }
+input[type="text"], input[type="number"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  width: 100%;
+}
+input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+button.action-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+button.action-btn:hover { opacity: 0.85; }
+.result-box {
+  background: var(--accent-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-top: 0.8rem;
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+canvas {
+  display: block;
+  max-width: 100%;
+  margin: 1rem auto;
+  border-radius: var(--radius);
+}
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 10px 14px;
+  margin: 6px 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+.quiz-option:hover { border-color: var(--accent); }
+.quiz-option.correct { border-color: var(--success); background: rgba(46,125,66,0.08); }
+.quiz-option.wrong { border-color: var(--error); background: rgba(198,40,40,0.08); }
+.quiz-option:disabled { cursor: default; opacity: 0.85; }
+.quiz-score {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1rem;
+  color: var(--heading);
+}
+.quiz-explanation {
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: var(--tip-bg);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.step-highlight { color: var(--accent); font-weight: 700; }
+@media (max-width: 600px) {
+  header h1 { font-size: 1.6rem; }
+  .tab-btn { font-size: 0.75rem; min-width: 80px; padding: 6px 6px; }
+  .card { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le thème" title="Changer le thème">&#9681;</button>
+  <span class="level-badge">3ème</span>
+  <h1>Statistiques</h1>
+  <p>Cours interactif &mdash; Programme de 3ème</p>
+</header>
+
+<div class="container">
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" onclick="showTab(0)">Effectifs</button>
+    <button class="tab-btn" onclick="showTab(1)">Moyenne</button>
+    <button class="tab-btn" onclick="showTab(2)">Médiane</button>
+    <button class="tab-btn" onclick="showTab(3)">Étendue</button>
+    <button class="tab-btn" onclick="showTab(4)">Diagrammes</button>
+    <button class="tab-btn" onclick="showTab(5)">Exercices</button>
+    <button class="tab-btn" onclick="showTab(6)">QCM</button>
+  </nav>
+
+  <!-- ==================== TAB 0: EFFECTIFS ==================== -->
+  <section class="tab-content active" id="tab0">
+    <div class="card">
+      <h2>Effectifs et fréquences</h2>
+      <h3>Vocabulaire</h3>
+      <p>En statistiques, on étudie un <strong>caractère</strong> (ou variable) sur une <strong>population</strong>. Chaque individu de la population donne une <strong>valeur</strong> du caractère.</p>
+      <ul style="margin:0.8rem 0 0.8rem 1.5rem;">
+        <li><strong>Effectif</strong> d&rsquo;une valeur : nombre de fois où cette valeur apparaît.</li>
+        <li><strong>Effectif total</strong> (N) : nombre total d&rsquo;individus.</li>
+        <li><strong>Fréquence</strong> d&rsquo;une valeur :
+          <span class="frac"><span class="num">effectif de la valeur</span><span class="den">effectif total</span></span>
+          (souvent exprimée en %).
+        </li>
+      </ul>
+
+      <div class="formula-box">
+        Fréquence (%) = <span class="frac"><span class="num">effectif</span><span class="den">N</span></span> &times; 100
+      </div>
+
+      <div class="tip-box">La somme de toutes les fréquences vaut toujours 100&nbsp;%.</div>
+
+      <h3 style="margin-top:1.2rem;">Exemple</h3>
+      <p>On demande à 30 élèves leur note à un contrôle (/5)&nbsp;:</p>
+      <table>
+        <tr><th>Note</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+        <tr><th>Effectif</th><td>2</td><td>5</td><td>8</td><td>10</td><td>5</td></tr>
+        <tr><th>Fréquence</th><td>6,7&nbsp;%</td><td>16,7&nbsp;%</td><td>26,7&nbsp;%</td><td>33,3&nbsp;%</td><td>16,7&nbsp;%</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Outil interactif &mdash; Calcul de fréquences</h3>
+      <p>Entrez vos valeurs et leurs effectifs (séparés par des virgules)&nbsp;:</p>
+      <div style="display:grid;gap:8px;margin:0.8rem 0;">
+        <label>Valeurs : <input type="text" id="freq-vals" value="1, 2, 3, 4, 5" placeholder="ex: 1, 2, 3, 4, 5"></label>
+        <label>Effectifs : <input type="text" id="freq-effs" value="2, 5, 8, 10, 5" placeholder="ex: 2, 5, 8, 10, 5"></label>
+      </div>
+      <button class="action-btn" onclick="computeFrequencies()">Calculer les fréquences</button>
+      <div id="freq-result" class="result-box" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 1: MOYENNE ==================== -->
+  <section class="tab-content" id="tab1">
+    <div class="card">
+      <h2>Moyenne</h2>
+      <h3>Moyenne simple</h3>
+      <p>La <strong>moyenne</strong> (<span style="text-decoration:overline">x</span>) d&rsquo;une série de N valeurs est&nbsp;:</p>
+      <div class="formula-box">
+        <span style="text-decoration:overline">x</span> = <span class="frac"><span class="num">x₁ + x₂ + &hellip; + x_N</span><span class="den">N</span></span>
+      </div>
+
+      <h3 style="margin-top:1.2rem;">Moyenne pondérée</h3>
+      <p>Quand les valeurs sont regroupées avec des effectifs (coefficients), on calcule&nbsp;:</p>
+      <div class="formula-box">
+        <span style="text-decoration:overline">x</span> = <span class="frac"><span class="num">n₁&middot;x₁ + n₂&middot;x₂ + &hellip; + n_k&middot;x_k</span><span class="den">n₁ + n₂ + &hellip; + n_k</span></span>
+      </div>
+
+      <div class="tip-box">La moyenne pondérée tient compte du « poids » de chaque valeur. C&rsquo;est la formule la plus utilisée au Brevet.</div>
+
+      <h3 style="margin-top:1.2rem;">Exemple</h3>
+      <table>
+        <tr><th>Note</th><td>8</td><td>12</td><td>14</td><td>16</td></tr>
+        <tr><th>Effectif</th><td>3</td><td>7</td><td>5</td><td>5</td></tr>
+      </table>
+      <p><span style="text-decoration:overline">x</span> = <span class="frac"><span class="num">3&times;8 + 7&times;12 + 5&times;14 + 5&times;16</span><span class="den">3 + 7 + 5 + 5</span></span> = <span class="frac"><span class="num">24 + 84 + 70 + 80</span><span class="den">20</span></span> = <span class="frac"><span class="num">258</span><span class="den">20</span></span> = <strong>12,9</strong></p>
+    </div>
+
+    <div class="card">
+      <h3>Visualisation &mdash; Diagramme en barres avec ligne de moyenne</h3>
+      <canvas id="canvas-mean" width="600" height="320"></canvas>
+    </div>
+
+    <div class="card">
+      <h3>Outil interactif &mdash; Calcul de moyenne</h3>
+      <p>Entrez vos valeurs (séparées par des virgules)&nbsp;:</p>
+      <input type="text" id="mean-input" value="8, 8, 8, 12, 12, 12, 12, 12, 12, 12, 14, 14, 14, 14, 14, 16, 16, 16, 16, 16" placeholder="ex: 12, 14, 15, 9, 11">
+      <button class="action-btn" style="margin-top:8px;" onclick="computeMean()">Calculer la moyenne</button>
+      <div id="mean-result" class="result-box" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 2: MEDIANE ==================== -->
+  <section class="tab-content" id="tab2">
+    <div class="card">
+      <h2>Médiane</h2>
+      <p>La <strong>médiane</strong> est la valeur qui partage la série ordonnée en deux groupes de même effectif&nbsp;: la moitié des valeurs lui sont inférieures ou égales, l&rsquo;autre moitié supérieures ou égales.</p>
+
+      <h3 style="margin-top:1rem;">Méthode de calcul</h3>
+      <p>On ordonne les N valeurs dans l&rsquo;ordre croissant, puis&nbsp;:</p>
+      <div class="formula-box" style="text-align:left;">
+        <strong>Si N est impair</strong> : la médiane est la valeur de rang <span class="frac"><span class="num">N + 1</span><span class="den">2</span></span><br><br>
+        <strong>Si N est pair</strong> : la médiane est la moyenne des valeurs de rang <span class="frac"><span class="num">N</span><span class="den">2</span></span> et <span class="frac"><span class="num">N</span><span class="den">2</span></span> + 1
+      </div>
+
+      <div class="tip-box">Ne pas oublier de <strong>trier</strong> la série avant de chercher la médiane&nbsp;!</div>
+
+      <h3 style="margin-top:1rem;">Exemples</h3>
+      <p><strong>N impair (N=7)</strong> : Série : 3, 5, 7, <span class="step-highlight">8</span>, 9, 12, 15<br>
+      Rang = (7+1)/2 = 4 &rarr; médiane = <strong>8</strong></p>
+      <p style="margin-top:0.5rem;"><strong>N pair (N=6)</strong> : Série : 4, 6, <span class="step-highlight">9, 11</span>, 13, 18<br>
+      Rangs = 3 et 4 &rarr; médiane = (9+11)/2 = <strong>10</strong></p>
+    </div>
+
+    <div class="card">
+      <h3>Outil interactif &mdash; Recherche de médiane</h3>
+      <p>Entrez vos valeurs (séparées par des virgules)&nbsp;:</p>
+      <input type="text" id="median-input" value="12, 5, 18, 9, 14, 7, 11" placeholder="ex: 12, 5, 18, 9, 14, 7, 11">
+      <button class="action-btn" style="margin-top:8px;" onclick="computeMedian()">Trouver la médiane</button>
+      <div id="median-result" class="result-box" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 3: ETENDUE ==================== -->
+  <section class="tab-content" id="tab3">
+    <div class="card">
+      <h2>Étendue</h2>
+      <p>L&rsquo;<strong>étendue</strong> d&rsquo;une série statistique est la différence entre la plus grande et la plus petite valeur&nbsp;:</p>
+      <div class="formula-box">
+        Étendue = Valeur maximale &minus; Valeur minimale
+      </div>
+      <p>Elle mesure la <strong>dispersion</strong> de la série : plus l&rsquo;étendue est grande, plus les valeurs sont « étalées ».</p>
+
+      <div class="tip-box">L&rsquo;étendue est sensible aux valeurs extrêmes. Une seule valeur très éloignée peut la rendre très grande.</div>
+
+      <h3 style="margin-top:1rem;">Comparaison de deux séries</h3>
+      <p>Pour comparer deux séries, on utilise souvent la moyenne <em>et</em> l&rsquo;étendue ensemble&nbsp;:</p>
+      <ul style="margin:0.5rem 0 0.5rem 1.5rem;">
+        <li>Même moyenne mais étendues différentes &rarr; dispersions différentes.</li>
+        <li>Même étendue mais moyennes différentes &rarr; niveaux différents.</li>
+      </ul>
+
+      <h3 style="margin-top:1rem;">Exemple</h3>
+      <table>
+        <tr><th></th><th>Série A</th><th>Série B</th></tr>
+        <tr><td>Valeurs</td><td>8, 10, 11, 12, 14</td><td>3, 9, 11, 14, 18</td></tr>
+        <tr><td>Moyenne</td><td>11</td><td>11</td></tr>
+        <tr><td>Étendue</td><td>14 &minus; 8 = <strong>6</strong></td><td>18 &minus; 3 = <strong>15</strong></td></tr>
+      </table>
+      <p>Les deux séries ont la même moyenne (11) mais la série B est beaucoup plus dispersée.</p>
+    </div>
+
+    <div class="card">
+      <h3>Visualisation &mdash; Comparaison de deux séries</h3>
+      <canvas id="canvas-range" width="600" height="320"></canvas>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 4: DIAGRAMMES ==================== -->
+  <section class="tab-content" id="tab4">
+    <div class="card">
+      <h2>Diagrammes statistiques</h2>
+      <h3>Les trois types principaux</h3>
+      <ul style="margin:0.5rem 0 1rem 1.5rem;">
+        <li><strong>Diagramme en barres</strong> : hauteur proportionnelle à l&rsquo;effectif. Adapté aux données discrètes.</li>
+        <li><strong>Diagramme circulaire</strong> : l&rsquo;angle de chaque secteur est proportionnel à la fréquence.<br>
+          Angle = fréquence &times; 360&deg;</li>
+        <li><strong>Histogramme</strong> : pour les données regroupées en classes. L&rsquo;aire est proportionnelle à l&rsquo;effectif.</li>
+      </ul>
+
+      <div class="formula-box">
+        Angle d&rsquo;un secteur = <span class="frac"><span class="num">effectif</span><span class="den">effectif total</span></span> &times; 360&deg;
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Visualisation interactive</h3>
+      <p>Données : Notes d&rsquo;un contrôle sur 30 élèves</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:0.8rem 0;">
+        <button class="action-btn" onclick="drawChart('bar')" id="btn-bar">Barres</button>
+        <button class="action-btn" onclick="drawChart('pie')" id="btn-pie" style="background:var(--muted);">Circulaire</button>
+        <button class="action-btn" onclick="drawChart('histo')" id="btn-histo" style="background:var(--muted);">Histogramme</button>
+      </div>
+      <canvas id="canvas-chart" width="600" height="380"></canvas>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 5: EXERCICES ==================== -->
+  <section class="tab-content" id="tab5">
+    <div class="card">
+      <h2>Exercices &mdash; Type Brevet</h2>
+    </div>
+
+    <!-- Exercice 1 -->
+    <div class="exercise">
+      <h4>Exercice 1 &mdash; Notes d&rsquo;un contrôle</h4>
+      <p>Voici les notes obtenues par 20 élèves à un contrôle de mathématiques&nbsp;:</p>
+      <p style="text-align:center;font-weight:600;">8, 12, 14, 10, 16, 12, 14, 8, 10, 12, 14, 16, 12, 10, 14, 8, 12, 16, 10, 14</p>
+      <p>1) Construire le tableau des effectifs et des fréquences.<br>
+         2) Calculer la moyenne de cette série.<br>
+         3) Déterminer la médiane.</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <table>
+          <tr><th>Note</th><td>8</td><td>10</td><td>12</td><td>14</td><td>16</td><th>Total</th></tr>
+          <tr><th>Effectif</th><td>3</td><td>4</td><td>5</td><td>5</td><td>3</td><td>20</td></tr>
+          <tr><th>Fréquence</th><td>15%</td><td>20%</td><td>25%</td><td>25%</td><td>15%</td><td>100%</td></tr>
+        </table>
+        <p><strong>Moyenne</strong> : <span style="text-decoration:overline">x</span> = (3&times;8 + 4&times;10 + 5&times;12 + 5&times;14 + 3&times;16) / 20 = (24+40+60+70+48)/20 = 242/20 = <strong>12,1</strong></p>
+        <p><strong>Médiane</strong> : N=20 (pair), rangs 10 et 11.<br>
+        Série ordonnée : 8,8,8,10,10,10,10,12,12,<span class="step-highlight">12</span>,<span class="step-highlight">12</span>,12,14,14,14,14,14,16,16,16<br>
+        Médiane = (12+12)/2 = <strong>12</strong></p>
+      </details>
+    </div>
+
+    <!-- Exercice 2 -->
+    <div class="exercise">
+      <h4>Exercice 2 &mdash; Températures</h4>
+      <p>Les températures maximales relevées à Lyon pendant 10 jours de janvier sont&nbsp;:</p>
+      <p style="text-align:center;font-weight:600;">3, &minus;1, 5, 2, 0, &minus;2, 4, 1, 3, 5</p>
+      <p>1) Calculer la moyenne des températures.<br>
+         2) Calculer la médiane.<br>
+         3) Déterminer l&rsquo;étendue. Que signifie-t-elle&nbsp;?</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <p><strong>Moyenne</strong> : <span style="text-decoration:overline">x</span> = (3+(&minus;1)+5+2+0+(&minus;2)+4+1+3+5)/10 = 20/10 = <strong>2&deg;C</strong></p>
+        <p><strong>Médiane</strong> : Série ordonnée : &minus;2, &minus;1, 0, 1, <span class="step-highlight">2, 3</span>, 3, 4, 5, 5<br>
+        N=10 (pair), rangs 5 et 6 : (2+3)/2 = <strong>2,5&deg;C</strong></p>
+        <p><strong>Étendue</strong> : 5 &minus; (&minus;2) = <strong>7&deg;C</strong><br>
+        L&rsquo;écart entre la journée la plus chaude et la plus froide est de 7&deg;C.</p>
+      </details>
+    </div>
+
+    <!-- Exercice 3 -->
+    <div class="exercise">
+      <h4>Exercice 3 &mdash; Sondage</h4>
+      <p>On a interrogé 200 personnes sur leur moyen de transport quotidien&nbsp;:</p>
+      <table>
+        <tr><th>Transport</th><td>Voiture</td><td>Bus</td><td>Vélo</td><td>Marche</td><td>Métro</td></tr>
+        <tr><th>Effectif</th><td>80</td><td>50</td><td>30</td><td>20</td><td>20</td></tr>
+      </table>
+      <p>1) Calculer les fréquences en pourcentage.<br>
+         2) Calculer les angles pour un diagramme circulaire.<br>
+         3) Quel est le mode de cette série&nbsp;?</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <table>
+          <tr><th>Transport</th><td>Voiture</td><td>Bus</td><td>Vélo</td><td>Marche</td><td>Métro</td></tr>
+          <tr><th>Fréquence</th><td>40%</td><td>25%</td><td>15%</td><td>10%</td><td>10%</td></tr>
+          <tr><th>Angle</th><td>144&deg;</td><td>90&deg;</td><td>54&deg;</td><td>36&deg;</td><td>36&deg;</td></tr>
+        </table>
+        <p><strong>Mode</strong> : la valeur ayant le plus grand effectif est <strong>Voiture</strong> (80 personnes).</p>
+      </details>
+    </div>
+
+    <!-- Exercice 4 -->
+    <div class="exercise">
+      <h4>Exercice 4 &mdash; Comparaison de deux classes</h4>
+      <p>On compare les résultats de deux classes à un même examen noté sur 20&nbsp;:</p>
+      <table>
+        <tr><th>Classe A</th><td>8</td><td>10</td><td>12</td><td>14</td><td>16</td></tr>
+        <tr><th>Effectif A</th><td>4</td><td>6</td><td>8</td><td>5</td><td>2</td></tr>
+        <tr><th>Classe B</th><td>6</td><td>10</td><td>12</td><td>14</td><td>18</td></tr>
+        <tr><th>Effectif B</th><td>2</td><td>5</td><td>10</td><td>6</td><td>2</td></tr>
+      </table>
+      <p>1) Calculer la moyenne de chaque classe.<br>
+         2) Calculer l&rsquo;étendue de chaque classe.<br>
+         3) Quelle classe a les meilleurs résultats&nbsp;? Justifier.</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <p><strong>Classe A</strong> : <span style="text-decoration:overline">x</span> = (4&times;8+6&times;10+8&times;12+5&times;14+2&times;16)/25 = (32+60+96+70+32)/25 = 290/25 = <strong>11,6</strong><br>
+        Étendue A = 16&minus;8 = <strong>8</strong></p>
+        <p><strong>Classe B</strong> : <span style="text-decoration:overline">x</span> = (2&times;6+5&times;10+10&times;12+6&times;14+2&times;18)/25 = (12+50+120+84+36)/25 = 302/25 = <strong>12,08</strong><br>
+        Étendue B = 18&minus;6 = <strong>12</strong></p>
+        <p>La classe B a une moyenne légèrement supérieure (12,08 contre 11,6) mais une étendue plus grande (12 contre 8), ce qui signifie que les résultats sont plus dispersés en B. La classe A est plus homogène.</p>
+      </details>
+    </div>
+
+    <!-- Exercice 5 -->
+    <div class="exercise">
+      <h4>Exercice 5 &mdash; Données groupées en classes</h4>
+      <p>Le temps (en minutes) mis par 40 élèves pour un exercice&nbsp;:</p>
+      <table>
+        <tr><th>Temps (min)</th><td>[0&nbsp;; 5[</td><td>[5&nbsp;; 10[</td><td>[10&nbsp;; 15[</td><td>[15&nbsp;; 20[</td></tr>
+        <tr><th>Effectif</th><td>6</td><td>14</td><td>12</td><td>8</td></tr>
+      </table>
+      <p>1) Quel est le centre de chaque classe&nbsp;?<br>
+         2) Calculer une valeur approchée de la moyenne.<br>
+         3) Dans quelle classe se trouve la médiane&nbsp;?</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <p><strong>Centres</strong> : 2,5 ; 7,5 ; 12,5 ; 17,5</p>
+        <p><strong>Moyenne</strong> : <span style="text-decoration:overline">x</span> = (6&times;2,5+14&times;7,5+12&times;12,5+8&times;17,5)/40 = (15+105+150+140)/40 = 410/40 = <strong>10,25 min</strong></p>
+        <p><strong>Médiane</strong> : N=40, on cherche les rangs 20 et 21.<br>
+        Effectifs cumulés : 6 ; 20 ; 32 ; 40<br>
+        Le 20e est dans [5;10[ et le 21e dans [10;15[.<br>
+        La médiane est à la frontière : on peut estimer la médiane &asymp; <strong>10 min</strong> (ou par interpolation dans la classe [5;10[).</p>
+      </details>
+    </div>
+
+    <!-- Exercice 6 -->
+    <div class="exercise">
+      <h4>Exercice 6 &mdash; Problème complet (type Brevet)</h4>
+      <p>Un club sportif compte 50 adhérents. On a relevé leur âge&nbsp;:</p>
+      <table>
+        <tr><th>Âge</th><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+        <tr><th>Effectif</th><td>5</td><td>8</td><td>12</td><td>10</td><td>9</td><td>6</td></tr>
+      </table>
+      <p>1) Calculer la fréquence de chaque âge.<br>
+         2) Calculer l&rsquo;âge moyen des adhérents.<br>
+         3) Déterminer la médiane des âges.<br>
+         4) L&rsquo;étendue des âges est-elle grande&nbsp;? Commenter.</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <table>
+          <tr><th>Âge</th><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+          <tr><th>Effectif</th><td>5</td><td>8</td><td>12</td><td>10</td><td>9</td><td>6</td></tr>
+          <tr><th>Fréq.</th><td>10%</td><td>16%</td><td>24%</td><td>20%</td><td>18%</td><td>12%</td></tr>
+        </table>
+        <p><strong>Moyenne</strong> : <span style="text-decoration:overline">x</span> = (5&times;12+8&times;13+12&times;14+10&times;15+9&times;16+6&times;17)/50<br>
+        = (60+104+168+150+144+102)/50 = 728/50 = <strong>14,56 ans</strong></p>
+        <p><strong>Médiane</strong> : N=50, rangs 25 et 26.<br>
+        Effectifs cumulés : 5, 13, 25, 35, 44, 50<br>
+        Le 25e est le dernier des « 14 ans », le 26e est le premier des « 15 ans ».<br>
+        Médiane = (14+15)/2 = <strong>14,5 ans</strong></p>
+        <p><strong>Étendue</strong> : 17&minus;12 = <strong>5 ans</strong>. L&rsquo;étendue est relativement faible, ce qui signifie que les adhérents ont des âges assez proches (tous des adolescents).</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 6: QCM ==================== -->
+  <section class="tab-content" id="tab6">
+    <div class="card">
+      <h2>QCM &mdash; Teste tes connaissances</h2>
+      <p>15 questions pour vérifier ta maîtrise du chapitre. Choisis la bonne réponse&nbsp;!</p>
+      <div id="quiz-container"></div>
+      <div id="quiz-score" class="quiz-score" style="display:none;"></div>
+      <button class="action-btn" id="quiz-reset-btn" style="display:none;margin-top:1rem;" onclick="resetQuiz()">Recommencer le QCM</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ===== THEME ===== */
+function toggleTheme() {
+  var r = document.documentElement;
+  var t = r.getAttribute('data-theme');
+  if (t === 'dark') { r.setAttribute('data-theme','light'); }
+  else if (t === 'light') { r.removeAttribute('data-theme'); }
+  else { r.setAttribute('data-theme','dark'); }
+}
+
+/* ===== TABS ===== */
+var inited = [true,false,false,false,false,false,false];
+function showTab(i) {
+  var btns = document.querySelectorAll('.tab-btn');
+  var tabs = document.querySelectorAll('.tab-content');
+  for (var j=0;j<btns.length;j++) { btns[j].classList.remove('active'); tabs[j].classList.remove('active'); }
+  btns[i].classList.add('active');
+  tabs[i].classList.add('active');
+  if (!inited[i]) { initSection(i); inited[i]=true; }
+}
+function initSection(i) {
+  if (i===1) drawMeanChart();
+  if (i===3) drawRangeChart();
+  if (i===4) drawChart('bar');
+  if (i===6) buildQuiz();
+}
+
+/* ===== CSS HELPER ===== */
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+/* ===== TAB 0: FREQUENCIES ===== */
+function computeFrequencies() {
+  var valsRaw = document.getElementById('freq-vals').value.split(',');
+  var effsRaw = document.getElementById('freq-effs').value.split(',');
+  var vals=[], effs=[];
+  for (var i=0;i<valsRaw.length;i++) {
+    var v = valsRaw[i].trim();
+    var e = parseInt(effsRaw[i]);
+    if (v && !isNaN(e)) { vals.push(v); effs.push(e); }
+  }
+  if (vals.length===0) return;
+  var total=0;
+  for (var i=0;i<effs.length;i++) total+=effs[i];
+  var out = "Effectif total N = " + total + "\n\n";
+  out += "Valeur\t\tEffectif\t\tFréquence\n";
+  out += "─".repeat(40) + "\n";
+  for (var i=0;i<vals.length;i++) {
+    var f = (effs[i]/total*100);
+    out += vals[i] + "\t\t" + effs[i] + "\t\t\t" + f.toFixed(1) + " %\n";
+  }
+  out += "─".repeat(40) + "\n";
+  out += "Total\t\t" + total + "\t\t\t100 %";
+  var el = document.getElementById('freq-result');
+  el.style.display='block';
+  el.textContent = out;
+}
+
+/* ===== TAB 1: MEAN ===== */
+function computeMean() {
+  var raw = document.getElementById('mean-input').value.split(',');
+  var vals=[];
+  for (var i=0;i<raw.length;i++) { var v=parseFloat(raw[i]); if(!isNaN(v)) vals.push(v); }
+  if (vals.length===0) return;
+  var sum=0;
+  for (var i=0;i<vals.length;i++) sum+=vals[i];
+  var mean = sum / vals.length;
+  var out = "Valeurs : " + vals.join(', ') + "\n";
+  out += "Nombre de valeurs N = " + vals.length + "\n\n";
+  out += "Somme = " + vals.join(' + ') + " = " + sum + "\n\n";
+  out += "Moyenne x̅ = " + sum + " / " + vals.length + " = " + mean.toFixed(2);
+  var el = document.getElementById('mean-result');
+  el.style.display='block';
+  el.textContent = out;
+}
+
+function drawMeanChart() {
+  var c = document.getElementById('canvas-mean');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var data = [{v:8,n:3},{v:12,n:7},{v:14,n:5},{v:16,n:5}];
+  var mean = 12.9;
+  var maxN = 7;
+  var barW = 60, gap = 40;
+  var startX = 100, baseY = H-50, topY = 40;
+  var scale = (baseY-topY)/maxN;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = getCSS('--surface');
+  ctx.fillRect(0,0,W,H);
+
+  // Axes
+  ctx.strokeStyle = getCSS('--border');
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(startX-10,baseY); ctx.lineTo(W-20,baseY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(startX-10,baseY); ctx.lineTo(startX-10,topY-10); ctx.stroke();
+
+  // Y labels
+  ctx.fillStyle = getCSS('--muted');
+  ctx.font = '12px Nunito Sans, sans-serif';
+  ctx.textAlign='right';
+  for (var i=0;i<=maxN;i++) {
+    var y = baseY - i*scale;
+    ctx.fillText(i, startX-18, y+4);
+    if(i>0) { ctx.strokeStyle=getCSS('--border'); ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(startX-10,y); ctx.lineTo(W-20,y); ctx.stroke(); ctx.setLineDash([]); }
+  }
+
+  // Bars
+  ctx.textAlign='center';
+  for (var i=0;i<data.length;i++) {
+    var x = startX + i*(barW+gap) + 20;
+    var h = data[i].n * scale;
+    ctx.fillStyle = getCSS('--accent');
+    ctx.fillRect(x, baseY-h, barW, h);
+    ctx.fillStyle = getCSS('--text');
+    ctx.font = '13px Nunito Sans, sans-serif';
+    ctx.fillText('Note '+data[i].v, x+barW/2, baseY+18);
+    ctx.fillStyle = getCSS('--heading');
+    ctx.font = 'bold 13px Nunito Sans, sans-serif';
+    ctx.fillText(data[i].n, x+barW/2, baseY-h-8);
+  }
+
+  // Mean line
+  var meanX1 = startX-10, meanX2 = startX + data.length*(barW+gap);
+  // Scale mean relative to note values for visual (but this is effectif chart)
+  // Show mean line as label
+  ctx.strokeStyle = getCSS('--error');
+  ctx.lineWidth=2;
+  ctx.setLineDash([8,4]);
+  var meanY = baseY - mean/20 * (baseY-topY);
+  ctx.beginPath(); ctx.moveTo(meanX1, baseY - 4*scale); ctx.lineTo(meanX2, baseY - 4*scale); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = getCSS('--error');
+  ctx.font = 'bold 13px Nunito Sans, sans-serif';
+  ctx.textAlign='left';
+  ctx.fillText('Moyenne = 12,9', meanX2+5, baseY - 4*scale + 4);
+
+  // Title
+  ctx.fillStyle = getCSS('--heading');
+  ctx.font = 'bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText('Effectifs par note', W/2, 24);
+
+  // Y-axis label
+  ctx.save();
+  ctx.translate(18, H/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = getCSS('--muted');
+  ctx.font = '12px Nunito Sans, sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('Effectif', 0, 0);
+  ctx.restore();
+}
+
+/* ===== TAB 2: MEDIAN ===== */
+function computeMedian() {
+  var raw = document.getElementById('median-input').value.split(',');
+  var vals=[];
+  for (var i=0;i<raw.length;i++) { var v=parseFloat(raw[i]); if(!isNaN(v)) vals.push(v); }
+  if (vals.length===0) return;
+  var sorted = vals.slice().sort(function(a,b){return a-b;});
+  var n = sorted.length;
+  var out = "Série brute : " + vals.join(', ') + "\n";
+  out += "Étape 1 — Tri croissant : " + sorted.join(', ') + "\n";
+  out += "Nombre de valeurs N = " + n + "\n\n";
+  var median;
+  if (n%2===1) {
+    var rank = (n+1)/2;
+    median = sorted[rank-1];
+    out += "N est impair → rang de la médiane = (N+1)/2 = " + rank + "\n";
+    out += "La valeur de rang " + rank + " est : " + sorted.map(function(v,i){ return i===rank-1 ? "["+v+"]" : v; }).join(', ') + "\n\n";
+    out += "Médiane = " + median;
+  } else {
+    var r1 = n/2, r2 = n/2+1;
+    median = (sorted[r1-1]+sorted[r2-1])/2;
+    out += "N est pair → on prend les rangs N/2 = " + r1 + " et N/2+1 = " + r2 + "\n";
+    out += "Valeurs : " + sorted.map(function(v,i){ return (i===r1-1||i===r2-1) ? "["+v+"]" : v; }).join(', ') + "\n\n";
+    out += "Médiane = (" + sorted[r1-1] + " + " + sorted[r2-1] + ") / 2 = " + median;
+  }
+  var el = document.getElementById('median-result');
+  el.style.display='block';
+  el.textContent = out;
+}
+
+/* ===== TAB 3: RANGE CHART ===== */
+function drawRangeChart() {
+  var c = document.getElementById('canvas-range');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var A = [8,10,11,12,14];
+  var B = [3,9,11,14,18];
+  var maxV = 20;
+  var baseY = H-50, topY = 50;
+  var scale = (baseY-topY)/maxV;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = getCSS('--surface');
+  ctx.fillRect(0,0,W,H);
+
+  // Title
+  ctx.fillStyle = getCSS('--heading');
+  ctx.font = 'bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText('Comparaison de deux séries (même moyenne = 11)', W/2, 28);
+
+  var leftX = 100, rightX = 370;
+  var dotR = 7;
+
+  // Draw series
+  function drawSeries(data, cx, label, col) {
+    // Vertical line (range)
+    var minV = Math.min.apply(null,data);
+    var maxVal = Math.max.apply(null,data);
+    var y1 = baseY - maxVal*scale;
+    var y2 = baseY - minV*scale;
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(cx, y1); ctx.lineTo(cx, y2); ctx.stroke();
+
+    // Range bracket
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx-15,y1); ctx.lineTo(cx+15,y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-15,y2); ctx.lineTo(cx+15,y2); ctx.stroke();
+
+    // Dots
+    for (var i=0;i<data.length;i++) {
+      var y = baseY - data[i]*scale;
+      ctx.beginPath(); ctx.arc(cx, y, dotR, 0, Math.PI*2);
+      ctx.fillStyle = col; ctx.fill();
+      ctx.fillStyle = getCSS('--text');
+      ctx.font = '12px Nunito Sans, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(data[i], cx+14, y+4);
+    }
+
+    // Mean line
+    ctx.strokeStyle = getCSS('--error');
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6,3]);
+    var my = baseY - 11*scale;
+    ctx.beginPath(); ctx.moveTo(cx-40,my); ctx.lineTo(cx+40,my); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.fillStyle = getCSS('--heading');
+    ctx.font = 'bold 14px Nunito Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, cx, baseY+20);
+    ctx.fillStyle = getCSS('--muted');
+    ctx.font = '12px Nunito Sans, sans-serif';
+    ctx.fillText('Étendue = ' + (maxVal-minV), cx, baseY+36);
+  }
+
+  drawSeries(A, leftX+50, 'Série A', getCSS('--accent'));
+  drawSeries(B, rightX+50, 'Série B', getCSS('--tip'));
+
+  // Y axis
+  ctx.strokeStyle = getCSS('--border');
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(50, topY-10); ctx.lineTo(50, baseY); ctx.stroke();
+  ctx.fillStyle = getCSS('--muted');
+  ctx.font = '11px Nunito Sans, sans-serif';
+  ctx.textAlign = 'right';
+  for (var i=0; i<=maxV; i+=2) {
+    var y = baseY - i*scale;
+    ctx.fillText(i, 44, y+4);
+    ctx.strokeStyle=getCSS('--border'); ctx.setLineDash([2,3]);
+    ctx.beginPath(); ctx.moveTo(50,y); ctx.lineTo(W-20,y); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Legend
+  ctx.fillStyle = getCSS('--error');
+  ctx.font = '12px Nunito Sans, sans-serif';
+  ctx.textAlign='left';
+  ctx.fillText('--- Moyenne = 11', W-180, topY+10);
+}
+
+/* ===== TAB 4: CHART TYPES ===== */
+var chartData = [
+  {label:'Note 1', v:2},
+  {label:'Note 2', v:5},
+  {label:'Note 3', v:8},
+  {label:'Note 4', v:10},
+  {label:'Note 5', v:5}
+];
+var chartColors = ['#a0522d','#b8860b','#6b8e23','#4682b4','#8b4513'];
+
+function drawChart(type) {
+  var btns = ['btn-bar','btn-pie','btn-histo'];
+  var types = ['bar','pie','histo'];
+  for (var i=0;i<btns.length;i++) {
+    document.getElementById(btns[i]).style.background = types[i]===type ? getCSS('--accent') : getCSS('--muted');
+  }
+  var c = document.getElementById('canvas-chart');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = getCSS('--surface');
+  ctx.fillRect(0,0,W,H);
+
+  if (type==='bar') drawBarChart(ctx,W,H);
+  else if (type==='pie') drawPieChart(ctx,W,H);
+  else drawHistoChart(ctx,W,H);
+}
+
+function drawBarChart(ctx,W,H) {
+  var baseY=H-60, topY=50, startX=80;
+  var maxV=10;
+  var scale=(baseY-topY)/maxV;
+  var barW=60, gap=25;
+
+  ctx.fillStyle = getCSS('--heading');
+  ctx.font='bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText('Diagramme en barres — Effectifs', W/2, 28);
+
+  // Axes
+  ctx.strokeStyle=getCSS('--border'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(startX-5,baseY); ctx.lineTo(W-20,baseY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(startX-5,topY-10); ctx.lineTo(startX-5,baseY); ctx.stroke();
+
+  ctx.fillStyle=getCSS('--muted'); ctx.font='11px Nunito Sans, sans-serif'; ctx.textAlign='right';
+  for(var i=0;i<=maxV;i+=2){var y=baseY-i*scale;ctx.fillText(i,startX-12,y+4);}
+
+  for(var i=0;i<chartData.length;i++){
+    var x=startX+i*(barW+gap)+15;
+    var h=chartData[i].v*scale;
+    ctx.fillStyle=chartColors[i];
+    ctx.fillRect(x,baseY-h,barW,h);
+    ctx.fillStyle=getCSS('--text'); ctx.font='12px Nunito Sans, sans-serif'; ctx.textAlign='center';
+    ctx.fillText(chartData[i].label,x+barW/2,baseY+16);
+    ctx.fillStyle=getCSS('--heading'); ctx.font='bold 13px Nunito Sans, sans-serif';
+    ctx.fillText(chartData[i].v,x+barW/2,baseY-h-8);
+  }
+}
+
+function drawPieChart(ctx,W,H) {
+  var cx=W/2-40, cy=H/2+10, r=120;
+  var total=0;
+  for(var i=0;i<chartData.length;i++) total+=chartData[i].v;
+
+  ctx.fillStyle = getCSS('--heading');
+  ctx.font='bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText('Diagramme circulaire', W/2, 28);
+
+  var angle=-Math.PI/2;
+  for(var i=0;i<chartData.length;i++){
+    var slice=chartData[i].v/total*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,angle,angle+slice);
+    ctx.closePath();
+    ctx.fillStyle=chartColors[i];
+    ctx.fill();
+    ctx.strokeStyle=getCSS('--surface'); ctx.lineWidth=2; ctx.stroke();
+
+    var mid=angle+slice/2;
+    var lx=cx+Math.cos(mid)*(r+25);
+    var ly=cy+Math.sin(mid)*(r+25);
+    ctx.fillStyle=getCSS('--text');
+    ctx.font='11px Nunito Sans, sans-serif';
+    ctx.textAlign='center';
+    var pct = (chartData[i].v/total*100).toFixed(0)+'%';
+    ctx.fillText(pct,lx,ly+4);
+    angle+=slice;
+  }
+
+  // Legend
+  var lx=W-140, ly=80;
+  for(var i=0;i<chartData.length;i++){
+    ctx.fillStyle=chartColors[i];
+    ctx.fillRect(lx,ly+i*24,14,14);
+    ctx.fillStyle=getCSS('--text');
+    ctx.font='12px Nunito Sans, sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText(chartData[i].label+' ('+chartData[i].v+')',lx+20,ly+i*24+12);
+  }
+}
+
+function drawHistoChart(ctx,W,H) {
+  var classes=[{label:'[0;4[',v:2},{label:'[4;8[',v:5},{label:'[8;12[',v:8},{label:'[12;16[',v:10},{label:'[16;20]',v:5}];
+  var baseY=H-60, topY=50, startX=80;
+  var maxV=10;
+  var scale=(baseY-topY)/maxV;
+  var barW=80;
+
+  ctx.fillStyle=getCSS('--heading');
+  ctx.font='bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText('Histogramme — Données groupées en classes', W/2, 28);
+
+  ctx.strokeStyle=getCSS('--border'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(startX-5,baseY); ctx.lineTo(W-20,baseY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(startX-5,topY-10); ctx.lineTo(startX-5,baseY); ctx.stroke();
+
+  ctx.fillStyle=getCSS('--muted'); ctx.font='11px Nunito Sans, sans-serif'; ctx.textAlign='right';
+  for(var i=0;i<=maxV;i+=2){var y=baseY-i*scale;ctx.fillText(i,startX-12,y+4);}
+
+  for(var i=0;i<classes.length;i++){
+    var x=startX+i*barW;
+    var h=classes[i].v*scale;
+    ctx.fillStyle=chartColors[i];
+    ctx.globalAlpha=0.75;
+    ctx.fillRect(x,baseY-h,barW,h);
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=getCSS('--text'); ctx.lineWidth=1;
+    ctx.strokeRect(x,baseY-h,barW,h);
+    ctx.fillStyle=getCSS('--text'); ctx.font='11px Nunito Sans, sans-serif'; ctx.textAlign='center';
+    ctx.fillText(classes[i].label,x+barW/2,baseY+16);
+    ctx.fillStyle=getCSS('--heading'); ctx.font='bold 12px Nunito Sans, sans-serif';
+    ctx.fillText(classes[i].v,x+barW/2,baseY-h-8);
+  }
+}
+
+/* ===== TAB 6: QUIZ ===== */
+var quizQuestions = [
+  {q:"L'effectif d'une valeur, c'est :", o:["Sa fréquence en pourcentage","Le nombre de fois où elle apparaît","Sa position dans la série","La somme de toutes les valeurs"], a:1, e:"L'effectif compte combien de fois une valeur est observée dans la série."},
+  {q:"La somme de toutes les fréquences vaut toujours :", o:["50 %","La moyenne","100 %","L'effectif total"], a:2, e:"Par définition, les fréquences se partagent 100 % de la population."},
+  {q:"La moyenne de 4, 8, 6, 10, 12 est :", o:["6","8","10","7"], a:1, e:"(4+8+6+10+12)/5 = 40/5 = 8."},
+  {q:"Pour calculer une moyenne pondérée, on multiplie chaque valeur par :", o:["La fréquence","Le rang","Son effectif (coefficient)","La médiane"], a:2, e:"On pondère chaque valeur par son effectif avant de diviser par l'effectif total."},
+  {q:"La médiane d'une série de 9 valeurs ordonnées est la valeur de rang :", o:["4","5","4,5","9"], a:1, e:"(9+1)/2 = 5, la médiane est la 5e valeur."},
+  {q:"Si N = 12 (pair), la médiane est la moyenne des valeurs de rangs :", o:["5 et 6","6 et 7","7 et 8","12 et 13"], a:1, e:"N/2 = 6 et N/2+1 = 7, donc rangs 6 et 7."},
+  {q:"L'étendue de la série 3, 7, 2, 15, 9 est :", o:["12","13","7","15"], a:1, e:"Étendue = 15 − 2 = 13. Attention, c'est bien 13."},
+  {q:"L'étendue de la série 3, 7, 2, 15, 9 est :", o:["15","7","13","12"], a:2, e:"Étendue = max − min = 15 − 2 = 13."},
+  {q:"Quelle est la fréquence d'une valeur d'effectif 12 sur un total de 60 ?", o:["12 %","20 %","5 %","60 %"], a:1, e:"12/60 × 100 = 20 %."},
+  {q:"Dans un diagramme circulaire, une fréquence de 25 % correspond à un angle de :", o:["25°","90°","45°","180°"], a:1, e:"25/100 × 360° = 90°."},
+  {q:"La moyenne de la série 10, 10, 10, 10 est :", o:["0","40","10","Impossible à calculer"], a:2, e:"Toutes les valeurs sont identiques, donc la moyenne est 10."},
+  {q:"Deux séries ont la même moyenne. Celle qui a la plus grande étendue est :", o:["Plus concentrée","Plus dispersée","Plus grande","Mieux classée"], a:1, e:"Une étendue plus grande signifie que les valeurs sont plus étalées (dispersées)."},
+  {q:"Pour des données groupées en classes, on utilise le centre de chaque classe pour calculer :", o:["L'étendue exacte","Une valeur approchée de la moyenne","La médiane exacte","L'effectif"], a:1, e:"Le centre de classe donne une approximation pour calculer la moyenne."},
+  {q:"La médiane de 5, 3, 8, 1, 9 est :", o:["3","5","8","1"], a:1, e:"Série ordonnée : 1, 3, 5, 8, 9. N=5, rang (5+1)/2=3 → médiane = 5."},
+  {q:"Un histogramme est utilisé pour représenter :", o:["Des données qualitatives","Des données regroupées en classes","Uniquement des effectifs pairs","Des fréquences cumulées"], a:1, e:"L'histogramme est spécifiquement adapté aux données continues regroupées en classes."},
+  {q:"Si on ajoute 3 à chaque valeur d'une série, la moyenne :", o:["Ne change pas","Augmente de 3","Est multipliée par 3","Diminue de 3"], a:1, e:"Ajouter une constante à chaque valeur décale la moyenne du même montant."}
+];
+
+var quizAnswered = 0;
+var quizCorrect = 0;
+
+function buildQuiz() {
+  var container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  quizAnswered = 0;
+  quizCorrect = 0;
+  document.getElementById('quiz-score').style.display='none';
+  document.getElementById('quiz-reset-btn').style.display='none';
+
+  for (var i=0;i<quizQuestions.length;i++) {
+    var q = quizQuestions[i];
+    var div = document.createElement('div');
+    div.className = 'exercise';
+    div.style.marginTop = '1rem';
+    var html = '<h4>Question ' + (i+1) + ' / ' + quizQuestions.length + '</h4>';
+    html += '<p>' + q.q + '</p>';
+    for (var j=0;j<q.o.length;j++) {
+      html += '<button class="quiz-option" data-q="'+i+'" data-o="'+j+'" onclick="answerQuiz(this,'+i+','+j+')">' + String.fromCharCode(65+j) + '. ' + q.o[j] + '</button>';
+    }
+    html += '<div class="quiz-explanation" id="quiz-expl-'+i+'" style="display:none;"></div>';
+    div.innerHTML = html;
+    container.appendChild(div);
+  }
+}
+
+function answerQuiz(btn, qi, oi) {
+  var q = quizQuestions[qi];
+  var btns = document.querySelectorAll('[data-q="'+qi+'"]');
+  var already = false;
+  for (var i=0;i<btns.length;i++) { if(btns[i].disabled) already=true; }
+  if (already) return;
+
+  for (var i=0;i<btns.length;i++) {
+    btns[i].disabled = true;
+    if (parseInt(btns[i].getAttribute('data-o'))===q.a) btns[i].classList.add('correct');
+  }
+  if (oi !== q.a) { btn.classList.add('wrong'); }
+  else { quizCorrect++; }
+  quizAnswered++;
+
+  var expl = document.getElementById('quiz-expl-'+qi);
+  expl.style.display='block';
+  expl.textContent = q.e;
+
+  if (quizAnswered === quizQuestions.length) {
+    var scoreEl = document.getElementById('quiz-score');
+    scoreEl.style.display='block';
+    var pct = Math.round(quizCorrect/quizQuestions.length*100);
+    var msg = '';
+    if (pct >= 80) msg = 'Excellent !';
+    else if (pct >= 60) msg = 'Bien, continue !';
+    else msg = 'Révise le cours et réessaie !';
+    scoreEl.textContent = 'Score : ' + quizCorrect + ' / ' + quizQuestions.length + ' (' + pct + ' %) — ' + msg;
+    document.getElementById('quiz-reset-btn').style.display='inline-block';
+  }
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded', function(){
+  // Tab 0 already visible, no canvas to init
+});
+</script>
+</body>
+</html>

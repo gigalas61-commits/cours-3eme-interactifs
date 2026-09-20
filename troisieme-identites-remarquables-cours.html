@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identit&eacute;s remarquables &ndash; 3&egrave;me</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --text: #2c2418;
+  --muted: #6b5a48;
+  --border: #d4c8b8;
+  --surface2: #ebe6de;
+  --accent-light: #faf5ef;
+  --tip: #b8860b;
+  --tip-bg: #fdf8ef;
+  --success: #2e7d42;
+  --error: #c62828;
+  --shadow: 0 2px 8px rgba(139,69,19,0.07);
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1410;
+    --surface: #2a2218;
+    --heading: #e0a86e;
+    --accent: #d4976a;
+    --text: #e8ddd0;
+    --muted: #a89880;
+    --border: #3d3228;
+    --surface2: #332a20;
+    --accent-light: #2e2418;
+    --tip: #e0c068;
+    --tip-bg: #2a2410;
+    --success: #66bb6a;
+    --error: #ef5350;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --radius: 6px;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1a1410;
+  --surface: #2a2218;
+  --heading: #e0a86e;
+  --accent: #d4976a;
+  --text: #e8ddd0;
+  --muted: #a89880;
+  --border: #3d3228;
+  --surface2: #332a20;
+  --accent-light: #2e2418;
+  --tip: #e0c068;
+  --tip-bg: #2a2410;
+  --success: #66bb6a;
+  --error: #ef5350;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--heading);
+  line-height: 1.3;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+header {
+  text-align: center;
+  padding: 2rem 16px 1rem;
+  position: relative;
+}
+header h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); margin-bottom: 0.3rem; }
+header p { color: var(--muted); font-size: 0.95rem; }
+.level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+.theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 0 16px 8px;
+  max-width: 900px;
+  margin: 0 auto;
+  scrollbar-width: thin;
+}
+.tab-btn {
+  flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:hover { background: var(--accent-light); color: var(--accent); }
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  border-bottom-color: var(--surface);
+}
+.sec { display: none; }
+.sec.active { display: block; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow);
+}
+.card h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+.card h3 { font-size: 1.2rem; margin-bottom: 0.8rem; }
+.formula-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.1rem;
+  text-align: center;
+  font-weight: 600;
+}
+.formula-box.big { font-size: 1.25rem; padding: 1.2rem 1.5rem; }
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip);
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.92rem;
+}
+.tip-box strong { color: var(--tip); }
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 3px;
+}
+.frac .num { border-bottom: 1.5px solid var(--text); padding: 0 4px 2px; }
+.frac .den { padding: 2px 4px 0; }
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.exercise h4 { margin-bottom: 0.6rem; color: var(--accent); }
+details { margin-top: 0.8rem; }
+details summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 6px 0;
+  user-select: none;
+}
+details summary:hover { text-decoration: underline; }
+details .correction {
+  background: var(--accent-light);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-top: 0.5rem;
+  line-height: 1.8;
+}
+input[type="text"], input[type="number"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  width: 100%;
+  max-width: 300px;
+}
+input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px;
+  border-radius: var(--radius);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+}
+button.action-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+button.action-btn:hover { opacity: 0.85; }
+.result-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-top: 0.8rem;
+  min-height: 40px;
+  line-height: 1.9;
+}
+.step { margin: 0.3rem 0; }
+.step-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+}
+canvas {
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 6px 0;
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.quiz-option:hover { border-color: var(--accent); background: var(--accent-light); }
+.quiz-option.correct { border-color: var(--success); background: rgba(46,125,66,0.1); }
+.quiz-option.wrong { border-color: var(--error); background: rgba(198,40,40,0.1); }
+.quiz-option:disabled { cursor: default; opacity: 0.85; }
+.quiz-score {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin: 1rem 0;
+}
+.quiz-progress {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0.8rem 0;
+}
+.tag {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 2px;
+}
+ol.spaced li, ul.spaced li { margin-bottom: 0.5rem; }
+.highlight { color: var(--accent); font-weight: 700; }
+@media (max-width: 600px) {
+  .card { padding: 1rem; }
+  .formula-box { font-size: 0.98rem; padding: 0.8rem; }
+  .formula-box.big { font-size: 1.05rem; }
+  .tab-btn { padding: 7px 10px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer le th&egrave;me" id="themeBtn">&#9789;</button>
+  <span class="level-badge">3&egrave;me</span>
+  <h1>Identit&eacute;s remarquables</h1>
+  <p>Cours interactif &mdash; D&eacute;velopper, factoriser, calculer</p>
+</header>
+
+<nav class="tab-bar" id="tabBar"></nav>
+
+<div class="container" id="content"></div>
+
+<script>
+var TAB_NAMES = [
+  'Les trois identités',
+  'Développer',
+  'Factoriser',
+  'Calcul astucieux',
+  'Applications',
+  'Exercices',
+  'QCM'
+];
+var currentTab = -1;
+var sectionInited = [];
+
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+function toggleTheme() {
+  var r = document.documentElement;
+  var cur = r.getAttribute('data-theme');
+  if (cur === 'dark') {
+    r.setAttribute('data-theme', 'light');
+    document.getElementById('themeBtn').innerHTML = '&#9789;';
+  } else {
+    r.setAttribute('data-theme', 'dark');
+    document.getElementById('themeBtn').innerHTML = '&#9788;';
+  }
+  sectionInited = [];
+  initSection(currentTab);
+}
+
+(function() {
+  var bar = document.getElementById('tabBar');
+  var cont = document.getElementById('content');
+  for (var i = 0; i < TAB_NAMES.length; i++) {
+    var btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.textContent = TAB_NAMES[i];
+    btn.setAttribute('data-i', i);
+    btn.onclick = function() { showTab(parseInt(this.getAttribute('data-i'))); };
+    bar.appendChild(btn);
+
+    var sec = document.createElement('div');
+    sec.className = 'sec';
+    sec.id = 'sec' + i;
+    cont.appendChild(sec);
+  }
+})();
+
+function showTab(i) {
+  if (i === currentTab) return;
+  currentTab = i;
+  var btns = document.querySelectorAll('.tab-btn');
+  var secs = document.querySelectorAll('.sec');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].classList.toggle('active', j === i);
+    secs[j].classList.toggle('active', j === i);
+  }
+  buildSection(i);
+  initSection(i);
+  document.querySelector('.container').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+function buildSection(i) {
+  var el = document.getElementById('sec' + i);
+  if (el.innerHTML !== '') return;
+  var builders = [buildTab0, buildTab1, buildTab2, buildTab3, buildTab4, buildTab5, buildTab6];
+  builders[i](el);
+}
+
+function esc(s) {
+  var d = document.createElement('span');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* ===== TAB 0 : Les trois identites ===== */
+function buildTab0(el) {
+  el.innerHTML =
+    '<div class="card">' +
+      '<h2>Les trois identit&eacute;s remarquables</h2>' +
+      '<p>Les identit&eacute;s remarquables sont des formules fondamentales qui permettent de <strong>d&eacute;velopper</strong> et de <strong>factoriser</strong> rapidement certaines expressions alg&eacute;briques. Elles sont valables pour <em>tous</em> les nombres r&eacute;els a et b.</p>' +
+      '<div class="formula-box big">( a + b )&sup2; = a&sup2; + 2ab + b&sup2;</div>' +
+      '<p style="text-align:center;color:var(--muted);font-size:0.88rem;">Carr&eacute; d\'une somme</p>' +
+      '<div class="formula-box big">( a &minus; b )&sup2; = a&sup2; &minus; 2ab + b&sup2;</div>' +
+      '<p style="text-align:center;color:var(--muted);font-size:0.88rem;">Carr&eacute; d\'une diff&eacute;rence</p>' +
+      '<div class="formula-box big">( a + b )( a &minus; b ) = a&sup2; &minus; b&sup2;</div>' +
+      '<p style="text-align:center;color:var(--muted);font-size:0.88rem;">Produit somme-diff&eacute;rence</p>' +
+      '<div class="tip-box"><strong>Astuce m&eacute;moire :</strong> Pour retenir le signe du double produit : dans (a+b)&sup2; le &laquo;&nbsp;+&nbsp;&raquo; donne +2ab&nbsp;; dans (a&minus;b)&sup2; le &laquo;&nbsp;&minus;&nbsp;&raquo; donne &minus;2ab. Le dernier terme est <em>toujours</em> positif (c\'est un carr&eacute;).</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>D&eacute;monstration g&eacute;om&eacute;trique de (a+b)&sup2;</h3>' +
+      '<p>Un carr&eacute; de c&ocirc;t&eacute; (a+b) peut &ecirc;tre d&eacute;coup&eacute; en quatre zones. Les aires de ces zones donnent la formule :</p>' +
+      '<canvas id="canvasProof" width="420" height="420"></canvas>' +
+      '<p style="text-align:center;font-size:0.9rem;color:var(--muted);">Aire totale = a&sup2; + ab + ab + b&sup2; = a&sup2; + 2ab + b&sup2;</p>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>D&eacute;monstration alg&eacute;brique</h3>' +
+      '<p><strong>( a + b )&sup2;</strong> signifie ( a + b ) &times; ( a + b ).</p>' +
+      '<p>On distribue (double distributivit&eacute;) :</p>' +
+      '<div class="result-box">' +
+        '<div class="step"><span class="step-label">&Eacute;tape 1</span>( a + b )( a + b ) = a&times;a + a&times;b + b&times;a + b&times;b</div>' +
+        '<div class="step"><span class="step-label">&Eacute;tape 2</span>= a&sup2; + ab + ab + b&sup2;</div>' +
+        '<div class="step"><span class="step-label">&Eacute;tape 3</span>= a&sup2; + 2ab + b&sup2;</div>' +
+      '</div>' +
+      '<div class="tip-box"><strong>M&eacute;thode :</strong> Le m&ecirc;me raisonnement s\'applique pour (a&minus;b)&sup2; en rempla&ccedil;ant +b par &minus;b, et pour (a+b)(a&minus;b) par double distribution. V&eacute;rifiez-le comme exercice !</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Erreurs fr&eacute;quentes &agrave; &eacute;viter</h3>' +
+      '<div class="formula-box" style="border-left-color:var(--error);background:rgba(198,40,40,0.06);">' +
+        '<span style="color:var(--error);">(a + b)&sup2; &ne; a&sup2; + b&sup2;</span>' +
+      '</div>' +
+      '<p style="text-align:center;color:var(--error);font-size:0.88rem;font-weight:600;">Il ne faut pas oublier le double produit 2ab !</p>' +
+      '<div class="formula-box" style="border-left-color:var(--error);background:rgba(198,40,40,0.06);">' +
+        '<span style="color:var(--error);">(a &minus; b)&sup2; &ne; a&sup2; &minus; b&sup2;</span>' +
+      '</div>' +
+      '<p style="text-align:center;color:var(--error);font-size:0.88rem;font-weight:600;">Le carr&eacute; d\'une diff&eacute;rence a trois termes, pas deux.</p>' +
+    '</div>';
+}
+
+function drawProofScaled(canvas, size) {
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, size, size);
+
+  var pad = size * 0.12;
+  var sq = size - 2 * pad;
+  var a = sq * 0.62;
+  var b = sq - a;
+  var x0 = pad;
+  var y0 = pad;
+
+  var heading = getCSS('--heading');
+  var accent = getCSS('--accent');
+  var text = getCSS('--text');
+  var border = getCSS('--border');
+  var fs = Math.max(12, size * 0.04);
+
+  ctx.fillStyle = accent + '44';
+  ctx.fillRect(x0, y0, a, a);
+  ctx.fillStyle = text;
+  ctx.font = 'bold ' + (fs * 1.2) + 'px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('a²', x0 + a / 2, y0 + a / 2);
+
+  ctx.fillStyle = heading + '44';
+  ctx.fillRect(x0 + a, y0 + a, b, b);
+  ctx.fillStyle = text;
+  ctx.fillText('b²', x0 + a + b / 2, y0 + a + b / 2);
+
+  ctx.fillStyle = accent + '22';
+  ctx.fillRect(x0 + a, y0, b, a);
+  ctx.fillStyle = text;
+  ctx.fillText('ab', x0 + a + b / 2, y0 + a / 2);
+
+  ctx.fillStyle = accent + '22';
+  ctx.fillRect(x0, y0 + a, a, b);
+  ctx.fillStyle = text;
+  ctx.fillText('ab', x0 + a / 2, y0 + a + b / 2);
+
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x0, y0, sq, sq);
+  ctx.beginPath();
+  ctx.moveTo(x0 + a, y0);
+  ctx.lineTo(x0 + a, y0 + sq);
+  ctx.moveTo(x0, y0 + a);
+  ctx.lineTo(x0 + sq, y0 + a);
+  ctx.stroke();
+
+  ctx.fillStyle = accent;
+  ctx.font = 'bold ' + fs + 'px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('a', x0 + a / 2, y0 - fs);
+  ctx.fillText('b', x0 + a + b / 2, y0 - fs);
+  ctx.textAlign = 'right';
+  ctx.fillText('a', x0 - fs * 0.6, y0 + a / 2);
+  ctx.fillText('b', x0 - fs * 0.6, y0 + a + b / 2);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = heading;
+  ctx.font = 'bold ' + (fs * 1.1) + 'px Nunito Sans, sans-serif';
+  ctx.fillText('(a + b)', x0 + sq / 2, y0 + sq + fs * 1.8);
+  ctx.save();
+  ctx.translate(x0 - fs * 2, y0 + sq / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('(a + b)', 0, 0);
+  ctx.restore();
+}
+
+/* ===== TAB 1 : Developper ===== */
+function buildTab1(el) {
+  el.innerHTML =
+    '<div class="card">' +
+      '<h2>D&eacute;velopper avec les identit&eacute;s</h2>' +
+      '<p>D&eacute;velopper, c\'est transformer un <strong>produit</strong> en une <strong>somme</strong> (ou diff&eacute;rence) de termes.</p>' +
+      '<div class="tip-box"><strong>M&eacute;thode :</strong><br>1. Identifier la forme de l\'expression (somme, diff&eacute;rence, produit somme-diff&eacute;rence).<br>2. Rep&eacute;rer a et b.<br>3. Appliquer la formule correspondante.<br>4. Simplifier chaque terme.</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Exemples d&eacute;taill&eacute;s</h3>' +
+      '<div class="exercise">' +
+        '<h4>Exemple 1 : D&eacute;velopper (3x + 5)&sup2;</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Identification</span>a = 3x, b = 5 &rarr; forme (a+b)&sup2;</div>' +
+          '<div class="step"><span class="step-label">Formule</span>(3x)&sup2; + 2 &times; 3x &times; 5 + 5&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>9x&sup2; + 30x + 25</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Exemple 2 : D&eacute;velopper (4x &minus; 7)&sup2;</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Identification</span>a = 4x, b = 7 &rarr; forme (a&minus;b)&sup2;</div>' +
+          '<div class="step"><span class="step-label">Formule</span>(4x)&sup2; &minus; 2 &times; 4x &times; 7 + 7&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>16x&sup2; &minus; 56x + 49</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Exemple 3 : D&eacute;velopper (2x + 3)(2x &minus; 3)</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Identification</span>a = 2x, b = 3 &rarr; forme (a+b)(a&minus;b)</div>' +
+          '<div class="step"><span class="step-label">Formule</span>(2x)&sup2; &minus; 3&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>4x&sup2; &minus; 9</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Outil interactif : d&eacute;veloppement pas &agrave; pas</h3>' +
+      '<p>Choisissez une identit&eacute; et entrez les valeurs de a et b :</p>' +
+      '<div class="input-row">' +
+        '<select id="devType">' +
+          '<option value="plus">(a + b)²</option>' +
+          '<option value="minus">(a − b)²</option>' +
+          '<option value="diff">(a + b)(a − b)</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="input-row">' +
+        '<label>a =&nbsp;</label><input type="text" id="devA" placeholder="ex : 3x" style="max-width:140px;">' +
+        '<label>&nbsp;b =&nbsp;</label><input type="text" id="devB" placeholder="ex : 5" style="max-width:140px;">' +
+      '</div>' +
+      '<button class="action-btn" onclick="doDev()">D&eacute;velopper</button>' +
+      '<div class="result-box" id="devResult" style="min-height:60px;"><span style="color:var(--muted)">Le r&eacute;sultat appara&icirc;tra ici.</span></div>' +
+    '</div>';
+}
+
+function doDev() {
+  var a = document.getElementById('devA').value.trim();
+  var b = document.getElementById('devB').value.trim();
+  var type = document.getElementById('devType').value;
+  var out = document.getElementById('devResult');
+  if (!a || !b) { out.innerHTML = '<span style="color:var(--error)">Veuillez remplir a et b.</span>'; return; }
+
+  var ea = esc(a), eb = esc(b);
+  var html = '';
+  if (type === 'plus') {
+    html =
+      '<div class="step"><span class="step-label">&Eacute;nonc&eacute;</span>(' + ea + ' + ' + eb + ')&sup2;</div>' +
+      '<div class="step"><span class="step-label">Identification</span>a = ' + ea + ', b = ' + eb + '</div>' +
+      '<div class="step"><span class="step-label">Formule</span>a&sup2; + 2ab + b&sup2;</div>' +
+      '<div class="step"><span class="step-label">Application</span>(' + ea + ')&sup2; + 2 &times; (' + ea + ') &times; (' + eb + ') + (' + eb + ')&sup2;</div>';
+  } else if (type === 'minus') {
+    html =
+      '<div class="step"><span class="step-label">&Eacute;nonc&eacute;</span>(' + ea + ' &minus; ' + eb + ')&sup2;</div>' +
+      '<div class="step"><span class="step-label">Identification</span>a = ' + ea + ', b = ' + eb + '</div>' +
+      '<div class="step"><span class="step-label">Formule</span>a&sup2; &minus; 2ab + b&sup2;</div>' +
+      '<div class="step"><span class="step-label">Application</span>(' + ea + ')&sup2; &minus; 2 &times; (' + ea + ') &times; (' + eb + ') + (' + eb + ')&sup2;</div>';
+  } else {
+    html =
+      '<div class="step"><span class="step-label">&Eacute;nonc&eacute;</span>(' + ea + ' + ' + eb + ')(' + ea + ' &minus; ' + eb + ')</div>' +
+      '<div class="step"><span class="step-label">Identification</span>a = ' + ea + ', b = ' + eb + '</div>' +
+      '<div class="step"><span class="step-label">Formule</span>a&sup2; &minus; b&sup2;</div>' +
+      '<div class="step"><span class="step-label">Application</span>(' + ea + ')&sup2; &minus; (' + eb + ')&sup2;</div>';
+  }
+  out.innerHTML = html;
+}
+
+/* ===== TAB 2 : Factoriser ===== */
+function buildTab2(el) {
+  el.innerHTML =
+    '<div class="card">' +
+      '<h2>Factoriser avec les identit&eacute;s</h2>' +
+      '<p>Factoriser, c\'est transformer une <strong>somme</strong> (ou diff&eacute;rence) en un <strong>produit</strong>. C\'est l\'op&eacute;ration inverse du d&eacute;veloppement.</p>' +
+      '<div class="tip-box"><strong>Comment reconna&icirc;tre une identit&eacute; ?</strong><br>' +
+        '&bull; <strong>a&sup2; + 2ab + b&sup2;</strong> : trois termes, deux carr&eacute;s parfaits, double produit <em>positif</em> &rarr; <strong>(a+b)&sup2;</strong><br>' +
+        '&bull; <strong>a&sup2; &minus; 2ab + b&sup2;</strong> : trois termes, deux carr&eacute;s parfaits, double produit <em>n&eacute;gatif</em> &rarr; <strong>(a&minus;b)&sup2;</strong><br>' +
+        '&bull; <strong>a&sup2; &minus; b&sup2;</strong> : diff&eacute;rence de deux carr&eacute;s (deux termes) &rarr; <strong>(a+b)(a&minus;b)</strong></div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Exemples d&eacute;taill&eacute;s</h3>' +
+      '<div class="exercise">' +
+        '<h4>Factoriser x&sup2; + 6x + 9</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Analyse</span>x&sup2; = (x)&sup2; &check; &nbsp; 9 = 3&sup2; &check; &nbsp; 6x = 2 &times; x &times; 3 &check;</div>' +
+          '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; + 2ab + b&sup2; avec a = x, b = 3</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(x + 3)&sup2;</strong></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Factoriser 25x&sup2; &minus; 20x + 4</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Analyse</span>25x&sup2; = (5x)&sup2; &check; &nbsp; 4 = 2&sup2; &check; &nbsp; 20x = 2 &times; 5x &times; 2 &check;</div>' +
+          '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; &minus; 2ab + b&sup2; avec a = 5x, b = 2</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(5x &minus; 2)&sup2;</strong></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Factoriser 16x&sup2; &minus; 49</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Analyse</span>16x&sup2; = (4x)&sup2; &check; &nbsp; 49 = 7&sup2; &check; &nbsp; Diff&eacute;rence de deux carr&eacute;s</div>' +
+          '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; &minus; b&sup2; avec a = 4x, b = 7</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(4x + 7)(4x &minus; 7)</strong></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Outil interactif : factorisation guid&eacute;e</h3>' +
+      '<p>Entrez une expression sous la forme ax&sup2; + bx + c ou ax&sup2; &minus; c :</p>' +
+      '<div class="input-row">' +
+        '<input type="text" id="facInput" placeholder="ex : x2+6x+9 ou 4x2-9" style="max-width:300px;">' +
+        '<button class="action-btn" onclick="doFac()">Factoriser</button>' +
+      '</div>' +
+      '<div class="result-box" id="facResult"><span style="color:var(--muted)">Format accept&eacute; : ax2+bx+c, ax2-bx+c, ax2-c<br>Utilisez x2 pour x&sup2;.</span></div>' +
+    '</div>';
+}
+
+function doFac() {
+  var raw = document.getElementById('facInput').value.trim().replace(/\s+/g, '').toLowerCase();
+  var out = document.getElementById('facResult');
+  if (!raw) { out.innerHTML = '<span style="color:var(--error)">Entrez une expression.</span>'; return; }
+
+  raw = raw.replace(/²/g, '2').replace(/\xb2/g, '2');
+
+  /* Pattern a*x2 - c (difference of squares) */
+  var m = raw.match(/^(-?\d*)x2([+-]\d+)$/);
+  if (m) {
+    var ca = m[1] === '' || m[1] === '+' ? 1 : (m[1] === '-' ? -1 : parseInt(m[1]));
+    var cc = parseInt(m[2]);
+    if (cc < 0 && ca > 0) {
+      var sa = Math.sqrt(ca);
+      var sb = Math.sqrt(-cc);
+      if (sa === Math.floor(sa) && sb === Math.floor(sb)) {
+        var aStr = sa === 1 ? 'x' : sa + 'x';
+        out.innerHTML =
+          '<div class="step"><span class="step-label">Analyse</span>' + (ca===1?'':ca) + 'x&sup2; &minus; ' + (-cc) + ' = (' + aStr + ')&sup2; &minus; ' + sb + '&sup2;</div>' +
+          '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; &minus; b&sup2; avec a = ' + aStr + ', b = ' + sb + '</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(' + aStr + ' + ' + sb + ')(' + aStr + ' &minus; ' + sb + ')</strong></div>';
+        return;
+      }
+    }
+  }
+
+  /* Pattern a*x2 +/- b*x + c (perfect square trinomial) */
+  var m2 = raw.match(/^(-?\d*)x2([+-]\d+)x([+-]\d+)$/);
+  if (m2) {
+    var ca2 = m2[1] === '' || m2[1] === '+' ? 1 : (m2[1] === '-' ? -1 : parseInt(m2[1]));
+    var cb2 = parseInt(m2[2]);
+    var cc2 = parseInt(m2[3]);
+    if (ca2 > 0 && cc2 > 0) {
+      var sa2 = Math.sqrt(ca2);
+      var sb2 = Math.sqrt(cc2);
+      if (sa2 === Math.floor(sa2) && sb2 === Math.floor(sb2)) {
+        var dp = 2 * sa2 * sb2;
+        var aS = sa2 === 1 ? 'x' : sa2 + 'x';
+        if (cb2 === dp) {
+          out.innerHTML =
+            '<div class="step"><span class="step-label">Analyse</span>' + (ca2===1?'':ca2) + 'x&sup2; = (' + aS + ')&sup2;, ' + cc2 + ' = ' + sb2 + '&sup2;, ' + cb2 + 'x = 2 &times; ' + aS + ' &times; ' + sb2 + ' &check;</div>' +
+            '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; + 2ab + b&sup2; avec a = ' + aS + ', b = ' + sb2 + '</div>' +
+            '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(' + aS + ' + ' + sb2 + ')&sup2;</strong></div>';
+          return;
+        }
+        if (cb2 === -dp) {
+          out.innerHTML =
+            '<div class="step"><span class="step-label">Analyse</span>' + (ca2===1?'':ca2) + 'x&sup2; = (' + aS + ')&sup2;, ' + cc2 + ' = ' + sb2 + '&sup2;, ' + Math.abs(cb2) + 'x = 2 &times; ' + aS + ' &times; ' + sb2 + ' &check;</div>' +
+            '<div class="step"><span class="step-label">Identit&eacute;</span>a&sup2; &minus; 2ab + b&sup2; avec a = ' + aS + ', b = ' + sb2 + '</div>' +
+            '<div class="step"><span class="step-label">R&eacute;sultat</span><strong>(' + aS + ' &minus; ' + sb2 + ')&sup2;</strong></div>';
+          return;
+        }
+      }
+    }
+  }
+  out.innerHTML = '<span style="color:var(--error)">Expression non reconnue comme identit&eacute; remarquable.<br>V&eacute;rifiez le format : x2+6x+9, 4x2-9, 9x2-12x+4</span>';
+}
+
+/* ===== TAB 3 : Calcul astucieux ===== */
+function buildTab3(el) {
+  el.innerHTML =
+    '<div class="card">' +
+      '<h2>Calcul astucieux</h2>' +
+      '<p>Les identit&eacute;s remarquables permettent de calculer <strong>mentalement</strong> des carr&eacute;s ou des produits de nombres proches de valeurs simples (10, 20, 50, 100&hellip;).</p>' +
+      '<div class="tip-box"><strong>Principe :</strong> &Eacute;crire le nombre comme une somme ou une diff&eacute;rence impliquant un nombre &laquo;&nbsp;rond&nbsp;&raquo;, puis appliquer l\'identit&eacute; correspondante.</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Exemples cl&eacute;s</h3>' +
+      '<div class="exercise">' +
+        '<h4>Calculer 99&sup2;</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Astuce</span>99 = 100 &minus; 1, donc 99&sup2; = (100 &minus; 1)&sup2;</div>' +
+          '<div class="step"><span class="step-label">Formule</span>100&sup2; &minus; 2 &times; 100 &times; 1 + 1&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>10 000 &minus; 200 + 1 = <strong>9 801</strong></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Calculer 101 &times; 99</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Astuce</span>101 &times; 99 = (100 + 1)(100 &minus; 1)</div>' +
+          '<div class="step"><span class="step-label">Formule</span>100&sup2; &minus; 1&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>10 000 &minus; 1 = <strong>9 999</strong></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Calculer 52&sup2;</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Astuce</span>52 = 50 + 2, donc 52&sup2; = (50 + 2)&sup2;</div>' +
+          '<div class="step"><span class="step-label">Formule</span>50&sup2; + 2 &times; 50 &times; 2 + 2&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>2 500 + 200 + 4 = <strong>2 704</strong></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exercise">' +
+        '<h4>Calculer 31 &times; 29</h4>' +
+        '<div class="result-box">' +
+          '<div class="step"><span class="step-label">Astuce</span>31 &times; 29 = (30 + 1)(30 &minus; 1)</div>' +
+          '<div class="step"><span class="step-label">Formule</span>30&sup2; &minus; 1&sup2;</div>' +
+          '<div class="step"><span class="step-label">Calcul</span>900 &minus; 1 = <strong>899</strong></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Calculatrice d\'identit&eacute;s</h3>' +
+      '<p>Entrez un nombre et choisissez le type de calcul :</p>' +
+      '<div class="input-row">' +
+        '<input type="number" id="calcN" placeholder="n" style="max-width:120px;">' +
+        '<select id="calcType">' +
+          '<option value="sq">n² (carré)</option>' +
+          '<option value="prod">n × m (produit)</option>' +
+        '</select>' +
+        '<input type="number" id="calcM" placeholder="m" style="max-width:100px;display:none;">' +
+      '</div>' +
+      '<button class="action-btn" onclick="doCalc()">Calculer</button>' +
+      '<div class="result-box" id="calcResult" style="min-height:60px;"><span style="color:var(--muted)">Le r&eacute;sultat appara&icirc;tra ici.</span></div>' +
+    '</div>';
+
+  document.getElementById('calcType').addEventListener('change', function() {
+    document.getElementById('calcM').style.display = this.value === 'prod' ? '' : 'none';
+  });
+}
+
+function doCalc() {
+  var n = parseInt(document.getElementById('calcN').value);
+  var type = document.getElementById('calcType').value;
+  var out = document.getElementById('calcResult');
+  if (isNaN(n)) { out.innerHTML = '<span style="color:var(--error)">Entrez un nombre valide.</span>'; return; }
+
+  if (type === 'sq') {
+    var base = Math.round(n / 10) * 10;
+    if (base === 0) base = 10;
+    var diff = n - base;
+    var sign = diff >= 0 ? '+' : '−';
+    var absDiff = Math.abs(diff);
+    var result = base * base + 2 * base * diff + diff * diff;
+    var signCalc = diff >= 0 ? '+' : '−';
+    out.innerHTML =
+      '<div class="step"><span class="step-label">&Eacute;criture</span>' + n + ' = ' + base + ' ' + sign + ' ' + absDiff + '</div>' +
+      '<div class="step"><span class="step-label">Identit&eacute;</span>(' + base + ' ' + sign + ' ' + absDiff + ')&sup2; = ' + base + '&sup2; ' + signCalc + ' 2 &times; ' + base + ' &times; ' + absDiff + ' + ' + absDiff + '&sup2;</div>' +
+      '<div class="step"><span class="step-label">Calcul</span>' + (base*base) + ' ' + signCalc + ' ' + (2*base*absDiff) + ' + ' + (absDiff*absDiff) + ' = <strong>' + result + '</strong></div>';
+  } else {
+    var m = parseInt(document.getElementById('calcM').value);
+    if (isNaN(m)) { out.innerHTML = '<span style="color:var(--error)">Entrez m.</span>'; return; }
+    var avg = (n + m) / 2;
+    if (avg === Math.floor(avg)) {
+      var d = n - avg;
+      var result2 = avg * avg - d * d;
+      out.innerHTML =
+        '<div class="step"><span class="step-label">Moyenne</span>a = (' + n + ' + ' + m + ') / 2 = ' + avg + '</div>' +
+        '<div class="step"><span class="step-label">&Eacute;cart</span>d = ' + Math.abs(d) + '</div>' +
+        '<div class="step"><span class="step-label">Identit&eacute;</span>' + n + ' &times; ' + m + ' = (' + avg + ' + ' + Math.abs(d) + ')(' + avg + ' &minus; ' + Math.abs(d) + ') = ' + avg + '&sup2; &minus; ' + Math.abs(d) + '&sup2;</div>' +
+        '<div class="step"><span class="step-label">Calcul</span>' + (avg*avg) + ' &minus; ' + (d*d) + ' = <strong>' + result2 + '</strong></div>';
+    } else {
+      out.innerHTML =
+        '<div class="step"><span class="step-label">R&eacute;sultat</span>' + n + ' &times; ' + m + ' = <strong>' + (n * m) + '</strong></div>' +
+        '<div class="step" style="color:var(--muted)">La moyenne de ' + n + ' et ' + m + ' n\'est pas enti&egrave;re : pas de d&eacute;composition simple par identit&eacute; remarquable.</div>';
+    }
+  }
+}
+
+/* ===== TAB 4 : Applications ===== */
+function buildTab4(el) {
+  el.innerHTML =
+    '<div class="card">' +
+      '<h2>Applications</h2>' +
+      '<p>Des exercices qui m&eacute;langent d&eacute;veloppement et factorisation dans des contextes vari&eacute;s.</p>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Application 1 : D&eacute;montrer une &eacute;galit&eacute;</h3>' +
+      '<div class="exercise">' +
+        '<p>Montrer que pour tout r&eacute;el x : (x + 3)&sup2; &minus; (x &minus; 3)&sup2; = 12x</p>' +
+        '<details><summary>Voir la correction</summary><div class="correction">' +
+          '<p><strong>M&eacute;thode 1 (d&eacute;veloppement) :</strong></p>' +
+          '<div class="step"><span class="step-label">D&eacute;v. 1</span>(x + 3)&sup2; = x&sup2; + 6x + 9</div>' +
+          '<div class="step"><span class="step-label">D&eacute;v. 2</span>(x &minus; 3)&sup2; = x&sup2; &minus; 6x + 9</div>' +
+          '<div class="step"><span class="step-label">Diff&eacute;rence</span>(x&sup2; + 6x + 9) &minus; (x&sup2; &minus; 6x + 9) = x&sup2; + 6x + 9 &minus; x&sup2; + 6x &minus; 9 = 12x &check;</div>' +
+          '<p style="margin-top:0.6rem"><strong>M&eacute;thode 2 (3&egrave;me identit&eacute;) :</strong></p>' +
+          '<div class="step"><span class="step-label">a&sup2;&minus;b&sup2;</span>Avec a = x+3, b = x&minus;3 : (x+3+x&minus;3)(x+3&minus;x+3) = 2x &times; 6 = 12x &check;</div>' +
+        '</div></details>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Application 2 : Aire et identit&eacute;s</h3>' +
+      '<div class="exercise">' +
+        '<p>Un carr&eacute; a un c&ocirc;t&eacute; de longueur (2x + 1) cm. Exprimer son aire sous forme d&eacute;velopp&eacute;e.</p>' +
+        '<details><summary>Voir la correction</summary><div class="correction">' +
+          '<div class="step"><span class="step-label">Aire</span>A = (2x + 1)&sup2;</div>' +
+          '<div class="step"><span class="step-label">D&eacute;v.</span>A = (2x)&sup2; + 2 &times; 2x &times; 1 + 1&sup2;</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span>A = 4x&sup2; + 4x + 1 cm&sup2;</div>' +
+        '</div></details>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Application 3 : &Eacute;quation produit</h3>' +
+      '<div class="exercise">' +
+        '<p>R&eacute;soudre : x&sup2; &minus; 25 = 0</p>' +
+        '<details><summary>Voir la correction</summary><div class="correction">' +
+          '<div class="step"><span class="step-label">Factorisation</span>x&sup2; &minus; 25 = x&sup2; &minus; 5&sup2; = (x + 5)(x &minus; 5)</div>' +
+          '<div class="step"><span class="step-label">&Eacute;quation</span>(x + 5)(x &minus; 5) = 0</div>' +
+          '<div class="step"><span class="step-label">R&egrave;gle</span>Un produit est nul si et seulement si l\'un de ses facteurs est nul.</div>' +
+          '<div class="step"><span class="step-label">Solutions</span>x + 5 = 0 &rArr; x = &minus;5 &nbsp;&nbsp;ou&nbsp;&nbsp; x &minus; 5 = 0 &rArr; x = 5</div>' +
+          '<div class="step"><span class="step-label">Conclusion</span>S = { &minus;5 ; 5 }</div>' +
+        '</div></details>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Application 4 : Facteur commun et identit&eacute;</h3>' +
+      '<div class="exercise">' +
+        '<p>Soit A = (3x + 2)&sup2; &minus; (3x + 2)(x &minus; 5). Factoriser A.</p>' +
+        '<details><summary>Voir la correction</summary><div class="correction">' +
+          '<div class="step"><span class="step-label">Facteur commun</span>A = (3x + 2)[(3x + 2) &minus; (x &minus; 5)]</div>' +
+          '<div class="step"><span class="step-label">Simplification</span>A = (3x + 2)(3x + 2 &minus; x + 5)</div>' +
+          '<div class="step"><span class="step-label">R&eacute;sultat</span>A = (3x + 2)(2x + 7)</div>' +
+        '</div></details>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<h3>Entra&icirc;nement rapide</h3>' +
+      '<p>D&eacute;veloppez ou factorisez chaque expression, puis v&eacute;rifiez :</p>' +
+      '<div id="appPractice"></div>' +
+      '<button class="action-btn" onclick="genAppPractice()" style="margin-top:0.5rem">Nouvelles expressions</button>' +
+    '</div>';
+  genAppPractice();
+}
+
+var appBank = [
+  {q: '(5x + 1)&sup2;', a: '25x&sup2; + 10x + 1', type: 'Développer'},
+  {q: '(x &minus; 7)&sup2;', a: 'x&sup2; &minus; 14x + 49', type: 'Développer'},
+  {q: '(3x + 4)(3x &minus; 4)', a: '9x&sup2; &minus; 16', type: 'Développer'},
+  {q: '(6x &minus; 1)&sup2;', a: '36x&sup2; &minus; 12x + 1', type: 'Développer'},
+  {q: '(x + 10)(x &minus; 10)', a: 'x&sup2; &minus; 100', type: 'Développer'},
+  {q: '(2x + 5)&sup2;', a: '4x&sup2; + 20x + 25', type: 'Développer'},
+  {q: 'x&sup2; &minus; 10x + 25', a: '(x &minus; 5)&sup2;', type: 'Factoriser'},
+  {q: '36x&sup2; &minus; 1', a: '(6x + 1)(6x &minus; 1)', type: 'Factoriser'},
+  {q: '4x&sup2; + 12x + 9', a: '(2x + 3)&sup2;', type: 'Factoriser'},
+  {q: '49x&sup2; &minus; 64', a: '(7x + 8)(7x &minus; 8)', type: 'Factoriser'},
+  {q: '9x&sup2; &minus; 24x + 16', a: '(3x &minus; 4)&sup2;', type: 'Factoriser'},
+  {q: 'x&sup2; + 2x + 1', a: '(x + 1)&sup2;', type: 'Factoriser'}
+];
+
+function genAppPractice() {
+  var pool = appBank.slice();
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  var pick = pool.slice(0, 4);
+  var html = '';
+  for (var k = 0; k < pick.length; k++) {
+    html += '<div class="exercise" style="margin-bottom:0.8rem">' +
+      '<h4><span class="tag">' + pick[k].type + '</span> ' + pick[k].q + '</h4>' +
+      '<details><summary>Voir la r&eacute;ponse</summary><div class="correction"><strong>R&eacute;sultat :</strong> ' + pick[k].a + '</div></details>' +
+    '</div>';
+  }
+  document.getElementById('appPractice').innerHTML = html;
+}
+
+/* ===== TAB 5 : Exercices ===== */
+function buildTab5(el) {
+  el.innerHTML =
+    '<div class="card"><h2>Exercices progressifs</h2><p>6 exercices de difficult&eacute; croissante. Essayez de r&eacute;soudre chaque exercice avant de consulter la correction.</p></div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 1</span> Exercice 1 &mdash; D&eacute;veloppement simple</h4>' +
+      '<p>D&eacute;velopper et r&eacute;duire :</p>' +
+      '<ol class="spaced" style="padding-left:1.5rem">' +
+        '<li>A = (x + 4)&sup2;</li>' +
+        '<li>B = (x &minus; 6)&sup2;</li>' +
+        '<li>C = (x + 1)(x &minus; 1)</li>' +
+      '</ol>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>A</strong> = x&sup2; + 2 &times; x &times; 4 + 4&sup2; = <strong>x&sup2; + 8x + 16</strong></p>' +
+        '<p><strong>B</strong> = x&sup2; &minus; 2 &times; x &times; 6 + 6&sup2; = <strong>x&sup2; &minus; 12x + 36</strong></p>' +
+        '<p><strong>C</strong> = x&sup2; &minus; 1&sup2; = <strong>x&sup2; &minus; 1</strong></p>' +
+      '</div></details>' +
+    '</div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 1</span> Exercice 2 &mdash; D&eacute;veloppement avec coefficients</h4>' +
+      '<p>D&eacute;velopper et r&eacute;duire :</p>' +
+      '<ol class="spaced" style="padding-left:1.5rem">' +
+        '<li>D = (2x + 3)&sup2;</li>' +
+        '<li>E = (5x &minus; 2)&sup2;</li>' +
+        '<li>F = (3x + 7)(3x &minus; 7)</li>' +
+      '</ol>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>D</strong> = (2x)&sup2; + 2 &times; 2x &times; 3 + 3&sup2; = <strong>4x&sup2; + 12x + 9</strong></p>' +
+        '<p><strong>E</strong> = (5x)&sup2; &minus; 2 &times; 5x &times; 2 + 2&sup2; = <strong>25x&sup2; &minus; 20x + 4</strong></p>' +
+        '<p><strong>F</strong> = (3x)&sup2; &minus; 7&sup2; = <strong>9x&sup2; &minus; 49</strong></p>' +
+      '</div></details>' +
+    '</div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 2</span> Exercice 3 &mdash; Factorisation</h4>' +
+      '<p>Factoriser :</p>' +
+      '<ol class="spaced" style="padding-left:1.5rem">' +
+        '<li>G = x&sup2; + 14x + 49</li>' +
+        '<li>H = x&sup2; &minus; 8x + 16</li>' +
+        '<li>I = 9x&sup2; &minus; 4</li>' +
+      '</ol>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>G</strong> : x&sup2; = (x)&sup2;, 49 = 7&sup2;, 14x = 2 &times; x &times; 7 &check; &rarr; <strong>G = (x + 7)&sup2;</strong></p>' +
+        '<p><strong>H</strong> : x&sup2; = (x)&sup2;, 16 = 4&sup2;, 8x = 2 &times; x &times; 4 &check; &rarr; <strong>H = (x &minus; 4)&sup2;</strong></p>' +
+        '<p><strong>I</strong> : 9x&sup2; = (3x)&sup2;, 4 = 2&sup2; &rarr; <strong>I = (3x + 2)(3x &minus; 2)</strong></p>' +
+      '</div></details>' +
+    '</div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 2</span> Exercice 4 &mdash; Calcul astucieux</h4>' +
+      '<p>Calculer sans calculatrice en utilisant une identit&eacute; remarquable :</p>' +
+      '<ol class="spaced" style="padding-left:1.5rem">' +
+        '<li>103&sup2;</li>' +
+        '<li>97&sup2;</li>' +
+        '<li>102 &times; 98</li>' +
+      '</ol>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>103&sup2;</strong> = (100 + 3)&sup2; = 10 000 + 600 + 9 = <strong>10 609</strong></p>' +
+        '<p><strong>97&sup2;</strong> = (100 &minus; 3)&sup2; = 10 000 &minus; 600 + 9 = <strong>9 409</strong></p>' +
+        '<p><strong>102 &times; 98</strong> = (100 + 2)(100 &minus; 2) = 10 000 &minus; 4 = <strong>9 996</strong></p>' +
+      '</div></details>' +
+    '</div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 3</span> Exercice 5 &mdash; D&eacute;monstrations</h4>' +
+      '<p>a) Montrer que pour tout x : (x + 2)&sup2; &minus; (x &minus; 2)&sup2; = 8x</p>' +
+      '<p>b) Montrer que pour tout entier n : (n + 1)&sup2; &minus; n&sup2; = 2n + 1 (un nombre impair)</p>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>a)</strong></p>' +
+        '<p><em>M&eacute;thode 1 (d&eacute;veloppement) :</em><br>' +
+        '(x+2)&sup2; &minus; (x&minus;2)&sup2; = (x&sup2;+4x+4) &minus; (x&sup2;&minus;4x+4) = x&sup2;+4x+4&minus;x&sup2;+4x&minus;4 = 8x &check;</p>' +
+        '<p><em>M&eacute;thode 2 (3&egrave;me identit&eacute;) :</em><br>' +
+        'a&sup2;&minus;b&sup2; avec a = x+2, b = x&minus;2 :<br>(x+2+x&minus;2)(x+2&minus;x+2) = 2x &times; 4 = 8x &check;</p>' +
+        '<p style="margin-top:0.8rem"><strong>b)</strong><br>' +
+        '(n+1)&sup2; &minus; n&sup2; = n&sup2; + 2n + 1 &minus; n&sup2; = 2n + 1<br>' +
+        'Or 2n est pair, donc 2n + 1 est impair. &check;</p>' +
+      '</div></details>' +
+    '</div>' +
+
+    '<div class="exercise">' +
+      '<h4><span class="tag">Niveau 3</span> Exercice 6 &mdash; Factorisation compl&egrave;te</h4>' +
+      '<p>Factoriser compl&egrave;tement :</p>' +
+      '<ol class="spaced" style="padding-left:1.5rem">' +
+        '<li>J = (2x + 1)&sup2; &minus; 9</li>' +
+        '<li>K = (x + 3)&sup2; &minus; (2x &minus; 1)&sup2;</li>' +
+        '<li>L = 4x&sup2; &minus; 4x + 1 &minus; (2x &minus; 1)(x + 5)</li>' +
+      '</ol>' +
+      '<details><summary>Correction</summary><div class="correction">' +
+        '<p><strong>J</strong> = (2x+1)&sup2; &minus; 3&sup2; &rarr; diff&eacute;rence de deux carr&eacute;s<br>' +
+        '= (2x+1+3)(2x+1&minus;3) = (2x+4)(2x&minus;2)<br>' +
+        '= 2(x+2) &times; 2(x&minus;1) = <strong>4(x+2)(x&minus;1)</strong></p>' +
+        '<p><strong>K</strong> = [(x+3) + (2x&minus;1)][(x+3) &minus; (2x&minus;1)]<br>' +
+        '= (x+3+2x&minus;1)(x+3&minus;2x+1) = <strong>(3x+2)(&minus;x+4)</strong></p>' +
+        '<p><strong>L</strong> : on remarque 4x&sup2;&minus;4x+1 = (2x&minus;1)&sup2;<br>' +
+        'Donc L = (2x&minus;1)&sup2; &minus; (2x&minus;1)(x+5)<br>' +
+        '= (2x&minus;1)[(2x&minus;1) &minus; (x+5)]<br>' +
+        '= (2x&minus;1)(2x&minus;1&minus;x&minus;5) = <strong>(2x&minus;1)(x&minus;6)</strong></p>' +
+      '</div></details>' +
+    '</div>';
+}
+
+/* ===== TAB 6 : QCM ===== */
+var quizPool = [
+  {q: 'Quel est le développement de (a + b)² ?', opts: ['a² + b²', 'a² + 2ab + b²', 'a² − 2ab + b²', '2a + 2b'], ans: 1},
+  {q: 'Quel est le développement de (a − b)² ?', opts: ['a² − b²', 'a² + 2ab + b²', 'a² − 2ab + b²', 'a² − ab + b²'], ans: 2},
+  {q: '(a + b)(a − b) = ?', opts: ['a² + b²', 'a² − b²', 'a² − 2ab + b²', '2a² − 2b²'], ans: 1},
+  {q: 'Développer (x + 5)² :', opts: ['x² + 25', 'x² + 5x + 25', 'x² + 10x + 25', 'x² + 10x + 5'], ans: 2},
+  {q: 'Développer (3x − 2)² :', opts: ['9x² − 12x + 4', '9x² − 6x + 4', '3x² − 12x + 4', '9x² + 12x + 4'], ans: 0},
+  {q: 'Factoriser x² − 9 :', opts: ['(x − 3)²', '(x + 3)(x − 3)', '(x − 9)(x + 1)', '(x + 9)(x − 1)'], ans: 1},
+  {q: 'Factoriser x² + 6x + 9 :', opts: ['(x + 6)²', '(x + 3)²', '(x + 9)(x + 1)', '(x + 3)(x − 3)'], ans: 1},
+  {q: 'Factoriser 4x² − 25 :', opts: ['(2x − 5)²', '(4x + 5)(4x − 5)', '(2x + 5)(2x − 5)', '(2x + 25)(2x − 1)'], ans: 2},
+  {q: '99² = (100 − 1)² = ?', opts: ['9 801', '9 901', '9 800', '9 899'], ans: 0},
+  {q: '51 × 49 = ?', opts: ['2 501', '2 499', '2 500', '2 449'], ans: 1},
+  {q: 'Quelle identité permet de factoriser a² − b² ?', opts: ['(a + b)²', '(a − b)²', '(a + b)(a − b)', 'Aucune'], ans: 2},
+  {q: 'Développer (2x + 1)(2x − 1) :', opts: ['4x² + 1', '4x² − 1', '2x² − 1', '4x² − 4x + 1'], ans: 1},
+  {q: 'Dans (a+b)² = a² + 2ab + b², le terme 2ab s\'appelle :', opts: ['Le carré', 'Le double produit', 'La somme', 'Le coefficient'], ans: 1},
+  {q: 'Factoriser 9x² − 30x + 25 :', opts: ['(3x − 5)²', '(3x + 5)²', '(9x − 5)(x − 5)', '(3x − 5)(3x + 5)'], ans: 0},
+  {q: '101² = ?', opts: ['10 001', '10 201', '10 200', '10 301'], ans: 1},
+  {q: '(x + 4)² − 16 se factorise en :', opts: ['x² + 8x', 'x(x + 8)', 'x² + 16', '(x+4)(x−4)'], ans: 1},
+  {q: 'Factoriser 49 − x² :', opts: ['(7 − x)(7 + x)', '(x − 7)(x + 7)', '(7 − x)²', '(49 − x)(1 + x)'], ans: 0}
+];
+
+var quizState = {};
+
+function buildTab6(el) {
+  el.innerHTML =
+    '<div class="card"><h2>QCM &mdash; Testez vos connaissances</h2>' +
+      '<p>10 questions tir&eacute;es al&eacute;atoirement parmi un pool de ' + quizPool.length + ' questions.</p>' +
+      '<div class="quiz-progress" id="quizProg"></div>' +
+      '<div id="quizArea"></div>' +
+      '<div class="quiz-score" id="quizScore"></div>' +
+      '<button class="action-btn" id="quizRestart" onclick="startQuiz()" style="display:none;margin:0.5rem auto;">Recommencer</button>' +
+    '</div>';
+  startQuiz();
+}
+
+function startQuiz() {
+  var pool = quizPool.slice();
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  quizState = { questions: pool.slice(0, 10), current: 0, score: 0 };
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizRestart').style.display = 'none';
+  showQuestion();
+}
+
+function showQuestion() {
+  var s = quizState;
+  var area = document.getElementById('quizArea');
+  var prog = document.getElementById('quizProg');
+  if (s.current >= s.questions.length) {
+    area.innerHTML = '';
+    prog.textContent = '';
+    var msg = '';
+    if (s.score >= 9) msg = 'Excellent ! Vous maîtrisez les identités remarquables.';
+    else if (s.score >= 7) msg = 'Très bien ! Encore un petit effort pour la perfection.';
+    else if (s.score >= 5) msg = 'Bien, mais révisez les points faibles.';
+    else msg = 'À retravailler. Relisez le cours et refaites les exercices.';
+    document.getElementById('quizScore').innerHTML =
+      'Score : ' + s.score + ' / ' + s.questions.length +
+      '<br><span style="font-size:0.9rem;color:var(--muted)">' + msg + '</span>';
+    document.getElementById('quizRestart').style.display = 'block';
+    return;
+  }
+  var q = s.questions[s.current];
+  prog.textContent = 'Question ' + (s.current + 1) + ' / ' + s.questions.length;
+  var html = '<p style="font-weight:600;margin-bottom:0.5rem;font-size:1.05rem;">' + q.q + '</p>';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="quiz-option" data-i="' + i + '" onclick="answerQuiz(this,' + i + ',' + q.ans + ')">' + String.fromCharCode(65 + i) + '. ' + q.opts[i] + '</button>';
+  }
+  area.innerHTML = html;
+}
+
+function answerQuiz(btn, chosen, correct) {
+  var btns = btn.parentNode.querySelectorAll('.quiz-option');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].disabled = true;
+    btns[i].onclick = null;
+    if (parseInt(btns[i].getAttribute('data-i')) === correct) {
+      btns[i].classList.add('correct');
+    }
+  }
+  if (chosen !== correct) {
+    btn.classList.add('wrong');
+  } else {
+    quizState.score++;
+  }
+  setTimeout(function() {
+    quizState.current++;
+    showQuestion();
+  }, 1200);
+}
+
+/* ===== Init Canvas (lazy) ===== */
+function initSection(i) {
+  if (sectionInited[i]) return;
+  sectionInited[i] = true;
+  if (i === 0) {
+    var c = document.getElementById('canvasProof');
+    if (c) {
+      var dpr = window.devicePixelRatio || 1;
+      var w = Math.min(420, c.parentElement.clientWidth - 32);
+      c.style.width = w + 'px';
+      c.style.height = w + 'px';
+      c.width = w * dpr;
+      c.height = w * dpr;
+      var ctx = c.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawProofScaled(c, w);
+    }
+  }
+}
+
+showTab(0);
+</script>
+</body>
+</html>

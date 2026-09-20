@@ -1,0 +1,1365 @@
+<title>Fonctions linéaires et affines</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --surface-alt: #faf8f5;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --accent-light: #d2a679;
+  --accent-bg: #f5ece3;
+  --text: #2c2418;
+  --text-muted: #7a6e60;
+  --border: #e0d6c8;
+  --border-light: #ede7dd;
+  --success: #2e7d32;
+  --success-bg: #e8f5e9;
+  --error: #c62828;
+  --error-bg: #fce4ec;
+  --canvas-bg: #fefcfa;
+  --canvas-grid: #e8e0d4;
+  --canvas-axis: #5c4a3a;
+  --canvas-line1: #c0392b;
+  --canvas-line2: #2471a3;
+  --tab-active: #8b4513;
+  --tab-inactive: #c4b5a2;
+  --shadow: 0 2px 8px rgba(44,36,24,0.08);
+  --shadow-lg: 0 4px 16px rgba(44,36,24,0.12);
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1612;
+    --surface: #262018;
+    --surface-alt: #2e271e;
+    --heading: #d4a56a;
+    --accent: #d4a56a;
+    --accent-light: #8b6d44;
+    --accent-bg: #332a1e;
+    --text: #e4ddd2;
+    --text-muted: #9e9488;
+    --border: #3d352a;
+    --border-light: #332c22;
+    --success: #66bb6a;
+    --success-bg: #1b2e1c;
+    --error: #ef5350;
+    --error-bg: #2e1618;
+    --canvas-bg: #221d16;
+    --canvas-grid: #3a3228;
+    --canvas-axis: #b8a896;
+    --canvas-line1: #e57373;
+    --canvas-line2: #64b5f6;
+    --tab-active: #d4a56a;
+    --tab-inactive: #6b5e4e;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1a1612;
+  --surface: #262018;
+  --surface-alt: #2e271e;
+  --heading: #d4a56a;
+  --accent: #d4a56a;
+  --accent-light: #8b6d44;
+  --accent-bg: #332a1e;
+  --text: #e4ddd2;
+  --text-muted: #9e9488;
+  --border: #3d352a;
+  --border-light: #332c22;
+  --success: #66bb6a;
+  --success-bg: #1b2e1c;
+  --error: #ef5350;
+  --error-bg: #2e1618;
+  --canvas-bg: #221d16;
+  --canvas-grid: #3a3228;
+  --canvas-axis: #b8a896;
+  --canvas-line1: #e57373;
+  --canvas-line2: #64b5f6;
+  --tab-active: #d4a56a;
+  --tab-inactive: #6b5e4e;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  padding-inline: 16px;
+  padding-block: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  color: var(--heading);
+  text-wrap: balance;
+  line-height: 1.3;
+}
+h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.3em; }
+h2 { font-size: 1.55rem; font-weight: 600; margin: 1.6em 0 0.6em; }
+h3 { font-size: 1.25rem; font-weight: 600; margin: 1.2em 0 0.5em; }
+
+.level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.header-area {
+  padding-top: 1.2em;
+  margin-bottom: 0.5em;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.8em;
+}
+.header-area p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0.3em 0 0;
+}
+
+/* Tabs */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1.5em;
+  margin-top: 0.8em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--tab-inactive);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -2px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--tab-active);
+  border-bottom-color: var(--tab-active);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Components */
+.formula-box {
+  background: var(--accent-bg);
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 1em 0;
+  font-size: 1.05rem;
+  overflow-x: auto;
+}
+.formula-box .formula-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.tip-box {
+  background: var(--success-bg);
+  border-left: 4px solid var(--success);
+  padding: 12px 16px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 1em 0;
+  font-size: 0.93rem;
+}
+.tip-box strong { color: var(--success); }
+
+.warning-box {
+  background: var(--error-bg);
+  border-left: 4px solid var(--error);
+  padding: 12px 16px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 1em 0;
+  font-size: 0.93rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 1em 0;
+  box-shadow: var(--shadow);
+}
+
+.exercise {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin: 1.2em 0;
+}
+.exercise h4 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+details {
+  margin: 0.8em 0;
+}
+details summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 6px 0;
+  user-select: none;
+}
+details summary:hover { text-decoration: underline; }
+details[open] summary { margin-bottom: 0.4em; }
+details .correction {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 0.93rem;
+  line-height: 1.7;
+}
+
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 3px;
+  font-size: 0.92em;
+  line-height: 1.2;
+}
+.frac .num { border-bottom: 1.5px solid var(--text); padding-bottom: 1px; }
+.frac .den { padding-top: 1px; }
+
+/* Canvas container */
+.canvas-wrap {
+  background: var(--canvas-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin: 1em 0;
+  overflow-x: auto;
+}
+.canvas-wrap canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  cursor: crosshair;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+.controls label { font-weight: 600; color: var(--text-muted); }
+.controls input[type="range"] {
+  width: 140px;
+  accent-color: var(--accent);
+}
+.controls .val {
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  min-width: 3ch;
+}
+.controls button, .action-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 7px 16px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.controls button:hover, .action-btn:hover { opacity: 0.85; }
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.93rem;
+}
+.data-table th, .data-table td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: center;
+}
+.data-table th {
+  background: var(--accent-bg);
+  color: var(--heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.data-table input[type="number"] {
+  width: 60px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Quiz */
+.quiz-q {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin: 0.8em 0;
+  box-shadow: var(--shadow);
+}
+.quiz-q .q-label {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.quiz-q p { margin: 0.3em 0 0.6em; font-weight: 600; }
+.quiz-opts label {
+  display: block;
+  padding: 7px 12px;
+  margin: 3px 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.93rem;
+}
+.quiz-opts label:hover { background: var(--accent-bg); }
+.quiz-opts input[type="radio"] {
+  accent-color: var(--accent);
+  margin-right: 8px;
+}
+.quiz-q .feedback {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.quiz-q .feedback.correct { background: var(--success-bg); color: var(--success); }
+.quiz-q .feedback.wrong { background: var(--error-bg); color: var(--error); }
+
+.score-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin: 1.2em 0;
+  text-align: center;
+}
+.score-bar .score-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.score-bar .score-label { color: var(--text-muted); font-size: 0.88rem; }
+
+.info-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin: 0.6em 0;
+  font-size: 0.92rem;
+}
+
+.result-msg {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 0.6em 0;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.result-msg.ok { background: var(--success-bg); color: var(--success); }
+.result-msg.ko { background: var(--error-bg); color: var(--error); }
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.55rem; }
+  h2 { font-size: 1.3rem; }
+  .tab-btn { font-size: 0.75rem; padding: 8px 10px; }
+  .controls { gap: 8px 14px; }
+  .controls input[type="range"] { width: 110px; }
+  body { font-size: 15px; }
+}
+</style>
+
+<div class="header-area">
+  <h1><span class="level-badge">3&egrave;me</span> Fonctions lin&eacute;aires et affines</h1>
+  <p>Cours interactif &mdash; Programme de troisi&egrave;me (coll&egrave;ge)</p>
+</div>
+
+<nav class="tab-nav" id="tabNav"></nav>
+
+<div id="tab0" class="tab-content">
+  <h2>1. Fonction lin&eacute;aire</h2>
+
+  <div class="formula-box">
+    <div class="formula-label">D&eacute;finition</div>
+    Une <strong>fonction lin&eacute;aire</strong> est une fonction de la forme
+    <strong>f(x) = ax</strong> o&ugrave; <em>a</em> est un nombre r&eacute;el appel&eacute; <strong>coefficient</strong>.
+  </div>
+
+  <p>La fonction lin&eacute;aire traduit une situation de <strong>proportionnalit&eacute;</strong> : si l&rsquo;on double la valeur de <em>x</em>, alors <em>f(x)</em> est aussi doubl&eacute;e.</p>
+
+  <h3>Propri&eacute;t&eacute;s fondamentales</h3>
+  <ul>
+    <li>La courbe repr&eacute;sentative est une <strong>droite passant par l&rsquo;origine</strong> O(0&thinsp;;&thinsp;0).</li>
+    <li>Le coefficient <em>a</em> est le <strong>coefficient directeur</strong> : il mesure la pente de la droite.</li>
+    <li>Si <em>a</em> &gt; 0 la fonction est croissante ; si <em>a</em> &lt; 0 elle est d&eacute;croissante.</li>
+    <li><em>f</em>(1) = <em>a</em> : le coefficient se lit directement &agrave; <em>x</em> = 1.</li>
+  </ul>
+
+  <div class="tip-box">
+    <strong>Astuce Brevet :</strong> Pour trouver le coefficient <em>a</em> &agrave; partir d&rsquo;un point M(<em>x<sub>M</sub></em>&thinsp;;&thinsp;<em>y<sub>M</sub></em>) de la droite, on calcule <em>a</em> = <span class="frac"><span class="num"><em>y<sub>M</sub></em></span><span class="den"><em>x<sub>M</sub></em></span></span>.
+  </div>
+
+  <h3>Repr&eacute;sentation graphique interactive</h3>
+  <p>D&eacute;placez le curseur pour modifier le coefficient <em>a</em> et observer l&rsquo;effet sur la droite.</p>
+
+  <div class="canvas-wrap">
+    <canvas id="cvLin" width="500" height="400"></canvas>
+    <div class="controls">
+      <label>Coefficient <em>a</em> =</label>
+      <input type="range" id="sliderA1" min="-3" max="3" step="0.25" value="1.5">
+      <span class="val" id="valA1">1,5</span>
+    </div>
+  </div>
+
+  <h3>Tableau de proportionnalit&eacute; interactif</h3>
+  <p>V&eacute;rifiez que <em>f(x) = ax</em> avec <em>a</em> = <span id="propCoef">1,5</span>. Compl&eacute;tez les valeurs de <em>f(x)</em> puis v&eacute;rifiez.</p>
+
+  <div style="overflow-x:auto">
+    <table class="data-table" id="propTable">
+      <tr><th><em>x</em></th><td>-2</td><td>-1</td><td>0</td><td>1</td><td>3</td><td>5</td></tr>
+      <tr><th><em>f(x)</em></th>
+        <td><input type="number" step="any" data-x="-2"></td>
+        <td><input type="number" step="any" data-x="-1"></td>
+        <td><input type="number" step="any" data-x="0"></td>
+        <td><input type="number" step="any" data-x="1"></td>
+        <td><input type="number" step="any" data-x="3"></td>
+        <td><input type="number" step="any" data-x="5"></td>
+      </tr>
+    </table>
+  </div>
+  <div class="controls" style="margin-top:8px">
+    <button onclick="checkPropTable()">V&eacute;rifier</button>
+    <span id="propResult"></span>
+  </div>
+</div>
+
+<div id="tab1" class="tab-content">
+  <h2>2. Fonction affine</h2>
+
+  <div class="formula-box">
+    <div class="formula-label">D&eacute;finition</div>
+    Une <strong>fonction affine</strong> est une fonction de la forme
+    <strong>f(x) = ax + b</strong> o&ugrave; <em>a</em> est le <strong>coefficient directeur</strong> et <em>b</em> l&rsquo;<strong>ordonn&eacute;e &agrave; l&rsquo;origine</strong>.
+  </div>
+
+  <h3>Cas particuliers</h3>
+  <ul>
+    <li>Si <em>b</em> = 0 : f(x) = ax &rarr; fonction <strong>lin&eacute;aire</strong></li>
+    <li>Si <em>a</em> = 0 : f(x) = b &rarr; fonction <strong>constante</strong></li>
+  </ul>
+
+  <h3>R&ocirc;le de <em>a</em> et <em>b</em></h3>
+  <div class="card">
+    <p><strong>Le coefficient directeur <em>a</em></strong> d&eacute;termine la pente de la droite :</p>
+    <ul>
+      <li><em>a</em> &gt; 0 : la droite &laquo;&nbsp;monte&nbsp;&raquo; (fonction croissante)</li>
+      <li><em>a</em> &lt; 0 : la droite &laquo;&nbsp;descend&nbsp;&raquo; (fonction d&eacute;croissante)</li>
+      <li><em>a</em> = 0 : la droite est horizontale</li>
+    </ul>
+    <p><strong>L&rsquo;ordonn&eacute;e &agrave; l&rsquo;origine <em>b</em></strong> est la valeur de <em>f</em>(0). C&rsquo;est le point o&ugrave; la droite coupe l&rsquo;axe des ordonn&eacute;es.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Calcul du coefficient directeur</div>
+    &Agrave; partir de deux points A(<em>x<sub>A</sub></em>&thinsp;;&thinsp;<em>y<sub>A</sub></em>) et B(<em>x<sub>B</sub></em>&thinsp;;&thinsp;<em>y<sub>B</sub></em>) :
+    <strong><em>a</em> = <span class="frac"><span class="num"><em>y<sub>B</sub></em> &minus; <em>y<sub>A</sub></em></span><span class="den"><em>x<sub>B</sub></em> &minus; <em>x<sub>A</sub></em></span></span></strong>
+  </div>
+
+  <h3>Repr&eacute;sentation graphique interactive</h3>
+  <p>Faites varier <em>a</em> et <em>b</em> pour observer l&rsquo;effet sur la droite repr&eacute;sentative de f(x)&nbsp;=&nbsp;ax&nbsp;+&nbsp;b.</p>
+
+  <div class="canvas-wrap">
+    <canvas id="cvAff" width="500" height="400"></canvas>
+    <div class="controls">
+      <label><em>a</em> =</label>
+      <input type="range" id="sliderA2" min="-3" max="3" step="0.25" value="0.75">
+      <span class="val" id="valA2">0,75</span>
+      <label style="margin-left:8px"><em>b</em> =</label>
+      <input type="range" id="sliderB2" min="-4" max="4" step="0.5" value="-1">
+      <span class="val" id="valB2">&minus;1</span>
+    </div>
+  </div>
+
+  <div class="info-row" id="affInfo">
+    <span>Coefficient directeur : <strong id="affA">0,75</strong> &mdash; Ordonn&eacute;e &agrave; l&rsquo;origine : <strong id="affB">&minus;1</strong> &mdash; f(x) = <strong id="affExpr">0,75x &minus; 1</strong></span>
+  </div>
+
+  <div class="tip-box">
+    <strong>M&eacute;thode :</strong> Pour tracer f(x) = ax + b, placez d&rsquo;abord le point (0&thinsp;;&thinsp;b), puis &agrave; partir de ce point avancez de 1 en <em>x</em> et de <em>a</em> en <em>y</em>.
+  </div>
+</div>
+
+<div id="tab2" class="tab-content">
+  <h2>3. D&eacute;terminer une fonction affine</h2>
+
+  <h3>&Agrave; partir de deux points</h3>
+  <div class="formula-box">
+    <div class="formula-label">M&eacute;thode</div>
+    Soit A(<em>x<sub>A</sub></em>&thinsp;;&thinsp;<em>y<sub>A</sub></em>) et B(<em>x<sub>B</sub></em>&thinsp;;&thinsp;<em>y<sub>B</sub></em>) deux points de la droite.<br>
+    1. Calculer <em>a</em> = <span class="frac"><span class="num"><em>y<sub>B</sub></em> &minus; <em>y<sub>A</sub></em></span><span class="den"><em>x<sub>B</sub></em> &minus; <em>x<sub>A</sub></em></span></span><br>
+    2. Calculer <em>b</em> = <em>y<sub>A</sub></em> &minus; <em>a</em> &times; <em>x<sub>A</sub></em>
+  </div>
+
+  <h3>Exercice interactif : cliquez deux points</h3>
+  <p>Cliquez sur le graphique pour placer deux points. La fonction affine passant par ces points sera calcul&eacute;e automatiquement.</p>
+
+  <div class="canvas-wrap">
+    <canvas id="cvFind" width="500" height="400"></canvas>
+    <div class="controls">
+      <button onclick="resetFindCanvas()">R&eacute;initialiser</button>
+      <span id="findResult" style="font-size:0.92rem"></span>
+    </div>
+  </div>
+
+  <h3>Exemple r&eacute;solu</h3>
+  <div class="exercise">
+    <h4>D&eacute;terminer la fonction affine passant par A(1&thinsp;;&thinsp;3) et B(4&thinsp;;&thinsp;9)</h4>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>&Eacute;tape 1 :</strong> Calcul de <em>a</em></p>
+        <p><em>a</em> = <span class="frac"><span class="num">9 &minus; 3</span><span class="den">4 &minus; 1</span></span> = <span class="frac"><span class="num">6</span><span class="den">3</span></span> = 2</p>
+        <p><strong>&Eacute;tape 2 :</strong> Calcul de <em>b</em></p>
+        <p><em>b</em> = <em>y<sub>A</sub></em> &minus; <em>a</em> &times; <em>x<sub>A</sub></em> = 3 &minus; 2 &times; 1 = 1</p>
+        <p><strong>Conclusion :</strong> f(x) = 2x + 1</p>
+        <p><em>V&eacute;rification :</em> f(4) = 2 &times; 4 + 1 = 9 &#10003;</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div id="tab3" class="tab-content">
+  <h2>4. Signe et variations</h2>
+
+  <h3>Signe de f(x) = ax + b</h3>
+  <div class="formula-box">
+    <div class="formula-label">R&egrave;gle</div>
+    f(x) = ax + b s&rsquo;annule pour <strong>x = &minus;<span class="frac"><span class="num">b</span><span class="den">a</span></span></strong> (avec a &ne; 0).<br>
+    Le signe de f(x) d&eacute;pend du signe de <em>a</em>.
+  </div>
+
+  <div class="card">
+    <h4>Tableau de signes</h4>
+    <p>Si <em>a</em> &gt; 0 : f(x) est <strong>n&eacute;gative</strong> avant la racine, <strong>positive</strong> apr&egrave;s.</p>
+    <p>Si <em>a</em> &lt; 0 : f(x) est <strong>positive</strong> avant la racine, <strong>n&eacute;gative</strong> apr&egrave;s.</p>
+  </div>
+
+  <h3>Variations</h3>
+  <ul>
+    <li>Si <em>a</em> &gt; 0 : f est <strong>strictement croissante</strong> sur &#8477;</li>
+    <li>Si <em>a</em> &lt; 0 : f est <strong>strictement d&eacute;croissante</strong> sur &#8477;</li>
+    <li>Si <em>a</em> = 0 : f est <strong>constante</strong></li>
+  </ul>
+
+  <h3>Visualisation interactive</h3>
+  <p>Observez les zones o&ugrave; f(x) est positive (bleu) ou n&eacute;gative (rouge).</p>
+
+  <div class="canvas-wrap">
+    <canvas id="cvSign" width="500" height="400"></canvas>
+    <div class="controls">
+      <label><em>a</em> =</label>
+      <input type="range" id="sliderA4" min="-3" max="3" step="0.25" value="2">
+      <span class="val" id="valA4">2</span>
+      <label style="margin-left:8px"><em>b</em> =</label>
+      <input type="range" id="sliderB4" min="-4" max="4" step="0.5" value="-3">
+      <span class="val" id="valB4">&minus;3</span>
+    </div>
+  </div>
+
+  <div class="info-row" id="signInfo">
+    <span>Racine : x = <strong id="signRoot">1,5</strong> &mdash; f(x) &lt; 0 pour x &lt; <strong id="signLeft">1,5</strong> et f(x) &gt; 0 pour x &gt; <strong id="signRight">1,5</strong></span>
+  </div>
+
+  <div class="warning-box">
+    <strong>Attention :</strong> Ne pas confondre le signe de la fonction (positif/n&eacute;gatif) avec ses variations (croissante/d&eacute;croissante). Une fonction peut &ecirc;tre croissante et n&eacute;gative en m&ecirc;me temps !
+  </div>
+</div>
+
+<div id="tab4" class="tab-content">
+  <h2>5. Probl&egrave;mes concrets</h2>
+
+  <h3>Comparaison de deux offres tarifaires</h3>
+  <div class="card">
+    <p><strong>Situation :</strong> Deux fournisseurs d&rsquo;acc&egrave;s Internet proposent&nbsp;:</p>
+    <ul>
+      <li><strong>Offre A :</strong> Abonnement de <span id="offA_b">10</span>&nbsp;&euro;/mois + <span id="offA_a">0,50</span>&nbsp;&euro; par Go consomm&eacute;</li>
+      <li><strong>Offre B :</strong> Abonnement de <span id="offB_b">25</span>&nbsp;&euro;/mois + <span id="offB_a">0,20</span>&nbsp;&euro; par Go consomm&eacute;</li>
+    </ul>
+    <p>On mod&eacute;lise par : <strong>f(x) = 0,5x + 10</strong> et <strong>g(x) = 0,2x + 25</strong></p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Seuil de rentabilit&eacute;</div>
+    Les deux offres co&ucirc;tent le m&ecirc;me prix quand f(x)&nbsp;=&nbsp;g(x), soit :<br>
+    0,5x + 10 = 0,2x + 25 &rArr; 0,3x = 15 &rArr; <strong>x = 50 Go</strong><br>
+    Co&ucirc;t &agrave; l&rsquo;&eacute;galit&eacute; : f(50) = 0,5 &times; 50 + 10 = <strong>35 &euro;</strong>
+  </div>
+
+  <h3>Visualisation interactive</h3>
+  <p>Modifiez les param&egrave;tres des deux offres pour comparer.</p>
+
+  <div class="canvas-wrap">
+    <canvas id="cvOffer" width="500" height="400"></canvas>
+    <div class="controls" style="flex-wrap:wrap">
+      <label>Offre A: fixe=</label>
+      <input type="range" id="sOA_b" min="0" max="30" step="1" value="10">
+      <span class="val" id="vOA_b">10</span>&euro;
+      <label>var.=</label>
+      <input type="range" id="sOA_a" min="0" max="1" step="0.05" value="0.5">
+      <span class="val" id="vOA_a">0,50</span>&euro;/Go
+    </div>
+    <div class="controls" style="margin-top:6px">
+      <label>Offre B: fixe=</label>
+      <input type="range" id="sOB_b" min="0" max="40" step="1" value="25">
+      <span class="val" id="vOB_b">25</span>&euro;
+      <label>var.=</label>
+      <input type="range" id="sOB_a" min="0" max="1" step="0.05" value="0.2">
+      <span class="val" id="vOB_a">0,20</span>&euro;/Go
+    </div>
+  </div>
+
+  <div class="info-row" id="offerInfo">
+    <span id="offerText"></span>
+  </div>
+
+  <h3>Autres applications courantes</h3>
+  <div class="card">
+    <h4>Vitesse et distance</h4>
+    <p>Un v&eacute;hicule roule &agrave; vitesse constante <em>v</em>. La distance parcourue est <strong>d(t) = v &times; t</strong> (fonction lin&eacute;aire).</p>
+    <p>S&rsquo;il part d&rsquo;un point situ&eacute; &agrave; <em>d<sub>0</sub></em> km de l&rsquo;origine : <strong>d(t) = v &times; t + d<sub>0</sub></strong> (fonction affine).</p>
+  </div>
+  <div class="card">
+    <h4>Conversions de temp&eacute;rature</h4>
+    <p>De Celsius vers Fahrenheit : <strong>F(C) = 1,8C + 32</strong></p>
+    <p>C&rsquo;est une fonction affine avec <em>a</em>&nbsp;=&nbsp;1,8 et <em>b</em>&nbsp;=&nbsp;32.</p>
+  </div>
+</div>
+
+<div id="tab5" class="tab-content">
+  <h2>6. Exercices type Brevet</h2>
+
+  <div class="exercise">
+    <h4>Exercice 1 &mdash; Identifier une fonction lin&eacute;aire</h4>
+    <p>Parmi les fonctions suivantes, lesquelles sont lin&eacute;aires ?</p>
+    <p>a) f(x) = 3x &emsp; b) g(x) = 2x + 5 &emsp; c) h(x) = &minus;4x &emsp; d) k(x) = x&sup2;</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>a) f(x) = 3x :</strong> Oui, c&rsquo;est une fonction lin&eacute;aire de coefficient 3.</p>
+        <p><strong>b) g(x) = 2x + 5 :</strong> Non, c&rsquo;est une fonction affine (b = 5 &ne; 0).</p>
+        <p><strong>c) h(x) = &minus;4x :</strong> Oui, c&rsquo;est une fonction lin&eacute;aire de coefficient &minus;4.</p>
+        <p><strong>d) k(x) = x&sup2; :</strong> Non, ce n&rsquo;est ni lin&eacute;aire ni affine (c&rsquo;est une fonction polyn&ocirc;me du second degr&eacute;).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 2 &mdash; Calculer des images</h4>
+    <p>Soit f la fonction affine d&eacute;finie par f(x) = &minus;2x + 7.</p>
+    <p>Calculer f(0), f(3), f(&minus;1) et f(3,5).</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p>f(0) = &minus;2 &times; 0 + 7 = <strong>7</strong></p>
+        <p>f(3) = &minus;2 &times; 3 + 7 = &minus;6 + 7 = <strong>1</strong></p>
+        <p>f(&minus;1) = &minus;2 &times; (&minus;1) + 7 = 2 + 7 = <strong>9</strong></p>
+        <p>f(3,5) = &minus;2 &times; 3,5 + 7 = &minus;7 + 7 = <strong>0</strong></p>
+        <p><em>Remarque :</em> f(3,5) = 0 signifie que 3,5 est l&rsquo;ant&eacute;c&eacute;dent de 0, c&rsquo;est-&agrave;-dire la racine de la fonction.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 3 &mdash; D&eacute;terminer une fonction affine</h4>
+    <p>La droite repr&eacute;sentant une fonction affine f passe par les points A(2&thinsp;;&thinsp;5) et B(6&thinsp;;&thinsp;13).</p>
+    <p>D&eacute;terminer l&rsquo;expression de f(x).</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>Calcul de <em>a</em> :</strong></p>
+        <p><em>a</em> = <span class="frac"><span class="num">13 &minus; 5</span><span class="den">6 &minus; 2</span></span> = <span class="frac"><span class="num">8</span><span class="den">4</span></span> = 2</p>
+        <p><strong>Calcul de <em>b</em> :</strong></p>
+        <p>f(2) = 5, donc 2 &times; 2 + b = 5, soit 4 + b = 5, d&rsquo;o&ugrave; <em>b</em> = 1.</p>
+        <p><strong>Conclusion :</strong> f(x) = 2x + 1</p>
+        <p><em>V&eacute;rification :</em> f(6) = 2 &times; 6 + 1 = 13 &#10003;</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 4 &mdash; Probl&egrave;me de tarification</h4>
+    <p>Un cin&eacute;ma propose deux formules :</p>
+    <ul>
+      <li>Formule 1 : 8&nbsp;&euro; par s&eacute;ance</li>
+      <li>Formule 2 : Abonnement de 15&nbsp;&euro; par mois + 5&nbsp;&euro; par s&eacute;ance</li>
+    </ul>
+    <p>a) Exprimer le co&ucirc;t de chaque formule en fonction du nombre <em>x</em> de s&eacute;ances.<br>
+    b) &Agrave; partir de combien de s&eacute;ances la formule 2 devient-elle plus avantageuse&nbsp;?</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>a)</strong> Formule 1 : f(x) = 8x (fonction lin&eacute;aire)<br>
+        Formule 2 : g(x) = 5x + 15 (fonction affine)</p>
+        <p><strong>b)</strong> On cherche quand g(x) &lt; f(x) :</p>
+        <p>5x + 15 &lt; 8x</p>
+        <p>15 &lt; 3x</p>
+        <p>x &gt; 5</p>
+        <p><strong>Conclusion :</strong> &Agrave; partir de 6 s&eacute;ances par mois, la formule 2 est plus avantageuse.</p>
+        <p><em>V&eacute;rification :</em> Pour 5 s&eacute;ances : f(5) = 40&nbsp;&euro; et g(5) = 40&nbsp;&euro; (identique).<br>
+        Pour 6 s&eacute;ances : f(6) = 48&nbsp;&euro; et g(6) = 45&nbsp;&euro; &#10003;</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 5 &mdash; Lecture graphique</h4>
+    <p>Une droite passe par les points de coordonn&eacute;es (0&thinsp;;&thinsp;&minus;2) et (3&thinsp;;&thinsp;4).</p>
+    <p>a) Cette droite repr&eacute;sente-t-elle une fonction lin&eacute;aire ou affine ?<br>
+    b) D&eacute;terminer son expression.<br>
+    c) Quel est l&rsquo;ant&eacute;c&eacute;dent de 0 ?</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>a)</strong> La droite passe par (0&thinsp;;&thinsp;&minus;2), donc l&rsquo;ordonn&eacute;e &agrave; l&rsquo;origine est b = &minus;2 &ne; 0. C&rsquo;est une <strong>fonction affine</strong>.</p>
+        <p><strong>b)</strong> <em>a</em> = <span class="frac"><span class="num">4 &minus; (&minus;2)</span><span class="den">3 &minus; 0</span></span> = <span class="frac"><span class="num">6</span><span class="den">3</span></span> = 2</p>
+        <p>Donc f(x) = 2x &minus; 2</p>
+        <p><strong>c)</strong> Ant&eacute;c&eacute;dent de 0 : 2x &minus; 2 = 0 &rArr; 2x = 2 &rArr; x = 1.</p>
+        <p>L&rsquo;ant&eacute;c&eacute;dent de 0 est <strong>1</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercice 6 &mdash; Probl&egrave;me ouvert (type Brevet)</h4>
+    <p>Un r&eacute;servoir contient 200 litres d&rsquo;eau. On ouvre un robinet qui laisse s&rsquo;&eacute;couler l&rsquo;eau &agrave; raison de 12 litres par minute.</p>
+    <p>a) Exprimer le volume V(t) d&rsquo;eau restant en fonction du temps t (en minutes).<br>
+    b) Quelle est la nature de cette fonction ? Pr&eacute;ciser <em>a</em> et <em>b</em>.<br>
+    c) Au bout de combien de temps le r&eacute;servoir sera-t-il vide ?<br>
+    d) Le volume est-il toujours positif ? Pr&eacute;ciser le domaine de validit&eacute; du mod&egrave;le.</p>
+    <details>
+      <summary>Voir la correction</summary>
+      <div class="correction">
+        <p><strong>a)</strong> V(t) = &minus;12t + 200</p>
+        <p><strong>b)</strong> C&rsquo;est une <strong>fonction affine</strong> avec a = &minus;12 (le volume diminue de 12&nbsp;L chaque minute) et b = 200 (volume initial).</p>
+        <p><strong>c)</strong> Le r&eacute;servoir est vide quand V(t) = 0 :<br>
+        &minus;12t + 200 = 0 &rArr; 12t = 200 &rArr; t = <span class="frac"><span class="num">200</span><span class="den">12</span></span> = <span class="frac"><span class="num">50</span><span class="den">3</span></span> &asymp; 16,7 minutes</p>
+        <p>Le r&eacute;servoir sera vide au bout de <strong>16 minutes et 40 secondes</strong>.</p>
+        <p><strong>d)</strong> Le volume ne peut pas &ecirc;tre n&eacute;gatif (pas de sens physique). Le mod&egrave;le est valide pour <strong>0 &le; t &le; <span class="frac"><span class="num">50</span><span class="den">3</span></span></strong> soit environ 0 &le; t &le; 16,7 minutes.</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div id="tab6" class="tab-content">
+  <h2>7. QCM &mdash; Testez vos connaissances</h2>
+  <p>R&eacute;pondez aux 15 questions puis consultez votre score.</p>
+  <div id="quizContainer"></div>
+  <div style="text-align:center; margin:1.5em 0">
+    <button class="action-btn" onclick="gradeQuiz()" style="font-size:1rem;padding:10px 28px">Valider le QCM</button>
+  </div>
+  <div class="score-bar" id="scoreBar" hidden>
+    <div class="score-label">Votre score</div>
+    <div class="score-num" id="scoreNum"></div>
+  </div>
+</div>
+
+<script>
+/* ===== Tabs ===== */
+const tabNames = [
+  'Fonction linéaire',
+  'Fonction affine',
+  'Déterminer f',
+  'Signe & variations',
+  'Problèmes',
+  'Exercices',
+  'QCM'
+];
+const tabNav = document.getElementById('tabNav');
+tabNames.forEach(function(name, i) {
+  var btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = name;
+  btn.onclick = function() { showTab(i); };
+  tabNav.appendChild(btn);
+});
+
+function showTab(idx) {
+  document.querySelectorAll('.tab-content').forEach(function(el, i) {
+    el.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el, i) {
+    el.classList.toggle('active', i === idx);
+  });
+  initSection(idx);
+  try { localStorage.setItem('fla_tab', idx); } catch(e) {}
+}
+
+var inited = {};
+function initSection(idx) {
+  if (inited[idx]) return;
+  inited[idx] = true;
+  if (idx === 0) initLinear();
+  if (idx === 1) initAffine();
+  if (idx === 2) initFind();
+  if (idx === 3) initSign();
+  if (idx === 4) initOffer();
+  if (idx === 6) initQuiz();
+}
+
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+function fmtNum(n) {
+  return n.toString().replace('.', ',');
+}
+
+/* ===== Graph helpers ===== */
+function drawGrid(ctx, w, h, ox, oy, scale) {
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = getCSS('--canvas-bg');
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = getCSS('--canvas-grid');
+  ctx.lineWidth = 0.7;
+  for (var gx = ox % scale; gx < w; gx += scale) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+  }
+  for (var gy = oy % scale; gy < h; gy += scale) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+  }
+  ctx.strokeStyle = getCSS('--canvas-axis');
+  ctx.lineWidth = 1.8;
+  ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.stroke();
+  // tick labels
+  ctx.fillStyle = getCSS('--text-muted');
+  ctx.font = '11px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (var tx = -Math.floor(ox / scale); tx <= Math.floor((w - ox) / scale); tx++) {
+    if (tx === 0) continue;
+    ctx.fillText(tx, ox + tx * scale, oy + 4);
+  }
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for (var ty = -Math.floor((h - oy) / scale); ty <= Math.floor(oy / scale); ty++) {
+    if (ty === 0) continue;
+    ctx.fillText(ty, ox - 6, oy - ty * scale);
+  }
+  ctx.fillText('0', ox - 6, oy + 4);
+}
+
+function drawLine(ctx, a, b, ox, oy, scale, w, color, lw) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw || 2.5;
+  ctx.beginPath();
+  var x0 = -ox / scale;
+  var x1 = (w - ox) / scale;
+  ctx.moveTo(ox + x0 * scale, oy - (a * x0 + b) * scale);
+  ctx.lineTo(ox + x1 * scale, oy - (a * x1 + b) * scale);
+  ctx.stroke();
+}
+
+/* ===== Tab 0: Linear ===== */
+function initLinear() {
+  var cv = document.getElementById('cvLin');
+  var ctx = cv.getContext('2d');
+  var sl = document.getElementById('sliderA1');
+  var vd = document.getElementById('valA1');
+  var w = cv.width, h = cv.height, ox = w / 2, oy = h / 2, sc = 50;
+
+  function draw() {
+    var a = parseFloat(sl.value);
+    vd.textContent = fmtNum(a);
+    document.getElementById('propCoef').textContent = fmtNum(a);
+    drawGrid(ctx, w, h, ox, oy, sc);
+    drawLine(ctx, a, 0, ox, oy, sc, w, getCSS('--canvas-line1'));
+    // label
+    ctx.fillStyle = getCSS('--canvas-line1');
+    ctx.font = 'bold 14px Nunito Sans, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('f(x) = ' + fmtNum(a) + 'x', ox + sc + 4, oy - (a * 1) * sc - 10);
+    // point at x=1
+    var py = oy - a * sc;
+    ctx.beginPath(); ctx.arc(ox + sc, py, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = getCSS('--text');
+    ctx.font = '12px Nunito Sans, sans-serif';
+    ctx.fillText('(1 ; ' + fmtNum(a) + ')', ox + sc + 10, py - 2);
+  }
+  sl.oninput = draw;
+  draw();
+}
+
+/* Prop table check */
+function checkPropTable() {
+  var a = parseFloat(document.getElementById('sliderA1').value);
+  var inputs = document.querySelectorAll('#propTable input[type="number"]');
+  var allOk = true, anyFilled = false;
+  inputs.forEach(function(inp) {
+    var x = parseFloat(inp.getAttribute('data-x'));
+    var expected = Math.round(a * x * 1000) / 1000;
+    if (inp.value === '') return;
+    anyFilled = true;
+    var val = parseFloat(inp.value.replace(',', '.'));
+    if (Math.abs(val - expected) < 0.01) {
+      inp.style.borderColor = getCSS('--success');
+      inp.style.background = getCSS('--success-bg');
+    } else {
+      inp.style.borderColor = getCSS('--error');
+      inp.style.background = getCSS('--error-bg');
+      allOk = false;
+    }
+  });
+  var res = document.getElementById('propResult');
+  if (!anyFilled) { res.textContent = 'Remplissez au moins une case.'; return; }
+  if (allOk) {
+    res.innerHTML = '<span style="color:' + getCSS('--success') + ';font-weight:600">Correct !</span>';
+  } else {
+    res.innerHTML = '<span style="color:' + getCSS('--error') + ';font-weight:600">Vérifiez les cases en rouge.</span>';
+  }
+}
+
+/* ===== Tab 1: Affine ===== */
+function initAffine() {
+  var cv = document.getElementById('cvAff');
+  var ctx = cv.getContext('2d');
+  var slA = document.getElementById('sliderA2');
+  var slB = document.getElementById('sliderB2');
+  var w = cv.width, h = cv.height, ox = w / 2, oy = h / 2, sc = 50;
+
+  function draw() {
+    var a = parseFloat(slA.value);
+    var b = parseFloat(slB.value);
+    document.getElementById('valA2').textContent = fmtNum(a);
+    document.getElementById('valB2').textContent = fmtNum(b);
+    document.getElementById('affA').textContent = fmtNum(a);
+    document.getElementById('affB').textContent = fmtNum(b);
+    var expr = fmtNum(a) + 'x';
+    if (b > 0) expr += ' + ' + fmtNum(b);
+    else if (b < 0) expr += ' − ' + fmtNum(Math.abs(b));
+    document.getElementById('affExpr').textContent = expr;
+
+    drawGrid(ctx, w, h, ox, oy, sc);
+    drawLine(ctx, a, b, ox, oy, sc, w, getCSS('--canvas-line1'));
+
+    // ordonnee a l'origine point
+    ctx.fillStyle = getCSS('--canvas-line2');
+    ctx.beginPath(); ctx.arc(ox, oy - b * sc, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = '12px Nunito Sans, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('(0 ; ' + fmtNum(b) + ')', ox + 8, oy - b * sc - 8);
+
+    // slope triangle
+    if (Math.abs(a) > 0.01) {
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = getCSS('--accent');
+      ctx.lineWidth = 1.5;
+      var x1p = ox + sc, y1p = oy - b * sc, y2p = oy - (a + b) * sc;
+      ctx.beginPath(); ctx.moveTo(ox, oy - b * sc); ctx.lineTo(x1p, y1p); ctx.lineTo(x1p, y2p); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = getCSS('--accent');
+      ctx.font = 'bold 12px Nunito Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('1', ox + sc / 2, oy - b * sc + 15);
+      ctx.fillText(fmtNum(a), x1p + 16, (y1p + y2p) / 2);
+    }
+  }
+  slA.oninput = draw;
+  slB.oninput = draw;
+  draw();
+}
+
+/* ===== Tab 2: Find function ===== */
+var findPts = [];
+function initFind() {
+  var cv = document.getElementById('cvFind');
+  var ctx = cv.getContext('2d');
+  var w = cv.width, h = cv.height, ox = w / 2, oy = h / 2, sc = 50;
+  findPts = [];
+
+  function draw() {
+    drawGrid(ctx, w, h, ox, oy, sc);
+    ctx.fillStyle = getCSS('--canvas-line1');
+    findPts.forEach(function(pt) {
+      ctx.beginPath(); ctx.arc(ox + pt[0] * sc, oy - pt[1] * sc, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.font = '12px Nunito Sans, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('(' + fmtNum(pt[0]) + ' ; ' + fmtNum(pt[1]) + ')', ox + pt[0] * sc + 10, oy - pt[1] * sc - 8);
+    });
+    if (findPts.length === 2) {
+      var p0 = findPts[0], p1 = findPts[1];
+      if (p0[0] !== p1[0]) {
+        var a = (p1[1] - p0[1]) / (p1[0] - p0[0]);
+        var b = p0[1] - a * p0[0];
+        a = Math.round(a * 100) / 100;
+        b = Math.round(b * 100) / 100;
+        drawLine(ctx, a, b, ox, oy, sc, w, getCSS('--canvas-line2'), 2);
+        var expr = 'f(x) = ' + fmtNum(a) + 'x';
+        if (b > 0) expr += ' + ' + fmtNum(b);
+        else if (b < 0) expr += ' − ' + fmtNum(Math.abs(b));
+        else if (b === 0) expr = 'f(x) = ' + fmtNum(a) + 'x';
+        document.getElementById('findResult').innerHTML = '<strong>' + expr + '</strong> &nbsp;(a = ' + fmtNum(a) + ', b = ' + fmtNum(b) + ')';
+      } else {
+        document.getElementById('findResult').textContent = 'Les deux points ont le même x : pas une fonction affine.';
+      }
+    }
+  }
+
+  cv.onclick = function(e) {
+    var r = cv.getBoundingClientRect();
+    var mx = (e.clientX - r.left) * (w / r.width);
+    var my = (e.clientY - r.top) * (h / r.height);
+    var px = Math.round((mx - ox) / sc * 2) / 2;
+    var py = Math.round((oy - my) / sc * 2) / 2;
+    if (findPts.length >= 2) findPts = [];
+    findPts.push([px, py]);
+    if (findPts.length < 2) document.getElementById('findResult').textContent = 'Cliquez un deuxième point…';
+    draw();
+  };
+  draw();
+}
+function resetFindCanvas() {
+  findPts = [];
+  document.getElementById('findResult').textContent = '';
+  inited[2] = false;
+  initSection(2);
+}
+
+/* ===== Tab 3: Sign ===== */
+function initSign() {
+  var cv = document.getElementById('cvSign');
+  var ctx = cv.getContext('2d');
+  var slA = document.getElementById('sliderA4');
+  var slB = document.getElementById('sliderB4');
+  var w = cv.width, h = cv.height, ox = w / 2, oy = h / 2, sc = 50;
+
+  function draw() {
+    var a = parseFloat(slA.value);
+    var b = parseFloat(slB.value);
+    document.getElementById('valA4').textContent = fmtNum(a);
+    document.getElementById('valB4').textContent = fmtNum(b);
+
+    drawGrid(ctx, w, h, ox, oy, sc);
+
+    // colored zones
+    if (Math.abs(a) > 0.01) {
+      var root = -b / a;
+      var rootPx = ox + root * sc;
+      // positive zone (blue, above x-axis)
+      ctx.save();
+      ctx.globalAlpha = 0.12;
+      // region where f(x) > 0
+      ctx.beginPath();
+      var xl = 0, xr = w;
+      for (var px = xl; px <= xr; px += 2) {
+        var xv = (px - ox) / sc;
+        var yv = a * xv + b;
+        if (yv > 0) {
+          var yPx = Math.max(0, oy - yv * sc);
+          if (px === xl || (a * ((px - 2 - ox) / sc) + b) <= 0) ctx.moveTo(px, oy);
+          ctx.lineTo(px, yPx);
+        }
+      }
+      // close
+      ctx.lineTo(xr, oy);
+      ctx.closePath();
+      ctx.fillStyle = getCSS('--canvas-line2');
+      ctx.fill();
+
+      // negative zone (red, below x-axis)
+      ctx.beginPath();
+      for (var px2 = xl; px2 <= xr; px2 += 2) {
+        var xv2 = (px2 - ox) / sc;
+        var yv2 = a * xv2 + b;
+        if (yv2 < 0) {
+          var yPx2 = Math.min(h, oy - yv2 * sc);
+          if (px2 === xl || (a * ((px2 - 2 - ox) / sc) + b) >= 0) ctx.moveTo(px2, oy);
+          ctx.lineTo(px2, yPx2);
+        }
+      }
+      ctx.lineTo(xr, oy);
+      ctx.closePath();
+      ctx.fillStyle = getCSS('--canvas-line1');
+      ctx.fill();
+      ctx.restore();
+
+      // root point
+      ctx.fillStyle = getCSS('--accent');
+      ctx.beginPath();
+      ctx.arc(rootPx, oy, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = 'bold 12px Nunito Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('x = ' + fmtNum(Math.round(root * 100) / 100), rootPx, oy + 20);
+
+      var rootRnd = Math.round(root * 100) / 100;
+      document.getElementById('signRoot').textContent = fmtNum(rootRnd);
+      if (a > 0) {
+        document.getElementById('signInfo').querySelector('span').innerHTML =
+          'Racine : x = <strong>' + fmtNum(rootRnd) + '</strong> — f(x) < 0 pour x < <strong>' + fmtNum(rootRnd) + '</strong> et f(x) > 0 pour x > <strong>' + fmtNum(rootRnd) + '</strong>';
+      } else {
+        document.getElementById('signInfo').querySelector('span').innerHTML =
+          'Racine : x = <strong>' + fmtNum(rootRnd) + '</strong> — f(x) > 0 pour x < <strong>' + fmtNum(rootRnd) + '</strong> et f(x) < 0 pour x > <strong>' + fmtNum(rootRnd) + '</strong>';
+      }
+    } else {
+      if (b > 0) document.getElementById('signInfo').querySelector('span').innerHTML = 'a = 0 : f(x) = ' + fmtNum(b) + ' est <strong>toujours positive</strong>';
+      else if (b < 0) document.getElementById('signInfo').querySelector('span').innerHTML = 'a = 0 : f(x) = ' + fmtNum(b) + ' est <strong>toujours négative</strong>';
+      else document.getElementById('signInfo').querySelector('span').innerHTML = 'f(x) = 0 : la fonction est <strong>nulle</strong>';
+    }
+
+    drawLine(ctx, a, b, ox, oy, sc, w, getCSS('--canvas-line1'));
+  }
+  slA.oninput = draw;
+  slB.oninput = draw;
+  draw();
+}
+
+/* ===== Tab 4: Offers ===== */
+function initOffer() {
+  var cv = document.getElementById('cvOffer');
+  var ctx = cv.getContext('2d');
+  var sOA_a = document.getElementById('sOA_a'), sOA_b = document.getElementById('sOA_b');
+  var sOB_a = document.getElementById('sOB_a'), sOB_b = document.getElementById('sOB_b');
+  var w = cv.width, h = cv.height;
+
+  function draw() {
+    var aA = parseFloat(sOA_a.value), bA = parseFloat(sOA_b.value);
+    var aB = parseFloat(sOB_a.value), bB = parseFloat(sOB_b.value);
+    document.getElementById('vOA_a').textContent = fmtNum(aA);
+    document.getElementById('vOA_b').textContent = fmtNum(bA);
+    document.getElementById('vOB_a').textContent = fmtNum(aB);
+    document.getElementById('vOB_b').textContent = fmtNum(bB);
+
+    // compute range
+    var maxX = 120, maxY = 0;
+    maxY = Math.max(aA * maxX + bA, aB * maxX + bB, bA, bB, 10);
+    var padL = 50, padR = 20, padT = 20, padB = 40;
+    var gw = w - padL - padR, gh = h - padT - padB;
+    var sX = gw / maxX, sY = gh / (maxY * 1.1);
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = getCSS('--canvas-bg');
+    ctx.fillRect(0, 0, w, h);
+
+    // grid
+    ctx.strokeStyle = getCSS('--canvas-grid');
+    ctx.lineWidth = 0.6;
+    for (var gx = 0; gx <= maxX; gx += 10) {
+      var px = padL + gx * sX;
+      ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+    }
+    for (var gy = 0; gy <= maxY * 1.1; gy += 10) {
+      var py = h - padB - gy * sY;
+      if (py < padT) break;
+      ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = getCSS('--canvas-axis');
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(padL, padT); ctx.stroke();
+
+    // labels
+    ctx.fillStyle = getCSS('--text-muted');
+    ctx.font = '11px Nunito Sans, sans-serif';
+    ctx.textAlign = 'center';
+    for (var lx = 0; lx <= maxX; lx += 20) {
+      ctx.fillText(lx, padL + lx * sX, h - padB + 16);
+    }
+    ctx.textAlign = 'right';
+    for (var ly = 0; ly <= maxY * 1.1; ly += 10) {
+      var lpy = h - padB - ly * sY;
+      if (lpy < padT) break;
+      ctx.fillText(ly, padL - 6, lpy + 4);
+    }
+    ctx.textAlign = 'center';
+    ctx.fillText('Go', w - padR, h - padB + 16);
+    ctx.save();
+    ctx.translate(14, h / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('€', 0, 0);
+    ctx.restore();
+
+    // line A
+    ctx.strokeStyle = getCSS('--canvas-line1');
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(padL, h - padB - bA * sY);
+    ctx.lineTo(padL + maxX * sX, h - padB - (aA * maxX + bA) * sY);
+    ctx.stroke();
+
+    // line B
+    ctx.strokeStyle = getCSS('--canvas-line2');
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(padL, h - padB - bB * sY);
+    ctx.lineTo(padL + maxX * sX, h - padB - (aB * maxX + bB) * sY);
+    ctx.stroke();
+
+    // intersection
+    var txt = document.getElementById('offerText');
+    if (Math.abs(aA - aB) > 0.001) {
+      var xi = (bB - bA) / (aA - aB);
+      var yi = aA * xi + bA;
+      if (xi > 0 && xi <= maxX) {
+        var iPx = padL + xi * sX;
+        var iPy = h - padB - yi * sY;
+        ctx.fillStyle = getCSS('--accent');
+        ctx.beginPath(); ctx.arc(iPx, iPy, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.setLineDash([4, 3]);
+        ctx.strokeStyle = getCSS('--accent');
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(iPx, iPy); ctx.lineTo(iPx, h - padB); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(iPx, iPy); ctx.lineTo(padL, iPy); ctx.stroke();
+        ctx.setLineDash([]);
+        txt.innerHTML = 'Seuil de rentabilité : <strong>' + fmtNum(Math.round(xi * 10) / 10) + ' Go</strong> — Coût : <strong>' + fmtNum(Math.round(yi * 100) / 100) + ' €</strong>';
+        if (aA > aB) {
+          txt.innerHTML += '<br>Avant ' + fmtNum(Math.round(xi * 10) / 10) + ' Go : Offre A moins chère. Après : Offre B moins chère.';
+        } else {
+          txt.innerHTML += '<br>Avant ' + fmtNum(Math.round(xi * 10) / 10) + ' Go : Offre B moins chère. Après : Offre A moins chère.';
+        }
+      } else {
+        txt.textContent = 'Pas d’intersection dans la plage affichée.';
+      }
+    } else {
+      if (Math.abs(bA - bB) < 0.01) txt.textContent = 'Les deux offres sont identiques.';
+      else txt.textContent = 'Les droites sont parallèles (même coefficient variable). Offre ' + (bA < bB ? 'A' : 'B') + ' toujours moins chère.';
+    }
+
+    // legend
+    ctx.font = 'bold 13px Nunito Sans, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = getCSS('--canvas-line1');
+    ctx.fillText('Offre A', padL + 10, padT + 16);
+    ctx.fillStyle = getCSS('--canvas-line2');
+    ctx.fillText('Offre B', padL + 10, padT + 32);
+  }
+  sOA_a.oninput = draw; sOA_b.oninput = draw;
+  sOB_a.oninput = draw; sOB_b.oninput = draw;
+  draw();
+}
+
+/* ===== Tab 6: Quiz ===== */
+var quizData = [
+  {q: 'La fonction f(x) = 3x est :', opts: ['Linéaire', 'Affine non linéaire', 'Constante', 'Ni linéaire ni affine'], ans: 0},
+  {q: 'La représentation graphique d’une fonction linéaire est :', opts: ['Une parabole', 'Une droite passant par l’origine', 'Une droite quelconque', 'Un cercle'], ans: 1},
+  {q: 'Si f(x) = −2x + 5, quelle est l’ordonnée à l’origine ?', opts: ['−2', '5', '2', '−5'], ans: 1},
+  {q: 'Le coefficient directeur de g(x) = 4x − 1 est :', opts: ['−1', '4', '1', '−4'], ans: 1},
+  {q: 'Quelle fonction est constante ?', opts: ['f(x) = 2x', 'f(x) = x + 3', 'f(x) = 7', 'f(x) = −x'], ans: 2},
+  {q: 'Si f(x) = ax et f(3) = −6, alors a vaut :', opts: ['3', '−3', '2', '−2'], ans: 3},
+  {q: 'La droite d’équation y = −0,5x + 2 est :', opts: ['Croissante', 'Décroissante', 'Constante', 'Ni croissante ni décroissante'], ans: 1},
+  {q: 'Deux droites de même coefficient directeur sont :', opts: ['Égales', 'Parallèles', 'Sécantes', 'Perpendiculaires'], ans: 1},
+  {q: 'La fonction f(x) = 3x + 2 : f(−1) vaut :', opts: ['5', '1', '−1', '−5'], ans: 2},
+  {q: 'Si f est linéaire et f(5) = 15, alors f(10) vaut :', opts: ['15', '20', '25', '30'], ans: 3},
+  {q: 'La racine de f(x) = 2x − 6 est :', opts: ['x = 6', 'x = 2', 'x = 3', 'x = −3'], ans: 2},
+  {q: 'f(x) = −3x + 9 est positive pour :', opts: ['x > 3', 'x < 3', 'x = 3', 'Tout x'], ans: 1},
+  {q: 'A(1;4) et B(3;10) : le coefficient directeur vaut :', opts: ['2', '3', '6', '4'], ans: 1},
+  {q: 'Une situation de proportionnalité se modélise par :', opts: ['Une fonction affine', 'Une fonction linéaire', 'Une fonction constante', 'Une fonction carrée'], ans: 1},
+  {q: 'Si f(x) = ax + b avec a < 0 et b > 0, la droite :', opts: ['Monte et coupe l’axe des y au-dessus de O', 'Descend et coupe l’axe des y au-dessus de O', 'Monte et coupe l’axe des y en dessous de O', 'Descend et coupe l’axe des y en dessous de O'], ans: 1}
+];
+
+function initQuiz() {
+  var container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizData.forEach(function(item, i) {
+    var div = document.createElement('div');
+    div.className = 'quiz-q';
+    var html = '<div class="q-label">Question ' + (i + 1) + '</div>';
+    html += '<p>' + item.q + '</p><div class="quiz-opts">';
+    item.opts.forEach(function(opt, j) {
+      html += '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + opt + '</label>';
+    });
+    html += '</div><div class="feedback" id="fb' + i + '" hidden></div>';
+    div.innerHTML = html;
+    container.appendChild(div);
+  });
+}
+
+function gradeQuiz() {
+  var score = 0;
+  quizData.forEach(function(item, i) {
+    var sel = document.querySelector('input[name="q' + i + '"]:checked');
+    var fb = document.getElementById('fb' + i);
+    fb.hidden = false;
+    if (sel && parseInt(sel.value) === item.ans) {
+      fb.className = 'feedback correct';
+      fb.textContent = 'Correct !';
+      score++;
+    } else {
+      fb.className = 'feedback wrong';
+      fb.textContent = 'Incorrect. Réponse : ' + item.opts[item.ans];
+    }
+  });
+  var bar = document.getElementById('scoreBar');
+  bar.hidden = false;
+  document.getElementById('scoreNum').textContent = score + ' / ' + quizData.length;
+  bar.scrollIntoView({behavior: 'smooth'});
+}
+
+/* ===== Init ===== */
+(function() {
+  var savedTab = 0;
+  try { savedTab = parseInt(localStorage.getItem('fla_tab')) || 0; } catch(e) {}
+  if (savedTab < 0 || savedTab >= tabNames.length) savedTab = 0;
+  showTab(savedTab);
+})();
+</script>

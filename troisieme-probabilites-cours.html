@@ -1,0 +1,1254 @@
+<title>Probabilités 3ème</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --text: #2c2418;
+  --muted: #6b5a48;
+  --border: #d4c8b8;
+  --surface2: #ebe6de;
+  --accent-light: #faf5ef;
+  --tip: #b8860b;
+  --tip-bg: #fdf8ef;
+  --success: #2e7d42;
+  --error: #c62828;
+  --shadow: 0 2px 8px rgba(139,69,19,0.07);
+  --radius: 6px;
+  --canvas-grid: #d4c8b8;
+  --canvas-text: #2c2418;
+  --canvas-fill: rgba(160,82,45,0.15);
+  --canvas-stroke: #a0522d;
+  --canvas-fill2: rgba(184,134,11,0.15);
+  --canvas-stroke2: #b8860b;
+  --tab-hover: #ebe6de;
+  --badge-bg: #a0522d;
+  --badge-text: #ffffff;
+  --detail-bg: #faf5ef;
+  --qcm-correct: #e8f5e9;
+  --qcm-wrong: #fce4ec;
+  --qcm-border-correct: #2e7d42;
+  --qcm-border-wrong: #c62828;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg: #1a1410;
+    --surface: #2a2218;
+    --heading: #d4a06a;
+    --accent: #c87a4a;
+    --text: #e0d6ca;
+    --muted: #a09080;
+    --border: #3d3228;
+    --surface2: #332a20;
+    --accent-light: #2a2218;
+    --tip: #d4a020;
+    --tip-bg: #2a2510;
+    --success: #66bb6a;
+    --error: #ef5350;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --canvas-grid: #3d3228;
+    --canvas-text: #e0d6ca;
+    --canvas-fill: rgba(200,122,74,0.2);
+    --canvas-stroke: #c87a4a;
+    --canvas-fill2: rgba(212,160,32,0.2);
+    --canvas-stroke2: #d4a020;
+    --tab-hover: #332a20;
+    --badge-bg: #c87a4a;
+    --badge-text: #1a1410;
+    --detail-bg: #2a2218;
+    --qcm-correct: #1b3a1e;
+    --qcm-wrong: #3a1b1e;
+    --qcm-border-correct: #66bb6a;
+    --qcm-border-wrong: #ef5350;
+  }
+}
+:root[data-theme="dark"]{
+  --bg: #1a1410;
+  --surface: #2a2218;
+  --heading: #d4a06a;
+  --accent: #c87a4a;
+  --text: #e0d6ca;
+  --muted: #a09080;
+  --border: #3d3228;
+  --surface2: #332a20;
+  --accent-light: #2a2218;
+  --tip: #d4a020;
+  --tip-bg: #2a2510;
+  --success: #66bb6a;
+  --error: #ef5350;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --canvas-grid: #3d3228;
+  --canvas-text: #e0d6ca;
+  --canvas-fill: rgba(200,122,74,0.2);
+  --canvas-stroke: #c87a4a;
+  --canvas-fill2: rgba(212,160,32,0.2);
+  --canvas-stroke2: #d4a020;
+  --tab-hover: #332a20;
+  --badge-bg: #c87a4a;
+  --badge-text: #1a1410;
+  --detail-bg: #2a2218;
+  --qcm-correct: #1b3a1e;
+  --qcm-wrong: #3a1b1e;
+  --qcm-border-correct: #66bb6a;
+  --qcm-border-wrong: #ef5350;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  padding-inline: 16px;
+  padding-block: 0;
+  max-width: 860px;
+  margin: 0 auto;
+}
+h1,h2,h3,h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--heading);
+  text-wrap: balance;
+  line-height: 1.25;
+}
+h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.25em; }
+h2 { font-size: 1.5rem; font-weight: 600; margin: 1.5em 0 0.5em; border-bottom: 2px solid var(--border); padding-bottom: 0.25em; }
+h3 { font-size: 1.2rem; font-weight: 600; margin: 1.2em 0 0.4em; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-block: 1.2em 0.6em;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 0;
+}
+.page-header h1 { margin: 0; flex: 1 1 auto; }
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0.4em 0 0;
+  width: 100%;
+}
+
+/* Tabs */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--border);
+  margin-top: 1em;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.tab-nav button {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 10px 14px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.tab-nav button:hover { color: var(--accent); background: var(--tab-hover); }
+.tab-nav button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-section { display: none; padding-block: 1em 2em; }
+.tab-section.active { display: block; }
+
+/* Cards & boxes */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2em;
+  margin: 1em 0;
+  box-shadow: var(--shadow);
+}
+.formula-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1em 1.2em;
+  margin: 1em 0;
+  font-size: 1.05em;
+  text-align: center;
+}
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip);
+  border-radius: var(--radius);
+  padding: 0.9em 1.2em;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+.tip-box::before {
+  content: "Astuce";
+  display: block;
+  font-weight: 700;
+  color: var(--tip);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3em;
+}
+
+/* Fractions */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 3px;
+  font-variant-numeric: tabular-nums;
+}
+.frac .num { border-bottom: 1.5px solid currentColor; padding: 0 4px 2px; line-height: 1.2; }
+.frac .den { padding: 2px 4px 0; line-height: 1.2; }
+
+/* Exercise */
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2em;
+  margin: 1em 0;
+  box-shadow: var(--shadow);
+}
+.exercise h3 { margin-top: 0; }
+.exercise-tag {
+  display: inline-block;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 0.5em;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+details {
+  margin-top: 0.8em;
+}
+summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 0.4em 0;
+}
+details[open] > summary { margin-bottom: 0.4em; }
+details .correction {
+  background: var(--detail-bg);
+  border-radius: var(--radius);
+  padding: 1em;
+  line-height: 1.7;
+}
+
+/* QCM */
+.qcm-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2em;
+  margin: 1em 0;
+  box-shadow: var(--shadow);
+}
+.qcm-block h3 { margin-top: 0; }
+.qcm-options { display: flex; flex-direction: column; gap: 8px; margin: 0.7em 0; }
+.qcm-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 0.95em;
+}
+.qcm-options label:hover { background: var(--surface2); }
+.qcm-options input[type="radio"] { accent-color: var(--accent); flex-shrink: 0; }
+.qcm-feedback {
+  margin-top: 0.5em;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.92em;
+  display: none;
+}
+.qcm-feedback.correct {
+  display: block;
+  background: var(--qcm-correct);
+  border: 1px solid var(--qcm-border-correct);
+  color: var(--success);
+}
+.qcm-feedback.wrong {
+  display: block;
+  background: var(--qcm-wrong);
+  border: 1px solid var(--qcm-border-wrong);
+  color: var(--error);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 9px 18px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+}
+.btn-outline:hover { background: var(--accent-light); opacity: 1; }
+.btn-sm { padding: 6px 12px; font-size: 0.82rem; }
+
+/* Simulation controls */
+.sim-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0.8em 0;
+}
+.sim-result {
+  background: var(--surface2);
+  border-radius: var(--radius);
+  padding: 0.7em 1em;
+  margin: 0.6em 0;
+  font-variant-numeric: tabular-nums;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin: 0.8em 0;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-variant-numeric: tabular-nums;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  text-align: center;
+}
+th {
+  background: var(--surface2);
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--heading);
+}
+
+.score-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  padding: 0.8em 1.2em;
+  margin: 1em 0;
+  font-weight: 600;
+}
+.score-bar .score-fill {
+  flex: 1;
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.score-bar .score-fill-inner {
+  height: 100%;
+  background: var(--success);
+  border-radius: 5px;
+  transition: width 0.4s;
+}
+
+ol.alpha { list-style-type: lower-alpha; }
+
+@media(max-width:600px){
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  .tab-nav button { padding: 8px 10px; font-size: 0.8rem; }
+  .card, .exercise, .qcm-block { padding: 0.9em; }
+}
+</style>
+
+<div class="page-header">
+  <h1>Probabilit&eacute;s</h1>
+  <span class="level-badge">3&egrave;me</span>
+  <p class="subtitle">Cours interactif &mdash; Pr&eacute;paration au Brevet des coll&egrave;ges</p>
+</div>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="active" onclick="showTab(0)">Vocabulaire</button>
+  <button onclick="showTab(1)">Probabilit&eacute;</button>
+  <button onclick="showTab(2)">Fr&eacute;quence</button>
+  <button onclick="showTab(3)">&Eacute;v&eacute;nements</button>
+  <button onclick="showTab(4)">Arbres</button>
+  <button onclick="showTab(5)">Exercices</button>
+  <button onclick="showTab(6)">QCM</button>
+</nav>
+
+<!-- ==================== TAB 0: VOCABULAIRE ==================== -->
+<section class="tab-section active" id="sec0">
+<h2>Vocabulaire des probabilit&eacute;s</h2>
+
+<div class="card">
+<h3>Exp&eacute;rience al&eacute;atoire</h3>
+<p>Une <strong>exp&eacute;rience al&eacute;atoire</strong> est une exp&eacute;rience dont on ne peut pas pr&eacute;voir le r&eacute;sultat avec certitude, m&ecirc;me si on conna&icirc;t toutes les issues possibles.</p>
+<p><em>Exemples :</em> lancer un d&eacute;, tirer une carte dans un jeu, lancer une pi&egrave;ce de monnaie.</p>
+</div>
+
+<div class="card">
+<h3>Issue (ou &eacute;ventualit&eacute;)</h3>
+<p>Une <strong>issue</strong> est chacun des r&eacute;sultats possibles d&rsquo;une exp&eacute;rience al&eacute;atoire.</p>
+<p><em>Exemple :</em> pour un d&eacute; &agrave; 6 faces, les issues sont : 1, 2, 3, 4, 5, 6.</p>
+</div>
+
+<div class="card">
+<h3>Univers (&Omega;)</h3>
+<p>L&rsquo;<strong>univers</strong> est l&rsquo;ensemble de toutes les issues possibles. On le note &Omega;.</p>
+<div class="formula-box">
+  &Omega; = {1 ; 2 ; 3 ; 4 ; 5 ; 6} pour un d&eacute; &agrave; 6 faces
+</div>
+<p><em>Pour une pi&egrave;ce :</em> &Omega; = {Pile ; Face}</p>
+</div>
+
+<div class="card">
+<h3>&Eacute;v&eacute;nement</h3>
+<p>Un <strong>&eacute;v&eacute;nement</strong> est un ensemble d&rsquo;issues. C&rsquo;est une partie de l&rsquo;univers.</p>
+<ul>
+  <li><strong>&Eacute;v&eacute;nement &eacute;l&eacute;mentaire :</strong> contient une seule issue. <em>Ex : &laquo;&nbsp;obtenir 3&nbsp;&raquo;</em></li>
+  <li><strong>&Eacute;v&eacute;nement certain :</strong> se r&eacute;alise toujours. <em>Ex : &laquo;&nbsp;obtenir un nombre entre 1 et 6&nbsp;&raquo;</em></li>
+  <li><strong>&Eacute;v&eacute;nement impossible :</strong> ne se r&eacute;alise jamais. <em>Ex : &laquo;&nbsp;obtenir 7 avec un d&eacute;&nbsp;&raquo;</em></li>
+</ul>
+</div>
+
+<div class="card">
+<h3>&Eacute;v&eacute;nement contraire</h3>
+<p>L&rsquo;<strong>&eacute;v&eacute;nement contraire</strong> de A, not&eacute; <strong>A&#772;</strong>, contient toutes les issues de &Omega; qui ne sont <em>pas</em> dans A.</p>
+<div class="formula-box">
+  Si A = &laquo;&nbsp;obtenir un nombre pair&nbsp;&raquo; = {2 ; 4 ; 6}<br>
+  alors A&#772; = &laquo;&nbsp;obtenir un nombre impair&nbsp;&raquo; = {1 ; 3 ; 5}
+</div>
+</div>
+
+<h3>Exemples avec un jeu de 32 cartes</h3>
+<div class="card">
+<p>Un jeu de 32 cartes comporte 4 couleurs (pique &spades;, c&oelig;ur &hearts;, carreau &diams;, tr&egrave;fle &clubs;) et 8 valeurs par couleur (7, 8, 9, 10, Valet, Dame, Roi, As).</p>
+<table>
+<tr><th></th><th>&spades;</th><th>&hearts;</th><th>&diams;</th><th>&clubs;</th></tr>
+<tr><td><strong>Figures</strong></td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td><strong>Non-figures</strong></td><td>5</td><td>5</td><td>5</td><td>5</td></tr>
+</table>
+<ul>
+  <li>Univers : 32 cartes</li>
+  <li>A = &laquo;&nbsp;tirer un c&oelig;ur&nbsp;&raquo; &rarr; 8 issues</li>
+  <li>B = &laquo;&nbsp;tirer une figure&nbsp;&raquo; &rarr; 12 issues (Valet, Dame, Roi &times; 4 couleurs)</li>
+  <li>A&#772; = &laquo;&nbsp;ne pas tirer un c&oelig;ur&nbsp;&raquo; &rarr; 24 issues</li>
+</ul>
+</div>
+
+<div class="tip-box">
+  Pour bien d&eacute;finir un &eacute;v&eacute;nement, il faut toujours pr&eacute;ciser l&rsquo;exp&eacute;rience al&eacute;atoire et lister les issues concern&eacute;es.
+</div>
+</section>
+
+<!-- ==================== TAB 1: PROBABILITÉ ==================== -->
+<section class="tab-section" id="sec1">
+<h2>Probabilit&eacute; d&rsquo;un &eacute;v&eacute;nement</h2>
+
+<div class="card">
+<h3>D&eacute;finition</h3>
+<p>La <strong>probabilit&eacute;</strong> d&rsquo;un &eacute;v&eacute;nement A, not&eacute;e <strong>p(A)</strong>, est un nombre compris entre 0 et 1 qui mesure la chance que cet &eacute;v&eacute;nement se r&eacute;alise.</p>
+<div class="formula-box">
+  0 &le; p(A) &le; 1
+</div>
+</div>
+
+<div class="card">
+<h3>Propri&eacute;t&eacute;s fondamentales</h3>
+<ul>
+  <li>La probabilit&eacute; de l&rsquo;&eacute;v&eacute;nement certain vaut <strong>1</strong></li>
+  <li>La probabilit&eacute; de l&rsquo;&eacute;v&eacute;nement impossible vaut <strong>0</strong></li>
+  <li>La <strong>somme des probabilit&eacute;s</strong> de toutes les issues vaut <strong>1</strong></li>
+</ul>
+<div class="formula-box">
+  p(e<sub>1</sub>) + p(e<sub>2</sub>) + &hellip; + p(e<sub>n</sub>) = 1
+</div>
+</div>
+
+<div class="card">
+<h3>Situation d&rsquo;&eacute;quiprobabilit&eacute;</h3>
+<p>Quand toutes les issues ont la <strong>m&ecirc;me probabilit&eacute;</strong>, on dit qu&rsquo;il y a <strong>&eacute;quiprobabilit&eacute;</strong>.</p>
+<div class="formula-box">
+  p(A) = <span class="frac"><span class="num">nombre d&rsquo;issues favorables &agrave; A</span><span class="den">nombre total d&rsquo;issues</span></span>
+</div>
+<p><em>Exemple :</em> probabilit&eacute; d&rsquo;obtenir un nombre pair avec un d&eacute; &eacute;quilibr&eacute; :</p>
+<div class="formula-box">
+  p(&laquo;&nbsp;pair&nbsp;&raquo;) = <span class="frac"><span class="num">3</span><span class="den">6</span></span> = <span class="frac"><span class="num">1</span><span class="den">2</span></span> = 0,5
+</div>
+</div>
+
+<div class="tip-box">
+  On ne peut utiliser la formule de l&rsquo;&eacute;quiprobabilit&eacute; que si toutes les issues sont &eacute;quiprobables. V&eacute;rifiez toujours cette condition&nbsp;!
+</div>
+
+<h3>Simulation interactive : d&eacute; et pi&egrave;ce</h3>
+<div class="card">
+  <p>Simulez des lancers et observez les fr&eacute;quences d&rsquo;apparition.</p>
+  <div class="sim-controls">
+    <button class="btn btn-sm" onclick="simDice(1)">Lancer 1 d&eacute;</button>
+    <button class="btn btn-sm" onclick="simDice(10)">Lancer 10</button>
+    <button class="btn btn-sm" onclick="simDice(100)">Lancer 100</button>
+    <button class="btn btn-sm btn-outline" onclick="resetDice()">R&eacute;initialiser</button>
+  </div>
+  <div class="sim-result" id="diceResult">Lancez le d&eacute; pour commencer.</div>
+  <canvas id="canvasDice" width="600" height="280"></canvas>
+  <p style="font-size:0.88em;color:var(--muted)">Nombre total de lancers : <strong id="diceTotalLabel">0</strong></p>
+</div>
+
+<div class="card">
+  <h3>Simulation pi&egrave;ce de monnaie</h3>
+  <div class="sim-controls">
+    <button class="btn btn-sm" onclick="simCoin(1)">Lancer 1</button>
+    <button class="btn btn-sm" onclick="simCoin(50)">Lancer 50</button>
+    <button class="btn btn-sm" onclick="simCoin(500)">Lancer 500</button>
+    <button class="btn btn-sm btn-outline" onclick="resetCoin()">R&eacute;initialiser</button>
+  </div>
+  <div class="sim-result" id="coinResult">Lancez la pi&egrave;ce pour commencer.</div>
+</div>
+</section>
+
+<!-- ==================== TAB 2: FRÉQUENCE ==================== -->
+<section class="tab-section" id="sec2">
+<h2>Fr&eacute;quence et probabilit&eacute;</h2>
+
+<div class="card">
+<h3>Fr&eacute;quence d&rsquo;un &eacute;v&eacute;nement</h3>
+<p>Apr&egrave;s avoir r&eacute;p&eacute;t&eacute; une exp&eacute;rience n fois, la <strong>fr&eacute;quence</strong> d&rsquo;un &eacute;v&eacute;nement A est :</p>
+<div class="formula-box">
+  f(A) = <span class="frac"><span class="num">nombre de fois o&ugrave; A s&rsquo;est r&eacute;alis&eacute;</span><span class="den">nombre total de r&eacute;p&eacute;titions (n)</span></span>
+</div>
+</div>
+
+<div class="card">
+<h3>Loi des grands nombres</h3>
+<p>Lorsque le nombre de r&eacute;p&eacute;titions d&rsquo;une exp&eacute;rience augmente, la fr&eacute;quence d&rsquo;un &eacute;v&eacute;nement se <strong>stabilise</strong> autour de sa probabilit&eacute; th&eacute;orique.</p>
+<div class="formula-box">
+  Quand n &rarr; +&infin;, &ensp; f(A) &rarr; p(A)
+</div>
+<p>C&rsquo;est la <strong>loi des grands nombres</strong>. Plus on r&eacute;p&egrave;te l&rsquo;exp&eacute;rience, plus la fr&eacute;quence observ&eacute;e se rapproche de la probabilit&eacute; th&eacute;orique.</p>
+</div>
+
+<div class="tip-box">
+  La loi des grands nombres ne dit <em>pas</em> que les r&eacute;sultats se &laquo;&nbsp;compensent&nbsp;&raquo;. Chaque lancer reste ind&eacute;pendant des pr&eacute;c&eacute;dents.
+</div>
+
+<h3>Simulation : convergence vers la probabilit&eacute; th&eacute;orique</h3>
+<div class="card">
+  <p>&Eacute;v&eacute;nement simul&eacute; : &laquo;&nbsp;obtenir 6 avec un d&eacute;&nbsp;&raquo; (probabilit&eacute; th&eacute;orique = <span class="frac"><span class="num">1</span><span class="den">6</span></span> &asymp; 0,167)</p>
+  <div class="sim-controls">
+    <button class="btn btn-sm" onclick="simConverge(50)">+50 lancers</button>
+    <button class="btn btn-sm" onclick="simConverge(200)">+200 lancers</button>
+    <button class="btn btn-sm" onclick="simConverge(1000)">+1000 lancers</button>
+    <button class="btn btn-sm btn-outline" onclick="resetConverge()">R&eacute;initialiser</button>
+  </div>
+  <canvas id="canvasConverge" width="700" height="320"></canvas>
+  <div class="sim-result" id="convergeResult">Cliquez pour lancer la simulation.</div>
+</div>
+</section>
+
+<!-- ==================== TAB 3: ÉVÉNEMENTS ==================== -->
+<section class="tab-section" id="sec3">
+<h2>&Eacute;v&eacute;nements : union, intersection, contraire</h2>
+
+<div class="card">
+<h3>Union de deux &eacute;v&eacute;nements (A &cup; B)</h3>
+<p>L&rsquo;&eacute;v&eacute;nement <strong>A &cup; B</strong> (&laquo;&nbsp;A ou B&nbsp;&raquo;) se r&eacute;alise quand <em>au moins un</em> des deux se r&eacute;alise.</p>
+<div class="formula-box">
+  p(A &cup; B) = p(A) + p(B) &minus; p(A &cap; B)
+</div>
+</div>
+
+<div class="card">
+<h3>Intersection de deux &eacute;v&eacute;nements (A &cap; B)</h3>
+<p>L&rsquo;&eacute;v&eacute;nement <strong>A &cap; B</strong> (&laquo;&nbsp;A et B&nbsp;&raquo;) se r&eacute;alise quand les <em>deux</em> se r&eacute;alisent en m&ecirc;me temps.</p>
+</div>
+
+<div class="card">
+<h3>&Eacute;v&eacute;nements incompatibles</h3>
+<p>Deux &eacute;v&eacute;nements sont <strong>incompatibles</strong> (ou disjoints) si A &cap; B = &empty;.</p>
+<div class="formula-box">
+  Si A et B incompatibles : p(A &cup; B) = p(A) + p(B)
+</div>
+</div>
+
+<div class="card">
+<h3>&Eacute;v&eacute;nement contraire</h3>
+<div class="formula-box">
+  p(A&#772;) = 1 &minus; p(A)
+</div>
+<p><em>Exemple :</em> si p(&laquo;&nbsp;obtenir un 6&nbsp;&raquo;) = <span class="frac"><span class="num">1</span><span class="den">6</span></span>, alors p(&laquo;&nbsp;ne pas obtenir de 6&nbsp;&raquo;) = 1 &minus; <span class="frac"><span class="num">1</span><span class="den">6</span></span> = <span class="frac"><span class="num">5</span><span class="den">6</span></span></p>
+</div>
+
+<div class="tip-box">
+  La formule de l&rsquo;&eacute;v&eacute;nement contraire est tr&egrave;s utile quand il est plus facile de calculer p(A&#772;) que p(A).
+</div>
+
+<h3>Diagramme de Venn interactif</h3>
+<div class="card">
+  <p>Cliquez sur les zones du diagramme pour voir les propri&eacute;t&eacute;s correspondantes.</p>
+  <canvas id="canvasVenn" width="600" height="360"></canvas>
+  <div class="sim-result" id="vennResult">Cliquez sur une zone du diagramme.</div>
+</div>
+</section>
+
+<!-- ==================== TAB 4: ARBRES ==================== -->
+<section class="tab-section" id="sec4">
+<h2>Arbres de probabilit&eacute;s</h2>
+
+<div class="card">
+<h3>Principe</h3>
+<p>Un <strong>arbre de probabilit&eacute;s</strong> permet de repr&eacute;senter et de calculer les probabilit&eacute;s lors d&rsquo;<strong>&eacute;preuves successives</strong>.</p>
+<ul>
+  <li>Chaque branche porte la probabilit&eacute; de passer d&rsquo;un n&oelig;ud au suivant.</li>
+  <li>La somme des probabilit&eacute;s des branches issues d&rsquo;un m&ecirc;me n&oelig;ud vaut <strong>1</strong>.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>R&egrave;gles de calcul</h3>
+<div class="formula-box">
+  <strong>R&egrave;gle du produit :</strong> la probabilit&eacute; d&rsquo;un chemin = produit des probabilit&eacute;s le long des branches
+</div>
+<div class="formula-box" style="margin-top:0.6em">
+  <strong>R&egrave;gle de la somme :</strong> la probabilit&eacute; d&rsquo;un &eacute;v&eacute;nement = somme des probabilit&eacute;s des chemins qui le r&eacute;alisent
+</div>
+</div>
+
+<div class="tip-box">
+  V&eacute;rification : la somme de toutes les probabilit&eacute;s en bout de branches doit &ecirc;tre &eacute;gale &agrave; 1.
+</div>
+
+<h3>Arbre interactif : deux &eacute;preuves successives</h3>
+<div class="card">
+  <p><strong>Situation :</strong> une urne contient 3 boules rouges et 2 boules vertes. On tire une boule, on note sa couleur, puis on la remet et on tire &agrave; nouveau.</p>
+  <div class="sim-controls">
+    <label style="font-size:0.9em;color:var(--muted)">Boules rouges :
+      <input type="number" id="treeRed" value="3" min="1" max="8" style="width:50px;padding:4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text)">
+    </label>
+    <label style="font-size:0.9em;color:var(--muted)">Boules vertes :
+      <input type="number" id="treeGreen" value="2" min="1" max="8" style="width:50px;padding:4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text)">
+    </label>
+    <button class="btn btn-sm" onclick="drawTree()">Mettre &agrave; jour</button>
+  </div>
+  <canvas id="canvasTree" width="700" height="400"></canvas>
+  <div class="sim-result" id="treeResult">Modifiez les param&egrave;tres et cliquez sur &laquo;&nbsp;Mettre &agrave; jour&nbsp;&raquo;.</div>
+</div>
+</section>
+
+<!-- ==================== TAB 5: EXERCICES ==================== -->
+<section class="tab-section" id="sec5">
+<h2>Exercices &mdash; Entra&icirc;nement Brevet</h2>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 1</span>
+  <h3>Exercice 1 &mdash; Lancer de d&eacute;</h3>
+  <p>On lance un d&eacute; &eacute;quilibr&eacute; &agrave; 6 faces.</p>
+  <ol class="alpha">
+    <li>Quelle est la probabilit&eacute; d&rsquo;obtenir le chiffre 4&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; d&rsquo;obtenir un nombre sup&eacute;rieur ou &eacute;gal &agrave; 5&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; d&rsquo;obtenir un nombre pair&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p><strong>a)</strong> Il y a 6 issues &eacute;quiprobables et 1 issue favorable (le 4).</p>
+      <p>p(4) = <span class="frac"><span class="num">1</span><span class="den">6</span></span></p>
+      <p><strong>b)</strong> Issues favorables : {5 ; 6}, soit 2 issues.</p>
+      <p>p(&ge; 5) = <span class="frac"><span class="num">2</span><span class="den">6</span></span> = <span class="frac"><span class="num">1</span><span class="den">3</span></span></p>
+      <p><strong>c)</strong> Issues favorables : {2 ; 4 ; 6}, soit 3 issues.</p>
+      <p>p(pair) = <span class="frac"><span class="num">3</span><span class="den">6</span></span> = <span class="frac"><span class="num">1</span><span class="den">2</span></span></p>
+    </div>
+  </details>
+</div>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 1</span>
+  <h3>Exercice 2 &mdash; Urne</h3>
+  <p>Une urne contient 5 boules rouges, 3 boules bleues et 2 boules vertes. On tire une boule au hasard.</p>
+  <ol class="alpha">
+    <li>Quelle est la probabilit&eacute; de tirer une boule rouge&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; de tirer une boule qui n&rsquo;est pas verte&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; de tirer une boule bleue ou verte&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p>Total : 5 + 3 + 2 = 10 boules, toutes &eacute;quiprobables.</p>
+      <p><strong>a)</strong> p(rouge) = <span class="frac"><span class="num">5</span><span class="den">10</span></span> = <span class="frac"><span class="num">1</span><span class="den">2</span></span></p>
+      <p><strong>b)</strong> &laquo;&nbsp;pas verte&nbsp;&raquo; = contraire de &laquo;&nbsp;verte&nbsp;&raquo;.<br>
+      p(verte) = <span class="frac"><span class="num">2</span><span class="den">10</span></span> = <span class="frac"><span class="num">1</span><span class="den">5</span></span><br>
+      p(pas verte) = 1 &minus; <span class="frac"><span class="num">1</span><span class="den">5</span></span> = <span class="frac"><span class="num">4</span><span class="den">5</span></span></p>
+      <p><strong>c)</strong> &laquo;&nbsp;bleue ou verte&nbsp;&raquo; sont incompatibles, donc :<br>
+      p(bleue ou verte) = <span class="frac"><span class="num">3</span><span class="den">10</span></span> + <span class="frac"><span class="num">2</span><span class="den">10</span></span> = <span class="frac"><span class="num">5</span><span class="den">10</span></span> = <span class="frac"><span class="num">1</span><span class="den">2</span></span></p>
+    </div>
+  </details>
+</div>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 2</span>
+  <h3>Exercice 3 &mdash; Jeu de cartes (type Brevet)</h3>
+  <p>On tire au hasard une carte dans un jeu de 32 cartes.</p>
+  <ol class="alpha">
+    <li>Quelle est la probabilit&eacute; de tirer un roi&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; de tirer une carte de c&oelig;ur&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; de tirer le roi de c&oelig;ur&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; de tirer un roi ou une carte de c&oelig;ur&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p>32 cartes au total, &eacute;quiprobabilit&eacute;.</p>
+      <p><strong>a)</strong> 4 rois dans le jeu. p(roi) = <span class="frac"><span class="num">4</span><span class="den">32</span></span> = <span class="frac"><span class="num">1</span><span class="den">8</span></span></p>
+      <p><strong>b)</strong> 8 cartes de c&oelig;ur. p(c&oelig;ur) = <span class="frac"><span class="num">8</span><span class="den">32</span></span> = <span class="frac"><span class="num">1</span><span class="den">4</span></span></p>
+      <p><strong>c)</strong> 1 seul roi de c&oelig;ur. p(roi de c&oelig;ur) = <span class="frac"><span class="num">1</span><span class="den">32</span></span></p>
+      <p><strong>d)</strong> A = &laquo;&nbsp;roi&nbsp;&raquo; et B = &laquo;&nbsp;c&oelig;ur&nbsp;&raquo;. A &cap; B = &laquo;&nbsp;roi de c&oelig;ur&nbsp;&raquo;.<br>
+      p(A &cup; B) = p(A) + p(B) &minus; p(A &cap; B) = <span class="frac"><span class="num">4</span><span class="den">32</span></span> + <span class="frac"><span class="num">8</span><span class="den">32</span></span> &minus; <span class="frac"><span class="num">1</span><span class="den">32</span></span> = <span class="frac"><span class="num">11</span><span class="den">32</span></span></p>
+    </div>
+  </details>
+</div>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 2</span>
+  <h3>Exercice 4 &mdash; QCM de Brevet</h3>
+  <p>Un QCM comporte 4 questions. Pour chaque question, 3 r&eacute;ponses sont propos&eacute;es dont une seule est correcte. Un &eacute;l&egrave;ve r&eacute;pond au hasard &agrave; toutes les questions.</p>
+  <ol class="alpha">
+    <li>Quelle est la probabilit&eacute; qu&rsquo;il r&eacute;ponde correctement &agrave; la premi&egrave;re question&nbsp;?</li>
+    <li>En utilisant un arbre, quelle est la probabilit&eacute; qu&rsquo;il r&eacute;ponde correctement aux deux premi&egrave;res questions&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; qu&rsquo;il obtienne au moins une bonne r&eacute;ponse sur les deux premi&egrave;res questions&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p><strong>a)</strong> 1 bonne r&eacute;ponse sur 3 : p(bonne) = <span class="frac"><span class="num">1</span><span class="den">3</span></span></p>
+      <p><strong>b)</strong> Les deux questions sont ind&eacute;pendantes. Par la r&egrave;gle du produit :<br>
+      p(2 bonnes) = <span class="frac"><span class="num">1</span><span class="den">3</span></span> &times; <span class="frac"><span class="num">1</span><span class="den">3</span></span> = <span class="frac"><span class="num">1</span><span class="den">9</span></span></p>
+      <p><strong>c)</strong> On utilise l&rsquo;&eacute;v&eacute;nement contraire : &laquo;&nbsp;au moins une bonne&nbsp;&raquo; = contraire de &laquo;&nbsp;aucune bonne&nbsp;&raquo;.<br>
+      p(aucune bonne) = <span class="frac"><span class="num">2</span><span class="den">3</span></span> &times; <span class="frac"><span class="num">2</span><span class="den">3</span></span> = <span class="frac"><span class="num">4</span><span class="den">9</span></span><br>
+      p(au moins une bonne) = 1 &minus; <span class="frac"><span class="num">4</span><span class="den">9</span></span> = <span class="frac"><span class="num">5</span><span class="den">9</span></span></p>
+    </div>
+  </details>
+</div>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 3 &mdash; Brevet</span>
+  <h3>Exercice 5 &mdash; Double lancer de d&eacute;</h3>
+  <p>On lance deux d&eacute;s &eacute;quilibr&eacute;s et on fait la somme des r&eacute;sultats.</p>
+  <ol class="alpha">
+    <li>Combien y a-t-il d&rsquo;issues possibles&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; d&rsquo;obtenir une somme &eacute;gale &agrave; 7&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; d&rsquo;obtenir une somme sup&eacute;rieure ou &eacute;gale &agrave; 10&nbsp;?</li>
+    <li>Est-il plus probable d&rsquo;obtenir 6 ou 7 comme somme&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p><strong>a)</strong> Chaque d&eacute; a 6 faces : 6 &times; 6 = <strong>36 issues</strong> &eacute;quiprobables.</p>
+      <p><strong>b)</strong> Somme = 7 : (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) &rarr; 6 issues.<br>
+      p(somme = 7) = <span class="frac"><span class="num">6</span><span class="den">36</span></span> = <span class="frac"><span class="num">1</span><span class="den">6</span></span></p>
+      <p><strong>c)</strong> Somme &ge; 10 :<br>
+      Somme 10 : (4,6),(5,5),(6,4) &rarr; 3<br>
+      Somme 11 : (5,6),(6,5) &rarr; 2<br>
+      Somme 12 : (6,6) &rarr; 1<br>
+      Total : 6 issues.<br>
+      p(somme &ge; 10) = <span class="frac"><span class="num">6</span><span class="den">36</span></span> = <span class="frac"><span class="num">1</span><span class="den">6</span></span></p>
+      <p><strong>d)</strong> Somme = 6 : (1,5),(2,4),(3,3),(4,2),(5,1) &rarr; 5 issues.<br>
+      p(somme = 6) = <span class="frac"><span class="num">5</span><span class="den">36</span></span><br>
+      p(somme = 7) = <span class="frac"><span class="num">6</span><span class="den">36</span></span><br>
+      Il est <strong>plus probable</strong> d&rsquo;obtenir 7 que 6.</p>
+    </div>
+  </details>
+</div>
+
+<div class="exercise">
+  <span class="exercise-tag">Niveau 3 &mdash; Brevet</span>
+  <h3>Exercice 6 &mdash; Tirage sans remise</h3>
+  <p>Un sac contient 4 jetons num&eacute;rot&eacute;s 1, 2, 3, 4. On tire deux jetons successivement <strong>sans remise</strong>. On note le couple (1<sup>er</sup> tirage, 2<sup>e</sup> tirage).</p>
+  <ol class="alpha">
+    <li>Construire l&rsquo;arbre des possibles.</li>
+    <li>Combien y a-t-il d&rsquo;issues&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; que la somme des deux jetons soit &eacute;gale &agrave; 5&nbsp;?</li>
+    <li>Quelle est la probabilit&eacute; que le premier jeton tir&eacute; soit plus grand que le second&nbsp;?</li>
+  </ol>
+  <details>
+    <summary>Voir la correction</summary>
+    <div class="correction">
+      <p><strong>a)</strong> Au 1<sup>er</sup> tirage : 4 choix. Au 2<sup>e</sup> tirage : 3 choix (sans remise).</p>
+      <p><strong>b)</strong> 4 &times; 3 = <strong>12 issues</strong> &eacute;quiprobables.</p>
+      <p><strong>c)</strong> Somme = 5 : (1,4), (2,3), (3,2), (4,1) &rarr; 4 issues.<br>
+      p(somme = 5) = <span class="frac"><span class="num">4</span><span class="den">12</span></span> = <span class="frac"><span class="num">1</span><span class="den">3</span></span></p>
+      <p><strong>d)</strong> 1<sup>er</sup> > 2<sup>e</sup> : (2,1), (3,1), (3,2), (4,1), (4,2), (4,3) &rarr; 6 issues.<br>
+      p(1<sup>er</sup> > 2<sup>e</sup>) = <span class="frac"><span class="num">6</span><span class="den">12</span></span> = <span class="frac"><span class="num">1</span><span class="den">2</span></span></p>
+    </div>
+  </details>
+</div>
+</section>
+
+<!-- ==================== TAB 6: QCM ==================== -->
+<section class="tab-section" id="sec6">
+<h2>QCM &mdash; Teste tes connaissances</h2>
+<div class="score-bar" id="scoreBar" hidden>
+  <span id="scoreText">0 / 0</span>
+  <div class="score-fill"><div class="score-fill-inner" id="scoreFill" style="width:0%"></div></div>
+</div>
+<div id="qcmContainer"></div>
+<div style="margin-top:1.2em;display:flex;gap:10px;flex-wrap:wrap">
+  <button class="btn" onclick="checkAllQCM()">V&eacute;rifier tout</button>
+  <button class="btn btn-outline" onclick="resetQCM()">Recommencer</button>
+</div>
+</section>
+
+<script>
+// ========== TAB SYSTEM ==========
+var sections=[], buttons=[];
+function showTab(i){
+  sections.forEach(function(s,j){
+    s.classList.toggle('active',j===i);
+    buttons[j].classList.toggle('active',j===i);
+  });
+  initSection(i);
+  try{localStorage.setItem('prob3-tab',i)}catch(e){}
+}
+function initSection(i){
+  if(i===1&&!window._diceInit){window._diceInit=true;drawDiceChart();}
+  if(i===2&&!window._convInit){window._convInit=true;drawConverge();}
+  if(i===3&&!window._vennInit){window._vennInit=true;drawVenn();}
+  if(i===4&&!window._treeInit){window._treeInit=true;drawTree();}
+  if(i===6&&!window._qcmInit){window._qcmInit=true;buildQCM();}
+}
+
+// ========== CSS HELPER ==========
+function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+// ========== DPI-AWARE CANVAS ==========
+function setupCanvas(canvas,w,h){
+  var dpr=window.devicePixelRatio||1;
+  canvas.width=w*dpr;
+  canvas.height=h*dpr;
+  canvas.style.width=w+'px';
+  canvas.style.height=h+'px';
+  var ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return ctx;
+}
+
+// ========== DICE SIMULATION ==========
+var diceCounts=[0,0,0,0,0,0], diceTotal=0;
+function simDice(n){
+  for(var i=0;i<n;i++){
+    var r=Math.floor(Math.random()*6);
+    diceCounts[r]++;
+    diceTotal++;
+  }
+  var last=diceCounts.reduce(function(a,b,j){return b>=diceCounts[a]?j:a;},0);
+  document.getElementById('diceResult').innerHTML='Dernier r&eacute;sultat : <strong>'+(Math.floor(Math.random()*6)+1)+'</strong> &mdash; Face la plus fr&eacute;quente : <strong>'+(last+1)+'</strong> ('+diceCounts[last]+' fois)';
+  document.getElementById('diceTotalLabel').textContent=diceTotal;
+  drawDiceChart();
+}
+function resetDice(){diceCounts=[0,0,0,0,0,0];diceTotal=0;document.getElementById('diceResult').innerHTML='Lancez le d&eacute; pour commencer.';document.getElementById('diceTotalLabel').textContent='0';drawDiceChart();}
+function drawDiceChart(){
+  var c=document.getElementById('canvasDice');if(!c)return;
+  var W=600,H=280;
+  var ctx=setupCanvas(c,W,H);
+  var bg=getCSS('--surface');
+  var grid=getCSS('--canvas-grid');
+  var txt=getCSS('--canvas-text');
+  var fill=getCSS('--canvas-stroke');
+  var muted=getCSS('--muted');
+  ctx.clearRect(0,0,W,H);
+  var mx=60,my=30,mxr=20,mb=40;
+  var cw=W-mx-mxr,ch=H-my-mb;
+  var maxV=Math.max.apply(null,diceCounts)||1;
+  maxV=Math.ceil(maxV/5)*5||5;
+  ctx.strokeStyle=grid;ctx.lineWidth=1;
+  for(var i=0;i<=5;i++){
+    var y=my+ch-ch*(i/5);
+    ctx.beginPath();ctx.moveTo(mx,y);ctx.lineTo(mx+cw,y);ctx.stroke();
+    ctx.fillStyle=muted;ctx.font='12px Nunito Sans,sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(maxV*i/5),mx-8,y+4);
+  }
+  var bw=cw/6*0.6;
+  for(var i=0;i<6;i++){
+    var x=mx+(i+0.5)*(cw/6)-bw/2;
+    var bh=diceCounts[i]/maxV*ch;
+    ctx.fillStyle=fill;
+    ctx.beginPath();
+    ctx.roundRect(x,my+ch-bh,bw,bh,4);
+    ctx.fill();
+    ctx.fillStyle=txt;ctx.font='bold 13px Nunito Sans,sans-serif';ctx.textAlign='center';
+    ctx.fillText(''+(i+1),mx+(i+0.5)*(cw/6),H-mb+18);
+    if(diceCounts[i]>0){
+      ctx.fillStyle=txt;ctx.font='11px Nunito Sans,sans-serif';
+      ctx.fillText(diceCounts[i],mx+(i+0.5)*(cw/6),my+ch-bh-6);
+    }
+  }
+  if(diceTotal>0){
+    var theoY=my+ch-(diceTotal/6)/maxV*ch;
+    ctx.strokeStyle=getCSS('--tip');ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(mx,theoY);ctx.lineTo(mx+cw,theoY);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=getCSS('--tip');ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='left';
+    ctx.fillText('théorique : '+(diceTotal/6).toFixed(1),mx+cw-110,theoY-6);
+  }
+}
+
+// ========== COIN SIMULATION ==========
+var coinP=0,coinF=0;
+function simCoin(n){
+  for(var i=0;i<n;i++){Math.random()<0.5?coinP++:coinF++;}
+  var t=coinP+coinF;
+  document.getElementById('coinResult').innerHTML='Pile : <strong>'+coinP+'</strong> ('+((coinP/t*100).toFixed(1))+'%) &mdash; Face : <strong>'+coinF+'</strong> ('+((coinF/t*100).toFixed(1))+'%) &mdash; Total : '+t;
+}
+function resetCoin(){coinP=0;coinF=0;document.getElementById('coinResult').innerHTML='Lancez la pièce pour commencer.';}
+
+// ========== CONVERGENCE SIMULATION ==========
+var convData=[];
+function simConverge(n){
+  var prev=convData.length>0?convData[convData.length-1]:{n:0,six:0};
+  for(var i=0;i<n;i++){
+    var die=Math.floor(Math.random()*6)+1;
+    prev={n:prev.n+1,six:prev.six+(die===6?1:0)};
+    if(prev.n<=50||prev.n%5===0||i===n-1) convData.push({n:prev.n,f:prev.six/prev.n});
+  }
+  drawConverge();
+  document.getElementById('convergeResult').innerHTML='Après <strong>'+prev.n+'</strong> lancers : fréquence des 6 = <strong>'+(prev.six/prev.n).toFixed(4)+'</strong> (théorique ≈ 0,1667)';
+}
+function resetConverge(){convData=[];drawConverge();document.getElementById('convergeResult').innerHTML='Cliquez pour lancer la simulation.';}
+function drawConverge(){
+  var c=document.getElementById('canvasConverge');if(!c)return;
+  var W=700,H=320;
+  var ctx=setupCanvas(c,W,H);
+  var bg=getCSS('--surface');
+  var grid=getCSS('--canvas-grid');
+  var txt=getCSS('--canvas-text');
+  var stroke=getCSS('--canvas-stroke');
+  var muted=getCSS('--muted');
+  ctx.clearRect(0,0,W,H);
+  var mx=55,my=25,mxr=20,mb=40;
+  var cw=W-mx-mxr,ch=H-my-mb;
+  // axes
+  ctx.strokeStyle=grid;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(mx,my+ch);ctx.lineTo(mx+cw,my+ch);ctx.stroke();
+  // y axis 0 to 0.5
+  for(var i=0;i<=5;i++){
+    var y=my+ch-ch*(i/5);
+    ctx.beginPath();ctx.moveTo(mx-4,y);ctx.lineTo(mx+cw,y);ctx.strokeStyle=grid;ctx.lineWidth=0.5;ctx.stroke();
+    ctx.fillStyle=muted;ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='right';
+    ctx.fillText((i*0.1).toFixed(1),mx-8,y+4);
+  }
+  // theoretical line
+  var theoY=my+ch-ch*(1/6/0.5);
+  ctx.strokeStyle=getCSS('--tip');ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(mx,theoY);ctx.lineTo(mx+cw,theoY);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=getCSS('--tip');ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='left';
+  ctx.fillText('p = 1/6 ≈ 0,167',mx+cw-100,theoY-6);
+  if(convData.length<2)return;
+  var maxN=convData[convData.length-1].n;
+  ctx.strokeStyle=stroke;ctx.lineWidth=2;
+  ctx.beginPath();
+  for(var i=0;i<convData.length;i++){
+    var x=mx+convData[i].n/maxN*cw;
+    var y=my+ch-convData[i].f/0.5*ch;
+    y=Math.max(my,Math.min(my+ch,y));
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // x labels
+  ctx.fillStyle=muted;ctx.font='11px Nunito Sans,sans-serif';ctx.textAlign='center';
+  ctx.fillText('0',mx,my+ch+18);
+  ctx.fillText(''+maxN,mx+cw,my+ch+18);
+  ctx.fillText('n (lancers)',mx+cw/2,my+ch+34);
+}
+
+// ========== VENN DIAGRAM ==========
+function drawVenn(){
+  var c=document.getElementById('canvasVenn');if(!c)return;
+  var W=600,H=360;
+  var ctx=setupCanvas(c,W,H);
+  renderVenn(ctx,W,H,null);
+  c.onclick=function(e){
+    var rect=c.getBoundingClientRect();
+    var dpr=window.devicePixelRatio||1;
+    var x=(e.clientX-rect.left)*(W/rect.width);
+    var y=(e.clientY-rect.top)*(H/rect.height);
+    var cx1=220,cy=170,cx2=380,r=120;
+    var inA=Math.hypot(x-cx1,y-cy)<r;
+    var inB=Math.hypot(x-cx2,y-cy)<r;
+    var zone=null,msg='';
+    if(inA&&inB){zone='ab';msg='<strong>A ∩ B</strong> (A et B) : issues qui appartiennent à A <em>et</em> à B en même temps.';}
+    else if(inA){zone='a';msg='<strong>A seul</strong> : issues dans A mais pas dans B.';}
+    else if(inB){zone='b';msg='<strong>B seul</strong> : issues dans B mais pas dans A.';}
+    else{zone='out';msg='<strong>Ω \\ (A ∪ B)</strong> : issues qui ne sont ni dans A, ni dans B.';}
+    renderVenn(ctx,W,H,zone);
+    document.getElementById('vennResult').innerHTML=msg;
+  };
+}
+function renderVenn(ctx,W,H,zone){
+  var bg=getCSS('--surface');
+  var border=getCSS('--border');
+  var txt=getCSS('--canvas-text');
+  var fillA=getCSS('--canvas-fill');
+  var strokeA=getCSS('--canvas-stroke');
+  var fillB=getCSS('--canvas-fill2');
+  var strokeB=getCSS('--canvas-stroke2');
+  var muted=getCSS('--muted');
+  ctx.clearRect(0,0,W,H);
+  // omega rect
+  ctx.strokeStyle=border;ctx.lineWidth=1.5;
+  ctx.strokeRect(30,20,W-60,H-40);
+  ctx.fillStyle=muted;ctx.font='bold 16px Cormorant Garamond,serif';
+  ctx.fillText('Ω',W-50,42);
+  var cx1=220,cy=170,cx2=380,r=120;
+  // highlight
+  if(zone==='out'){ctx.fillStyle='rgba(160,82,45,0.08)';ctx.fillRect(30,20,W-60,H-40);}
+  // circle A
+  ctx.beginPath();ctx.arc(cx1,cy,r,0,Math.PI*2);
+  ctx.fillStyle=(zone==='a'||zone==='ab')?fillA:'rgba(160,82,45,0.06)';
+  ctx.fill();
+  ctx.strokeStyle=strokeA;ctx.lineWidth=2;ctx.stroke();
+  // circle B
+  ctx.beginPath();ctx.arc(cx2,cy,r,0,Math.PI*2);
+  ctx.fillStyle=(zone==='b'||zone==='ab')?fillB:'rgba(184,134,11,0.06)';
+  ctx.fill();
+  ctx.strokeStyle=strokeB;ctx.lineWidth=2;ctx.stroke();
+  // intersection highlight
+  if(zone==='ab'){
+    ctx.save();
+    ctx.beginPath();ctx.arc(cx1,cy,r,0,Math.PI*2);ctx.clip();
+    ctx.beginPath();ctx.arc(cx2,cy,r,0,Math.PI*2);
+    ctx.fillStyle='rgba(139,69,19,0.18)';ctx.fill();
+    ctx.restore();
+  }
+  // labels
+  ctx.fillStyle=txt;ctx.font='bold 20px Cormorant Garamond,serif';ctx.textAlign='center';
+  ctx.fillText('A',cx1-50,cy+6);
+  ctx.fillText('B',cx2+50,cy+6);
+  ctx.font='14px Nunito Sans,sans-serif';ctx.fillStyle=muted;
+  ctx.fillText('A ∩ B',(cx1+cx2)/2,cy+6);
+}
+
+// ========== PROBABILITY TREE ==========
+function drawTree(){
+  var c=document.getElementById('canvasTree');if(!c)return;
+  var nr=parseInt(document.getElementById('treeRed').value)||3;
+  var ng=parseInt(document.getElementById('treeGreen').value)||2;
+  var total=nr+ng;
+  var pr=nr/total,pg=ng/total;
+  var W=700,H=400;
+  var ctx=setupCanvas(c,W,H);
+  var txt=getCSS('--canvas-text');
+  var strokeA=getCSS('--canvas-stroke');
+  var strokeB=getCSS('--canvas-stroke2');
+  var muted=getCSS('--muted');
+  var bg=getCSS('--surface');
+  ctx.clearRect(0,0,W,H);
+  var x0=60,y0=H/2;
+  var x1=250,y1t=H*0.25,y1b=H*0.75;
+  var x2=460;
+  var leaves=[[y1t-70,y1t+70],[y1b-70,y1b+70]];
+  function drawBranch(xa,ya,xb,yb,label,color){
+    ctx.strokeStyle=color;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(xa,ya);ctx.lineTo(xb,yb);ctx.stroke();
+    var mx2=(xa+xb)/2,my2=(ya+yb)/2-10;
+    ctx.fillStyle=txt;ctx.font='13px Nunito Sans,sans-serif';ctx.textAlign='center';
+    ctx.fillText(label,mx2,my2);
+  }
+  function fracStr(n,d){var g=gcd(n,d);return(n/g)+'/'+(d/g);}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+  // first branches
+  drawBranch(x0,y0,x1,y1t,fracStr(nr,total),strokeA);
+  drawBranch(x0,y0,x1,y1b,fracStr(ng,total),strokeB);
+  // node labels
+  ctx.fillStyle=txt;ctx.font='bold 14px Nunito Sans,sans-serif';ctx.textAlign='center';
+  ctx.fillText('R',x1,y1t-8);
+  ctx.fillText('V',x1,y1b-8);
+  // second branches from R
+  drawBranch(x1,y1t,x2,leaves[0][0],fracStr(nr,total),strokeA);
+  drawBranch(x1,y1t,x2,leaves[0][1],fracStr(ng,total),strokeB);
+  // second branches from V
+  drawBranch(x1,y1b,x2,leaves[1][0],fracStr(nr,total),strokeA);
+  drawBranch(x1,y1b,x2,leaves[1][1],fracStr(ng,total),strokeB);
+  // leaf labels & probs
+  var outcomes=[
+    {y:leaves[0][0],label:'R,R',p:pr*pr},
+    {y:leaves[0][1],label:'R,V',p:pr*pg},
+    {y:leaves[1][0],label:'V,R',p:pg*pr},
+    {y:leaves[1][1],label:'V,V',p:pg*pg}
+  ];
+  ctx.font='bold 13px Nunito Sans,sans-serif';ctx.textAlign='left';
+  outcomes.forEach(function(o){
+    ctx.fillStyle=txt;
+    ctx.fillText('('+o.label+')',x2+10,o.y+4);
+    ctx.fillStyle=muted;ctx.font='12px Nunito Sans,sans-serif';
+    ctx.fillText('p = '+o.p.toFixed(4),x2+80,o.y+4);
+    ctx.font='bold 13px Nunito Sans,sans-serif';
+  });
+  // result
+  var t2=total*total;
+  document.getElementById('treeResult').innerHTML=
+    'p(R,R) = '+fracStr(nr*nr,t2)+' = '+(pr*pr).toFixed(4)+
+    ' &emsp; p(R,V) + p(V,R) = '+fracStr(2*nr*ng,t2)+' = '+(2*pr*pg).toFixed(4)+
+    ' &emsp; p(V,V) = '+fracStr(ng*ng,t2)+' = '+(pg*pg).toFixed(4)+
+    ' &emsp; Vérif : somme = '+(pr*pr+2*pr*pg+pg*pg).toFixed(4);
+}
+
+// ========== QCM ==========
+var qcmData=[
+  {q:'Une expérience aléatoire est une expérience dont…',
+   o:['on connaît le résultat à l’avance','on ne peut pas prévoir le résultat','on ne répète jamais'],c:1,
+   e:'On ne peut pas prévoir le résultat avec certitude.'},
+  {q:'L’univers d’un lancer de dé à 6 faces est…',
+   o:['{1 ; 2 ; 3 ; 4 ; 5}','{1 ; 2 ; 3 ; 4 ; 5 ; 6}','{pair ; impair}'],c:1,
+   e:'L’univers contient toutes les issues : de 1 à 6.'},
+  {q:'La probabilité d’un événement est toujours…',
+   o:['comprise entre 0 et 1','comprise entre −1 et 1','un nombre entier'],c:0,
+   e:'Par définition, 0 ≤ p(A) ≤ 1.'},
+  {q:'La somme des probabilités de toutes les issues vaut…',
+   o:['0','0,5','1'],c:2,
+   e:'C’est une propriété fondamentale.'},
+  {q:'On lance un dé équilibré. p(« obtenir 3 ») = …',
+   o:['1/3','1/6','1/2'],c:1,
+   e:'6 issues équiprobables, 1 favorable : 1/6.'},
+  {q:'p(« obtenir un nombre pair ») avec un dé =…',
+   o:['1/3','1/2','2/3'],c:1,
+   e:'3 issues favorables (2, 4, 6) sur 6 : 3/6 = 1/2.'},
+  {q:'Si p(A) = 0,3, alors p(Ā) = …',
+   o:['0,3','0,7','1,3'],c:1,
+   e:'p(Ā) = 1 − p(A) = 1 − 0,3 = 0,7.'},
+  {q:'Deux événements sont incompatibles si…',
+   o:['ils peuvent se réaliser en même temps','A ∩ B = ∅','p(A) = p(B)'],c:1,
+   e:'Incompatibles signifie qu’ils ne peuvent se réaliser simultanément.'},
+  {q:'Dans un arbre, la probabilité d’un chemin se calcule par…',
+   o:['addition des probabilités','multiplication des probabilités','soustraction des probabilités'],c:1,
+   e:'Règle du produit : on multiplie le long d’un chemin.'},
+  {q:'On tire une carte dans un jeu de 32. p(« roi ») = …',
+   o:['1/32','4/32 = 1/8','8/32 = 1/4'],c:1,
+   e:'4 rois sur 32 cartes : 4/32 = 1/8.'},
+  {q:'On lance deux dés. Combien y a-t-il d’issues ?',
+   o:['12','36','6'],c:1,
+   e:'6 × 6 = 36 issues.'},
+  {q:'La loi des grands nombres dit que…',
+   o:['la fréquence se stabilise autour de la probabilité','après Pile, Face est plus probable','on obtient toujours le même résultat'],c:0,
+   e:'La fréquence converge vers la probabilité théorique.'},
+  {q:'p(A ∪ B) = p(A) + p(B) est vrai quand…',
+   o:['toujours','A et B sont incompatibles','A = B'],c:1,
+   e:'Cette formule simplifiée ne vaut que si A ∩ B = ∅.'},
+  {q:'Un sac a 3 boules rouges et 7 bleues. p(« rouge ») = …',
+   o:['3/7','3/10','7/10'],c:1,
+   e:'3 favorables sur 10 au total : 3/10.'},
+  {q:'p(événement certain) = …',
+   o:['0','0,5','1'],c:2,
+   e:'L’événement certain se réalise toujours : p = 1.'},
+  {q:'On tire 2 cartes avec remise. Les tirages sont…',
+   o:['indépendants','dépendants','incompatibles'],c:0,
+   e:'Avec remise, le premier tirage n’influence pas le second.'},
+  {q:'Un QCM a 4 choix par question. En répondant au hasard, p(bonne réponse) = …',
+   o:['1/2','1/3','1/4'],c:2,
+   e:'1 bonne sur 4 choix : 1/4 = 0,25.'}
+];
+function buildQCM(){
+  var cont=document.getElementById('qcmContainer');
+  cont.innerHTML='';
+  qcmData.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='qcm-block';
+    var h='<h3>Question '+(i+1)+'</h3><p>'+q.q+'</p><div class="qcm-options">';
+    q.o.forEach(function(o,j){
+      h+='<label><input type="radio" name="qcm'+i+'" value="'+j+'"> '+o+'</label>';
+    });
+    h+='</div><div class="qcm-feedback" id="qfb'+i+'"></div>';
+    div.innerHTML=h;
+    cont.appendChild(div);
+  });
+}
+function checkAllQCM(){
+  var score=0,total=qcmData.length;
+  qcmData.forEach(function(q,i){
+    var sel=document.querySelector('input[name="qcm'+i+'"]:checked');
+    var fb=document.getElementById('qfb'+i);
+    if(!sel){fb.className='qcm-feedback wrong';fb.style.display='block';fb.textContent='Veuillez sélectionner une réponse.';return;}
+    if(parseInt(sel.value)===q.c){
+      fb.className='qcm-feedback correct';fb.textContent='✓ Correct ! '+q.e;score++;
+    }else{
+      fb.className='qcm-feedback wrong';fb.textContent='✗ Incorrect. '+q.e;
+    }
+    fb.style.display='block';
+  });
+  var bar=document.getElementById('scoreBar');bar.hidden=false;
+  document.getElementById('scoreText').textContent=score+' / '+total;
+  document.getElementById('scoreFill').style.width=(score/total*100)+'%';
+}
+function resetQCM(){
+  qcmData.forEach(function(q,i){
+    var radios=document.querySelectorAll('input[name="qcm'+i+'"]');
+    radios.forEach(function(r){r.checked=false;});
+    var fb=document.getElementById('qfb'+i);
+    fb.className='qcm-feedback';fb.style.display='none';
+  });
+  document.getElementById('scoreBar').hidden=true;
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded',function(){
+  buttons=Array.from(document.querySelectorAll('.tab-nav button'));
+  sections=Array.from(document.querySelectorAll('.tab-section'));
+  var saved=0;
+  try{saved=parseInt(localStorage.getItem('prob3-tab'))||0;}catch(e){}
+  if(saved>=0&&saved<sections.length)showTab(saved);
+  else showTab(0);
+});
+</script>

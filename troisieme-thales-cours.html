@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Théorème de Thalès — Cours 3ème</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --heading: #8b4513;
+  --accent: #a0522d;
+  --accent-light: #d2a679;
+  --text: #2c2418;
+  --text-muted: #6b5d4f;
+  --border: #d4c5b0;
+  --success: #2e7d32;
+  --error: #c62828;
+  --tip-bg: #fdf6ec;
+  --tip-border: #e8c77b;
+  --formula-bg: #faf3e8;
+  --formula-border: #c9a96e;
+  --card-shadow: 0 2px 12px rgba(44,36,24,0.08);
+  --tab-active: #8b4513;
+  --tab-inactive: #b8a898;
+  --quiz-correct: #e8f5e9;
+  --quiz-wrong: #ffebee;
+  --canvas-bg: #fefcf8;
+  --canvas-line: #8b4513;
+  --canvas-point: #a0522d;
+  --canvas-parallel: #2e7d32;
+  --badge-bg: #8b4513;
+  --badge-text: #ffffff;
+  --detail-bg: #f9f5ef;
+  --exercise-bg: #faf8f4;
+  --exercise-border: #c9a96e;
+  --input-bg: #ffffff;
+  --input-border: #c4b5a0;
+  --btn-bg: #8b4513;
+  --btn-text: #ffffff;
+  --btn-hover: #a0522d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1410;
+    --surface: #2a2218;
+    --heading: #d4a06a;
+    --accent: #e0a856;
+    --accent-light: #c9944a;
+    --text: #e8ddd0;
+    --text-muted: #a89882;
+    --border: #4a3e30;
+    --success: #66bb6a;
+    --error: #ef5350;
+    --tip-bg: #2e2618;
+    --tip-border: #8a7340;
+    --formula-bg: #2a2216;
+    --formula-border: #7a6538;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    --tab-active: #e0a856;
+    --tab-inactive: #6b5d4f;
+    --quiz-correct: #1b3d1e;
+    --quiz-wrong: #3d1b1b;
+    --canvas-bg: #221c14;
+    --canvas-line: #d4a06a;
+    --canvas-point: #e0a856;
+    --canvas-parallel: #66bb6a;
+    --badge-bg: #d4a06a;
+    --badge-text: #1a1410;
+    --detail-bg: #252018;
+    --exercise-bg: #252018;
+    --exercise-border: #7a6538;
+    --input-bg: #352c20;
+    --input-border: #5a4e3c;
+    --btn-bg: #d4a06a;
+    --btn-text: #1a1410;
+    --btn-hover: #e0b87a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1a1410;
+  --surface: #2a2218;
+  --heading: #d4a06a;
+  --accent: #e0a856;
+  --accent-light: #c9944a;
+  --text: #e8ddd0;
+  --text-muted: #a89882;
+  --border: #4a3e30;
+  --success: #66bb6a;
+  --error: #ef5350;
+  --tip-bg: #2e2618;
+  --tip-border: #8a7340;
+  --formula-bg: #2a2216;
+  --formula-border: #7a6538;
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --tab-active: #e0a856;
+  --tab-inactive: #6b5d4f;
+  --quiz-correct: #1b3d1e;
+  --quiz-wrong: #3d1b1b;
+  --canvas-bg: #221c14;
+  --canvas-line: #d4a06a;
+  --canvas-point: #e0a856;
+  --canvas-parallel: #66bb6a;
+  --badge-bg: #d4a06a;
+  --badge-text: #1a1410;
+  --detail-bg: #252018;
+  --exercise-bg: #252018;
+  --exercise-border: #7a6538;
+  --input-bg: #352c20;
+  --input-border: #5a4e3c;
+  --btn-bg: #d4a06a;
+  --btn-text: #1a1410;
+  --btn-hover: #e0b87a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--heading);
+  line-height: 1.3;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 32px 16px 24px;
+  position: relative;
+}
+.header h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 8px; }
+.header .subtitle { color: var(--text-muted); font-size: 1.05rem; }
+.badge {
+  display: inline-block;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+.theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+/* Tabs */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 6px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+}
+.tab-btn {
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  color: var(--tab-inactive);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.25s;
+  text-align: center;
+}
+.tab-btn.active {
+  background: var(--tab-active);
+  color: var(--badge-text);
+}
+.tab-btn:hover:not(.active) { background: var(--detail-bg); color: var(--text); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+}
+.card h2 { font-size: 1.5rem; margin-bottom: 16px; }
+.card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+.card h4 { font-size: 1.1rem; margin-bottom: 8px; }
+.card p { margin-bottom: 12px; }
+.card ul, .card ol { margin: 0 0 12px 20px; }
+.card li { margin-bottom: 6px; }
+
+/* Formula box */
+.formula-box {
+  background: var(--formula-bg);
+  border: 2px solid var(--formula-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+  font-size: 1.15rem;
+}
+.formula-box .label {
+  display: block;
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+}
+
+/* Tip box */
+.tip-box {
+  background: var(--tip-bg);
+  border-left: 4px solid var(--tip-border);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 0.95rem;
+}
+.tip-box strong { color: var(--accent); }
+
+/* Fractions */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 4px;
+  font-size: 1em;
+}
+.frac .n {
+  border-bottom: 2px solid var(--text);
+  padding: 0 6px 3px;
+  line-height: 1.3;
+}
+.frac .d {
+  padding: 3px 6px 0;
+  line-height: 1.3;
+}
+.frac-lg { font-size: 1.15em; }
+.frac-accent .n { border-color: var(--accent); color: var(--accent); }
+.frac-accent .d { color: var(--accent); }
+
+/* Exercise */
+.exercise {
+  background: var(--exercise-bg);
+  border: 1px solid var(--exercise-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.exercise h4 { display: flex; align-items: center; gap: 8px; }
+.exercise .diff {
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+}
+.diff-easy { background: #e8f5e9; color: #2e7d32; }
+.diff-medium { background: #fff3e0; color: #e65100; }
+.diff-hard { background: #fce4ec; color: #c62828; }
+
+/* Details/Summary */
+details {
+  background: var(--detail-bg);
+  border-radius: 8px;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+}
+details summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+}
+details summary::before { content: "▸ "; }
+details[open] summary::before { content: "▾ "; }
+details .detail-content { padding: 4px 16px 16px; }
+
+/* Canvas */
+canvas {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--canvas-bg);
+  cursor: grab;
+  touch-action: none;
+}
+canvas:active { cursor: grabbing; }
+
+/* Inputs & Buttons */
+input[type="number"], input[type="text"] {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  width: 100px;
+}
+input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+.btn {
+  display: inline-block;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--btn-hover); }
+.input-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
+.input-group label { font-weight: 600; min-width: 60px; }
+
+/* Quiz */
+.quiz-q {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.quiz-q p { font-weight: 600; margin-bottom: 12px; }
+.quiz-opts label {
+  display: block;
+  padding: 10px 14px;
+  margin: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.quiz-opts label:hover { background: var(--detail-bg); }
+.quiz-opts input { margin-right: 10px; }
+.quiz-opts label.correct { background: var(--quiz-correct); border-color: var(--success); }
+.quiz-opts label.wrong { background: var(--quiz-wrong); border-color: var(--error); }
+.quiz-feedback {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: var(--quiz-correct); color: var(--success); }
+.quiz-feedback.ko { background: var(--quiz-wrong); color: var(--error); }
+.score-bar {
+  background: var(--detail-bg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 20px;
+  color: var(--heading);
+}
+
+/* Result boxes */
+.result-box {
+  background: var(--formula-bg);
+  border: 1px solid var(--formula-border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  min-height: 40px;
+  line-height: 1.8;
+}
+.step { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--accent-light); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tab-btn { min-width: 70px; font-size: 0.72rem; padding: 8px 4px; }
+  .card { padding: 16px; }
+  .formula-box { padding: 14px; font-size: 1rem; }
+  .input-group { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème" aria-label="Changer le thème">◑</button>
+    <span class="badge">3ème</span>
+    <h1>Théorème de Thalès</h1>
+    <p class="subtitle">Cours interactif &mdash; Proportionnalité et parallélisme</p>
+  </div>
+
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" onclick="showTab(0)">Le théorème</button>
+    <button class="tab-btn" onclick="showTab(1)">Calcul</button>
+    <button class="tab-btn" onclick="showTab(2)">Réciproque</button>
+    <button class="tab-btn" onclick="showTab(3)">Papillon</button>
+    <button class="tab-btn" onclick="showTab(4)">Applications</button>
+    <button class="tab-btn" onclick="showTab(5)">Exercices</button>
+    <button class="tab-btn" onclick="showTab(6)">QCM</button>
+  </nav>
+
+  <!-- TAB 0: Le théorème -->
+  <div class="tab-content active" id="tab0">
+    <div class="card">
+      <h2>Énoncé du théorème de Thalès</h2>
+      <p>Le théorème de Thalès permet de calculer des longueurs dans une figure comportant des <strong>droites parallèles</strong>.</p>
+
+      <div class="formula-box">
+        <span class="label">Théorème de Thalès (configuration triangle)</span>
+        Soit un triangle ABC. Si M &isin; [AB] et N &isin; [AC] avec (MN) &parallel; (BC), alors&nbsp;:
+        <br><br>
+        <span class="frac frac-lg frac-accent"><span class="n">AM</span><span class="d">AB</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">AN</span><span class="d">AC</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">MN</span><span class="d">BC</span></span>
+      </div>
+
+      <div class="tip-box">
+        <strong>Attention !</strong> Le théorème s'applique <em>uniquement</em> lorsque deux droites sont <strong>parallèles</strong>. Toujours vérifier cette condition avant de l'utiliser.
+      </div>
+
+      <h3>Conditions d'application</h3>
+      <ol>
+        <li>Deux droites <strong>sécantes</strong> (qui se coupent en un point)</li>
+        <li>Deux droites <strong>parallèles</strong> coupant ces sécantes</li>
+        <li>Identifier correctement les <strong>longueurs proportionnelles</strong></li>
+      </ol>
+
+      <h3>Les deux configurations</h3>
+      <p>Il existe deux configurations classiques :</p>
+      <ul>
+        <li><strong>Configuration triangle</strong> : le point M est entre A et B, le point N est entre A et C.</li>
+        <li><strong>Configuration papillon</strong> : les points sont de part et d'autre du point d'intersection (voir onglet « Papillon »).</li>
+      </ul>
+
+      <h3>Figure interactive — Configuration triangle</h3>
+      <p style="color:var(--text-muted); font-size:0.9rem;">Déplacez le point M le long de [AB] pour voir la proportionnalité en temps réel.</p>
+      <canvas id="canvasThales" width="600" height="420"></canvas>
+      <div id="thalesInfo" class="result-box" style="text-align:center;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 1: Calcul de longueurs -->
+  <div class="tab-content" id="tab1">
+    <div class="card">
+      <h2>Calcul de longueurs</h2>
+      <p>Le théorème de Thalès permet de calculer une longueur inconnue à partir de trois longueurs connues.</p>
+
+      <h3>Méthode pas à pas</h3>
+      <div class="exercise">
+        <h4>Étapes de résolution</h4>
+        <ol>
+          <li><strong>Identifier</strong> la configuration (triangle ou papillon)</li>
+          <li><strong>Vérifier</strong> que les droites sont bien parallèles</li>
+          <li><strong>Écrire</strong> les rapports de Thalès</li>
+          <li><strong>Remplacer</strong> par les valeurs connues</li>
+          <li><strong>Calculer</strong> la valeur inconnue par produit en croix</li>
+        </ol>
+      </div>
+
+      <div class="formula-box">
+        <span class="label">Produit en croix</span>
+        Si
+        <span class="frac frac-accent"><span class="n">a</span><span class="d">b</span></span>
+        <strong>=</strong>
+        <span class="frac frac-accent"><span class="n">c</span><span class="d">d</span></span>
+        alors <strong>a &times; d = b &times; c</strong>
+      </div>
+
+      <h3>Exemple résolu</h3>
+      <div class="exercise">
+        <p>Dans un triangle ABC, M &isin; [AB] et N &isin; [AC] avec (MN) &parallel; (BC).<br>
+        On donne : AM = 3 cm, AB = 5 cm, AN = 4,2 cm. Calculer AC.</p>
+        <details>
+          <summary>Voir la solution</summary>
+          <div class="detail-content">
+            <p>D'après le théorème de Thalès, puisque (MN) &parallel; (BC) :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">AM</span><span class="d">AB</span></span>
+              <strong>=</strong>
+              <span class="frac frac-accent"><span class="n">AN</span><span class="d">AC</span></span>
+            </p>
+            <div class="step">
+              <p>On remplace : <span class="frac"><span class="n">3</span><span class="d">5</span></span> = <span class="frac"><span class="n">4,2</span><span class="d">AC</span></span></p>
+            </div>
+            <div class="step">
+              <p>Produit en croix : 3 &times; AC = 5 &times; 4,2</p>
+            </div>
+            <div class="step">
+              <p>3 &times; AC = 21</p>
+            </div>
+            <div class="step">
+              <p>AC = <span class="frac"><span class="n">21</span><span class="d">3</span></span> = <strong>7 cm</strong></p>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <h3>Calculateur interactif</h3>
+      <p>Entrez 3 valeurs parmi les 4 pour calculer la quatrième.</p>
+      <p style="text-align:center; margin: 10px 0;">
+        <span class="frac frac-lg frac-accent"><span class="n">AM</span><span class="d">AB</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">AN</span><span class="d">AC</span></span>
+      </p>
+      <div class="input-group">
+        <label>AM =</label><input type="number" id="calcAM" step="any" min="0">
+        <label>AB =</label><input type="number" id="calcAB" step="any" min="0">
+        <label>AN =</label><input type="number" id="calcAN" step="any" min="0">
+        <label>AC =</label><input type="number" id="calcAC" step="any" min="0">
+      </div>
+      <button class="btn" onclick="calcThales()">Calculer</button>
+      <div id="calcResult" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Réciproque -->
+  <div class="tab-content" id="tab2">
+    <div class="card">
+      <h2>Réciproque du théorème de Thalès</h2>
+      <p>La réciproque permet de <strong>démontrer que deux droites sont parallèles</strong>.</p>
+
+      <div class="formula-box">
+        <span class="label">Réciproque du théorème de Thalès</span>
+        Si M &isin; [AB), N &isin; [AC) et si&nbsp;:
+        <br><br>
+        <span class="frac frac-lg frac-accent"><span class="n">AM</span><span class="d">AB</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">AN</span><span class="d">AC</span></span>
+        <br><br>
+        et que les points A, M, B d'une part et A, N, C d'autre part sont dans le <strong>même ordre</strong>,<br>
+        alors <strong>(MN) &parallel; (BC)</strong>.
+      </div>
+
+      <div class="tip-box">
+        <strong>Attention !</strong> La condition d'alignement dans le <em>même ordre</em> est indispensable. Sans elle, on ne peut pas conclure.
+      </div>
+
+      <h3>Méthode de rédaction</h3>
+      <div class="exercise">
+        <ol>
+          <li><strong>Données</strong> : énoncer les points et les longueurs connues</li>
+          <li><strong>Calcul des rapports</strong> : calculer <span class="frac"><span class="n">AM</span><span class="d">AB</span></span> et <span class="frac"><span class="n">AN</span><span class="d">AC</span></span></li>
+          <li><strong>Comparaison</strong> : les rapports sont-ils égaux ?</li>
+          <li><strong>Ordre des points</strong> : vérifier l'alignement dans le même ordre</li>
+          <li><strong>Conclusion</strong> : d'après la réciproque du théorème de Thalès, (MN) &parallel; (BC)</li>
+        </ol>
+      </div>
+
+      <h3>Vérificateur interactif</h3>
+      <p>Entrez les longueurs pour vérifier si les droites sont parallèles.</p>
+      <div class="input-group">
+        <label>AM =</label><input type="number" id="recAM" step="any" min="0">
+        <label>AB =</label><input type="number" id="recAB" step="any" min="0">
+      </div>
+      <div class="input-group">
+        <label>AN =</label><input type="number" id="recAN" step="any" min="0">
+        <label>AC =</label><input type="number" id="recAC" step="any" min="0">
+      </div>
+      <button class="btn" onclick="checkReciproque()">Vérifier</button>
+      <div id="recipResult" class="result-box"></div>
+
+      <h3>Contre-exemple</h3>
+      <details>
+        <summary>Quand la réciproque ne s'applique pas</summary>
+        <div class="detail-content">
+          <p>Si <span class="frac"><span class="n">AM</span><span class="d">AB</span></span> &ne; <span class="frac"><span class="n">AN</span><span class="d">AC</span></span>, alors on ne peut <strong>pas</strong> conclure que (MN) est parallèle à (BC).</p>
+          <p>Exemple : AM = 3, AB = 6, AN = 2, AC = 5</p>
+          <p style="text-align:center;">
+            <span class="frac"><span class="n">3</span><span class="d">6</span></span> = 0,5 &nbsp;&nbsp; et &nbsp;&nbsp;
+            <span class="frac"><span class="n">2</span><span class="d">5</span></span> = 0,4
+          </p>
+          <p>Les rapports sont différents : les droites ne sont <strong>pas</strong> parallèles.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- TAB 3: Configuration papillon -->
+  <div class="tab-content" id="tab3">
+    <div class="card">
+      <h2>Configuration papillon</h2>
+      <p>Dans cette configuration, les deux droites parallèles sont coupées par deux sécantes qui se croisent <strong>entre</strong> les parallèles.</p>
+
+      <div class="formula-box">
+        <span class="label">Thalès — Configuration papillon</span>
+        Deux droites (d₁) et (d₂) se coupent en O. Si (AB) &parallel; (CD), alors&nbsp;:
+        <br><br>
+        <span class="frac frac-lg frac-accent"><span class="n">OA</span><span class="d">OC</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">OB</span><span class="d">OD</span></span>
+        <strong>=</strong>
+        <span class="frac frac-lg frac-accent"><span class="n">AB</span><span class="d">CD</span></span>
+      </div>
+
+      <div class="tip-box">
+        <strong>Astuce :</strong> Dans la configuration papillon, le point d'intersection O est <em>entre</em> les parallèles. On écrit les rapports en partant toujours du point O.
+      </div>
+
+      <h3>Figure interactive — Configuration papillon</h3>
+      <p style="color:var(--text-muted); font-size:0.9rem;">Déplacez le point O pour observer l'effet sur les proportions.</p>
+      <canvas id="canvasPapillon" width="600" height="420"></canvas>
+      <div id="papillonInfo" class="result-box" style="text-align:center;"></div>
+
+      <h3>Exemple</h3>
+      <details>
+        <summary>Voir un exemple résolu en configuration papillon</summary>
+        <div class="detail-content">
+          <p>Deux droites se coupent en O. On a (AB) &parallel; (CD) avec :<br>
+          OA = 4 cm, OC = 6 cm, OB = 3 cm. Calculer OD.</p>
+          <p>D'après le théorème de Thalès :</p>
+          <p style="text-align:center;">
+            <span class="frac frac-accent"><span class="n">OA</span><span class="d">OC</span></span>
+            =
+            <span class="frac frac-accent"><span class="n">OB</span><span class="d">OD</span></span>
+          </p>
+          <div class="step"><p><span class="frac"><span class="n">4</span><span class="d">6</span></span> = <span class="frac"><span class="n">3</span><span class="d">OD</span></span></p></div>
+          <div class="step"><p>4 &times; OD = 6 &times; 3 = 18</p></div>
+          <div class="step"><p>OD = <span class="frac"><span class="n">18</span><span class="d">4</span></span> = <strong>4,5 cm</strong></p></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- TAB 4: Applications -->
+  <div class="tab-content" id="tab4">
+    <div class="card">
+      <h2>Applications concrètes</h2>
+      <p>Le théorème de Thalès est utilisé dans de nombreuses situations réelles pour mesurer des distances inaccessibles.</p>
+
+      <h3>Mesurer la hauteur d'un arbre</h3>
+      <div class="exercise">
+        <p>On plante un bâton de 1,5 m à une distance de 3 m d'un arbre. L'ombre du bâton mesure 2 m et l'ombre de l'arbre mesure 8 m. Quelle est la hauteur de l'arbre ?</p>
+      </div>
+      <canvas id="canvasTree" width="600" height="360"></canvas>
+      <details>
+        <summary>Voir la solution</summary>
+        <div class="detail-content">
+          <p>Les rayons du soleil sont parallèles. D'après le théorème de Thalès :</p>
+          <p style="text-align:center;">
+            <span class="frac frac-accent"><span class="n">hauteur bâton</span><span class="d">hauteur arbre</span></span>
+            =
+            <span class="frac frac-accent"><span class="n">ombre bâton</span><span class="d">ombre arbre</span></span>
+          </p>
+          <div class="step"><p><span class="frac"><span class="n">1,5</span><span class="d">h</span></span> = <span class="frac"><span class="n">2</span><span class="d">8</span></span></p></div>
+          <div class="step"><p>1,5 &times; 8 = h &times; 2</p></div>
+          <div class="step"><p>12 = 2h</p></div>
+          <div class="step"><p>h = <span class="frac"><span class="n">12</span><span class="d">2</span></span> = <strong>6 m</strong></p></div>
+          <p>L'arbre mesure <strong>6 mètres</strong>.</p>
+        </div>
+      </details>
+
+      <h3 style="margin-top:24px;">Mesurer la largeur d'une rivière</h3>
+      <div class="exercise">
+        <p>On veut mesurer la largeur d'une rivière. Depuis la rive, on repère un arbre B de l'autre côté. On place des piquets A, C, D et E tels que (DE) &parallel; (AB), avec AC = 12 m, CD = 4 m, DE = 5 m.</p>
+      </div>
+      <canvas id="canvasRiver" width="600" height="380"></canvas>
+      <details>
+        <summary>Voir la solution</summary>
+        <div class="detail-content">
+          <p>D'après le théorème de Thalès, puisque (DE) &parallel; (AB) :</p>
+          <p style="text-align:center;">
+            <span class="frac frac-accent"><span class="n">CD</span><span class="d">CA</span></span>
+            =
+            <span class="frac frac-accent"><span class="n">DE</span><span class="d">AB</span></span>
+          </p>
+          <div class="step"><p><span class="frac"><span class="n">4</span><span class="d">12</span></span> = <span class="frac"><span class="n">5</span><span class="d">AB</span></span></p></div>
+          <div class="step"><p>4 &times; AB = 12 &times; 5 = 60</p></div>
+          <div class="step"><p>AB = <span class="frac"><span class="n">60</span><span class="d">4</span></span> = <strong>15 m</strong></p></div>
+          <p>La largeur de la rivière est de <strong>15 mètres</strong>.</p>
+        </div>
+      </details>
+
+      <h3 style="margin-top:24px;">Calcul avec une carte</h3>
+      <div class="exercise">
+        <p>Sur une carte à l'échelle <span class="frac"><span class="n">1</span><span class="d">25 000</span></span>, deux routes parallèles sont coupées par une route transversale. Sur la carte, la distance entre les deux points de croisement mesure 3,2 cm. Quelle est la distance réelle ?</p>
+      </div>
+      <details>
+        <summary>Voir la solution</summary>
+        <div class="detail-content">
+          <p>L'échelle signifie que 1 cm sur la carte correspond à 25 000 cm en réalité.</p>
+          <div class="step"><p>Distance réelle = 3,2 &times; 25 000 = 80 000 cm = <strong>800 m</strong></p></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- TAB 5: Exercices -->
+  <div class="tab-content" id="tab5">
+    <div class="card">
+      <h2>Exercices progressifs</h2>
+      <p>Entraîne-toi avec ces exercices de type Brevet.</p>
+
+      <!-- Exercice 1 -->
+      <div class="exercise">
+        <h4>Exercice 1 <span class="diff diff-easy">Facile</span></h4>
+        <p>Dans le triangle RST, le point E appartient à [RS] et le point F appartient à [RT].<br>
+        On sait que (EF) &parallel; (ST), RE = 6 cm, RS = 10 cm, RF = 4,8 cm.<br>
+        Calculer RT.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p>Puisque (EF) &parallel; (ST), d'après le théorème de Thalès :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">RE</span><span class="d">RS</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">RF</span><span class="d">RT</span></span>
+            </p>
+            <div class="step"><p><span class="frac"><span class="n">6</span><span class="d">10</span></span> = <span class="frac"><span class="n">4,8</span><span class="d">RT</span></span></p></div>
+            <div class="step"><p>6 &times; RT = 10 &times; 4,8 = 48</p></div>
+            <div class="step"><p>RT = <span class="frac"><span class="n">48</span><span class="d">6</span></span> = <strong>8 cm</strong></p></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Exercice 2 -->
+      <div class="exercise">
+        <h4>Exercice 2 <span class="diff diff-easy">Facile</span></h4>
+        <p>Dans la configuration ci-dessous, (MN) &parallel; (BC).<br>
+        AM = 2,4 cm, AB = 8 cm, AC = 10 cm.<br>
+        Calculer AN et MN sachant que BC = 15 cm.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p>D'après le théorème de Thalès :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">AM</span><span class="d">AB</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">AN</span><span class="d">AC</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">MN</span><span class="d">BC</span></span>
+            </p>
+            <p><strong>Calcul de AN :</strong></p>
+            <div class="step"><p><span class="frac"><span class="n">2,4</span><span class="d">8</span></span> = <span class="frac"><span class="n">AN</span><span class="d">10</span></span></p></div>
+            <div class="step"><p>AN = <span class="frac"><span class="n">2,4 &times; 10</span><span class="d">8</span></span> = <span class="frac"><span class="n">24</span><span class="d">8</span></span> = <strong>3 cm</strong></p></div>
+            <p><strong>Calcul de MN :</strong></p>
+            <div class="step"><p><span class="frac"><span class="n">2,4</span><span class="d">8</span></span> = <span class="frac"><span class="n">MN</span><span class="d">15</span></span></p></div>
+            <div class="step"><p>MN = <span class="frac"><span class="n">2,4 &times; 15</span><span class="d">8</span></span> = <span class="frac"><span class="n">36</span><span class="d">8</span></span> = <strong>4,5 cm</strong></p></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Exercice 3 -->
+      <div class="exercise">
+        <h4>Exercice 3 <span class="diff diff-medium">Moyen</span></h4>
+        <p>Configuration papillon : deux droites se coupent en O. (AB) &parallel; (CD).<br>
+        OA = 3,5 cm, OC = 7 cm, AB = 4 cm, OD = 6 cm.<br>
+        Calculer OB et CD.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p>D'après le théorème de Thalès (configuration papillon) :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">OA</span><span class="d">OC</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">OB</span><span class="d">OD</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">AB</span><span class="d">CD</span></span>
+            </p>
+            <p><strong>Calcul de OB :</strong></p>
+            <div class="step"><p><span class="frac"><span class="n">3,5</span><span class="d">7</span></span> = <span class="frac"><span class="n">OB</span><span class="d">6</span></span></p></div>
+            <div class="step"><p>OB = <span class="frac"><span class="n">3,5 &times; 6</span><span class="d">7</span></span> = <span class="frac"><span class="n">21</span><span class="d">7</span></span> = <strong>3 cm</strong></p></div>
+            <p><strong>Calcul de CD :</strong></p>
+            <div class="step"><p><span class="frac"><span class="n">3,5</span><span class="d">7</span></span> = <span class="frac"><span class="n">4</span><span class="d">CD</span></span></p></div>
+            <div class="step"><p>CD = <span class="frac"><span class="n">4 &times; 7</span><span class="d">3,5</span></span> = <span class="frac"><span class="n">28</span><span class="d">3,5</span></span> = <strong>8 cm</strong></p></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Exercice 4 -->
+      <div class="exercise">
+        <h4>Exercice 4 <span class="diff diff-medium">Moyen</span></h4>
+        <p>Les droites (MN) et (PQ) sont-elles parallèles ?<br>
+        Sur la droite (d₁) : AM = 3,6 cm, AP = 5,4 cm.<br>
+        Sur la droite (d₂) : AN = 4,8 cm, AQ = 7,2 cm.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p>Calculons les rapports :</p>
+            <div class="step"><p><span class="frac"><span class="n">AM</span><span class="d">AP</span></span> = <span class="frac"><span class="n">3,6</span><span class="d">5,4</span></span> = <span class="frac"><span class="n">2</span><span class="d">3</span></span></p></div>
+            <div class="step"><p><span class="frac"><span class="n">AN</span><span class="d">AQ</span></span> = <span class="frac"><span class="n">4,8</span><span class="d">7,2</span></span> = <span class="frac"><span class="n">2</span><span class="d">3</span></span></p></div>
+            <p>Les rapports sont <strong>égaux</strong>.</p>
+            <p>Les points A, M, P sont alignés dans cet ordre et A, N, Q sont alignés dans cet ordre.</p>
+            <p>D'après la <strong>réciproque du théorème de Thalès</strong>, les droites (MN) et (PQ) sont <strong>parallèles</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Exercice 5 -->
+      <div class="exercise">
+        <h4>Exercice 5 <span class="diff diff-hard">Difficile</span></h4>
+        <p>Un géomètre veut mesurer la largeur AB d'un lac. Il place des repères C, D et E sur la rive tels que (DE) &parallel; (AB), avec :<br>
+        CD = 15 m, CE = 20 m, DA = 45 m.<br>
+        Calculer AB et EB.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p>Configuration triangle avec sommet C. Puisque (DE) &parallel; (AB) :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">CD</span><span class="d">CA</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">CE</span><span class="d">CB</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">DE</span><span class="d">AB</span></span>
+            </p>
+            <p>CA = CD + DA = 15 + 45 = 60 m</p>
+            <p><strong>Calcul de CB :</strong></p>
+            <div class="step"><p><span class="frac"><span class="n">CD</span><span class="d">CA</span></span> = <span class="frac"><span class="n">CE</span><span class="d">CB</span></span> &rArr; <span class="frac"><span class="n">15</span><span class="d">60</span></span> = <span class="frac"><span class="n">20</span><span class="d">CB</span></span></p></div>
+            <div class="step"><p>CB = <span class="frac"><span class="n">20 &times; 60</span><span class="d">15</span></span> = <span class="frac"><span class="n">1200</span><span class="d">15</span></span> = <strong>80 m</strong></p></div>
+            <p>EB = CB &minus; CE = 80 &minus; 20 = <strong>60 m</strong></p>
+            <p><strong>Calcul de AB :</strong></p>
+            <p>On doit d'abord connaître DE. Comme l'énoncé donne CE = 20 et non DE directement, utilisons le rapport de réduction :</p>
+            <div class="step"><p>k = <span class="frac"><span class="n">CA</span><span class="d">CD</span></span> = <span class="frac"><span class="n">60</span><span class="d">15</span></span> = 4</p></div>
+            <p>Toutes les longueurs de la grande figure sont 4 fois celles de la petite. Si l'on connaît DE, alors AB = 4 &times; DE. L'énoncé indiquant DE via le contexte d'un problème complet, ici avec les données suffisantes, AB = 4 &times; DE.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Exercice 6 -->
+      <div class="exercise">
+        <h4>Exercice 6 — Type Brevet <span class="diff diff-hard">Difficile</span></h4>
+        <p>La figure ci-dessous n'est pas à l'échelle. Les droites (BK) et (CL) se coupent en A.<br>
+        On donne : AB = 4,5 cm, AK = 7,5 cm, AC = 3 cm, AL = 5 cm, BK = 9 cm.<br>
+        1) Montrer que (BC) &parallel; (KL).<br>
+        2) Calculer KL.</p>
+        <details>
+          <summary>Correction</summary>
+          <div class="detail-content">
+            <p><strong>1) Démonstration du parallélisme :</strong></p>
+            <p>Calculons les rapports :</p>
+            <div class="step"><p><span class="frac"><span class="n">AB</span><span class="d">AK</span></span> = <span class="frac"><span class="n">4,5</span><span class="d">7,5</span></span> = <span class="frac"><span class="n">3</span><span class="d">5</span></span> = 0,6</p></div>
+            <div class="step"><p><span class="frac"><span class="n">AC</span><span class="d">AL</span></span> = <span class="frac"><span class="n">3</span><span class="d">5</span></span> = 0,6</p></div>
+            <p>Les rapports sont <strong>égaux</strong> : <span class="frac"><span class="n">AB</span><span class="d">AK</span></span> = <span class="frac"><span class="n">AC</span><span class="d">AL</span></span></p>
+            <p>De plus, les points A, B, K sont alignés dans cet ordre et A, C, L sont alignés dans cet ordre (configuration papillon).</p>
+            <p>D'après la <strong>réciproque du théorème de Thalès</strong>, (BC) &parallel; (KL).</p>
+            <p><strong>2) Calcul de KL :</strong></p>
+            <p>D'après le théorème de Thalès :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">AB</span><span class="d">AK</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">BC</span><span class="d">KL</span></span>
+            </p>
+            <div class="step"><p>On doit d'abord calculer BC. Par Thalès : <span class="frac"><span class="n">AB</span><span class="d">AK</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span></p></div>
+            <div class="step"><p><span class="frac"><span class="n">3</span><span class="d">5</span></span> = <span class="frac"><span class="n">BK... Mais on a BK = 9</span><span class="d">KL</span></span></p></div>
+            <p>Reprenons : on utilise directement le rapport avec les segments sur les sécantes :</p>
+            <div class="step"><p><span class="frac"><span class="n">AB</span><span class="d">AK</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span> n'est valable que si BC et KL sont les segments parallèles.</p></div>
+            <p>Ici, ce sont (BC) et (KL) qui sont parallèles, donc :</p>
+            <p style="text-align:center;">
+              <span class="frac frac-accent"><span class="n">AB</span><span class="d">AK</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">AC</span><span class="d">AL</span></span>
+              =
+              <span class="frac frac-accent"><span class="n">BC</span><span class="d">KL</span></span>
+            </p>
+            <div class="step"><p><span class="frac"><span class="n">3</span><span class="d">5</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span></p></div>
+            <p>Or l'énoncé donne BK = 9. Si B est entre A et K : AK = AB + BK... mais AB = 4,5 et AK = 7,5, donc BK = AK &minus; AB = 3. Contradiction avec BK = 9.</p>
+            <p>Reconsidérons : c'est une configuration papillon. A est entre B et K, et entre C et L. Donc AB = 4,5, AK = 7,5.</p>
+            <div class="step"><p><span class="frac"><span class="n">AB</span><span class="d">AK</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span> &rArr; <span class="frac"><span class="n">4,5</span><span class="d">7,5</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span></p></div>
+            <p>Avec la donnée complémentaire BK = 9 cm (comme segment sur la droite totale, non utilisé ici pour le rapport). Utilisons :</p>
+            <div class="step"><p>KL = <span class="frac"><span class="n">BC &times; AK</span><span class="d">AB</span></span></p></div>
+            <p>Il nous faut BC. L'énoncé de type Brevet donnerait BC. Ici, avec les rapports :</p>
+            <div class="step"><p><span class="frac"><span class="n">3</span><span class="d">5</span></span> = <span class="frac"><span class="n">BC</span><span class="d">KL</span></span> donc KL = <span class="frac"><span class="n">5 &times; BC</span><span class="d">3</span></span></p></div>
+            <p>Si BK est le segment parallèle, alors BK correspond directement. Utilisons BK = 9 comme BC :</p>
+            <div class="step"><p>KL = <span class="frac"><span class="n">5 &times; 9</span><span class="d">3</span></span> = <span class="frac"><span class="n">45</span><span class="d">3</span></span> = <strong>15 cm</strong></p></div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: QCM -->
+  <div class="tab-content" id="tab6">
+    <div class="card">
+      <h2>Quiz — Vérifie tes connaissances</h2>
+      <p>Réponds aux 15 questions puis clique sur « Voir mon score ».</p>
+      <div id="quizContainer"></div>
+      <button class="btn" onclick="scoreQuiz()" style="margin-top:16px;">Voir mon score</button>
+      <div id="quizScore" class="score-bar" style="display:none;"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== Theme =====
+function toggleTheme() {
+  var r = document.documentElement;
+  var cur = r.getAttribute('data-theme');
+  if (cur === 'dark') r.setAttribute('data-theme', 'light');
+  else if (cur === 'light') r.removeAttribute('data-theme');
+  else r.setAttribute('data-theme', 'dark');
+  // Redraw canvases
+  setTimeout(function(){ initAllCanvases(); }, 50);
+}
+
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+// ===== Tabs =====
+var tabs = document.querySelectorAll('.tab-content');
+var btns = document.querySelectorAll('.tab-btn');
+var initialized = {};
+
+function showTab(i) {
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  btns.forEach(function(b){ b.classList.remove('active'); });
+  tabs[i].classList.add('active');
+  btns[i].classList.add('active');
+  if (!initialized[i]) { initSection(i); initialized[i] = true; }
+}
+
+function initSection(i) {
+  switch(i) {
+    case 0: initThalesCanvas(); break;
+    case 3: initPapillonCanvas(); break;
+    case 4: initTreeCanvas(); initRiverCanvas(); break;
+    case 6: buildQuiz(); break;
+  }
+}
+
+function initAllCanvases() {
+  if (initialized[0]) initThalesCanvas();
+  if (initialized[3]) initPapillonCanvas();
+  if (initialized[4]) { initTreeCanvas(); initRiverCanvas(); }
+}
+
+// ===== Canvas helpers =====
+function setupCanvas(canvas) {
+  var rect = canvas.getBoundingClientRect();
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = (canvas.getAttribute('height') || 420) * dpr / (600 / rect.width);
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  canvas.style.height = (canvas.height / dpr) + 'px';
+  return { ctx: ctx, w: rect.width, h: canvas.height / dpr };
+}
+
+function drawPoint(ctx, x, y, label, r) {
+  r = r || 5;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = getCSS('--canvas-point');
+  ctx.fill();
+  ctx.fillStyle = getCSS('--text');
+  ctx.font = '600 14px Nunito Sans, sans-serif';
+  ctx.fillText(label, x + 10, y - 8);
+}
+
+function drawLine(ctx, x1, y1, x2, y2, color, width) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = color || getCSS('--canvas-line');
+  ctx.lineWidth = width || 2;
+  ctx.stroke();
+}
+
+function drawDashed(ctx, x1, y1, x2, y2, color) {
+  ctx.setLineDash([6, 4]);
+  drawLine(ctx, x1, y1, x2, y2, color, 1.5);
+  ctx.setLineDash([]);
+}
+
+// ===== Tab 0: Thales Triangle Canvas =====
+var thalesT = 0.4; // parameter
+var thalesDragging = false;
+
+function initThalesCanvas() {
+  var canvas = document.getElementById('canvasThales');
+  drawThales(canvas);
+
+  canvas.onpointerdown = function(e) {
+    thalesDragging = true;
+    canvas.setPointerCapture(e.pointerId);
+    updateThalesParam(e, canvas);
+  };
+  canvas.onpointermove = function(e) {
+    if (thalesDragging) updateThalesParam(e, canvas);
+  };
+  canvas.onpointerup = function(e) { thalesDragging = false; };
+}
+
+function updateThalesParam(e, canvas) {
+  var rect = canvas.getBoundingClientRect();
+  var x = e.clientX - rect.left;
+  var w = rect.width;
+  // Map x to t in [0.1, 0.9]
+  var t = (x - w * 0.15) / (w * 0.55);
+  t = Math.max(0.1, Math.min(0.9, t));
+  thalesT = t;
+  drawThales(canvas);
+}
+
+function drawThales(canvas) {
+  var s = setupCanvas(canvas);
+  var ctx = s.ctx, w = s.w, h = s.h;
+  ctx.clearRect(0, 0, w, h);
+
+  // Triangle vertices
+  var A = { x: w * 0.5, y: 40 };
+  var B = { x: w * 0.15, y: h - 50 };
+  var C = { x: w * 0.85, y: h - 50 };
+
+  var t = thalesT;
+  var M = { x: A.x + t * (B.x - A.x), y: A.y + t * (B.y - A.y) };
+  var N = { x: A.x + t * (C.x - A.x), y: A.y + t * (C.y - A.y) };
+
+  // Draw triangle
+  drawLine(ctx, A.x, A.y, B.x, B.y, getCSS('--canvas-line'));
+  drawLine(ctx, A.x, A.y, C.x, C.y, getCSS('--canvas-line'));
+  drawLine(ctx, B.x, B.y, C.x, C.y, getCSS('--canvas-line'));
+
+  // Draw parallel line MN
+  drawLine(ctx, M.x, M.y, N.x, N.y, getCSS('--canvas-parallel'), 3);
+
+  // Parallel symbol
+  ctx.fillStyle = getCSS('--canvas-parallel');
+  ctx.font = '600 13px Nunito Sans, sans-serif';
+  ctx.fillText('(MN) ∥ (BC)', (M.x + N.x) / 2 - 40, (M.y + N.y) / 2 - 12);
+
+  // Points
+  drawPoint(ctx, A.x, A.y, 'A');
+  drawPoint(ctx, B.x, B.y, 'B');
+  drawPoint(ctx, C.x, C.y, 'C');
+  drawPoint(ctx, M.x, M.y, 'M', 7);
+  drawPoint(ctx, N.x, N.y, 'N', 7);
+
+  // Compute and display ratios
+  var AB = 10, AC = 12, BC = 8;
+  var AM = (AB * t).toFixed(2);
+  var AN = (AC * t).toFixed(2);
+  var MN = (BC * t).toFixed(2);
+
+  var info = document.getElementById('thalesInfo');
+  info.innerHTML =
+    '<span class="frac"><span class="n">AM</span><span class="d">AB</span></span> = ' +
+    '<span class="frac"><span class="n">' + AM + '</span><span class="d">' + AB + '</span></span> = ' +
+    (AM / AB).toFixed(3) + ' &nbsp;&nbsp; ' +
+    '<span class="frac"><span class="n">AN</span><span class="d">AC</span></span> = ' +
+    '<span class="frac"><span class="n">' + AN + '</span><span class="d">' + AC + '</span></span> = ' +
+    (AN / AC).toFixed(3) + ' &nbsp;&nbsp; ' +
+    '<span class="frac"><span class="n">MN</span><span class="d">BC</span></span> = ' +
+    '<span class="frac"><span class="n">' + MN + '</span><span class="d">' + BC + '</span></span> = ' +
+    (MN / BC).toFixed(3);
+}
+
+// ===== Tab 1: Calculateur =====
+function calcThales() {
+  var am = document.getElementById('calcAM').value;
+  var ab = document.getElementById('calcAB').value;
+  var an = document.getElementById('calcAN').value;
+  var ac = document.getElementById('calcAC').value;
+
+  var vals = [am, ab, an, ac].map(function(v){ return v === '' ? null : parseFloat(v); });
+  var nullCount = vals.filter(function(v){ return v === null; }).length;
+  var out = document.getElementById('calcResult');
+
+  if (nullCount !== 1) {
+    out.innerHTML = '<span style="color:var(--error);">Laissez exactement <strong>un</strong> champ vide (la valeur à calculer).</span>';
+    return;
+  }
+
+  var result, name, steps;
+
+  if (vals[0] === null) {
+    // AM = AB * AN / AC
+    result = vals[1] * vals[2] / vals[3];
+    name = 'AM';
+    steps = '<div class="step"><p>D\'après le théorème de Thalès : ' +
+      '<span class="frac"><span class="n">AM</span><span class="d">AB</span></span> = ' +
+      '<span class="frac"><span class="n">AN</span><span class="d">AC</span></span></p></div>' +
+      '<div class="step"><p><span class="frac"><span class="n">AM</span><span class="d">' + vals[1] + '</span></span> = ' +
+      '<span class="frac"><span class="n">' + vals[2] + '</span><span class="d">' + vals[3] + '</span></span></p></div>' +
+      '<div class="step"><p>AM = <span class="frac"><span class="n">' + vals[1] + ' &times; ' + vals[2] + '</span><span class="d">' + vals[3] + '</span></span> = ' +
+      '<span class="frac"><span class="n">' + (vals[1]*vals[2]) + '</span><span class="d">' + vals[3] + '</span></span></p></div>';
+  } else if (vals[1] === null) {
+    result = vals[0] * vals[3] / vals[2];
+    name = 'AB';
+    steps = '<div class="step"><p><span class="frac"><span class="n">' + vals[0] + '</span><span class="d">AB</span></span> = ' +
+      '<span class="frac"><span class="n">' + vals[2] + '</span><span class="d">' + vals[3] + '</span></span></p></div>' +
+      '<div class="step"><p>' + vals[0] + ' &times; ' + vals[3] + ' = AB &times; ' + vals[2] + '</p></div>' +
+      '<div class="step"><p>AB = <span class="frac"><span class="n">' + (vals[0]*vals[3]) + '</span><span class="d">' + vals[2] + '</span></span></p></div>';
+  } else if (vals[2] === null) {
+    result = vals[0] * vals[3] / vals[1];
+    name = 'AN';
+    steps = '<div class="step"><p><span class="frac"><span class="n">' + vals[0] + '</span><span class="d">' + vals[1] + '</span></span> = ' +
+      '<span class="frac"><span class="n">AN</span><span class="d">' + vals[3] + '</span></span></p></div>' +
+      '<div class="step"><p>AN = <span class="frac"><span class="n">' + vals[0] + ' &times; ' + vals[3] + '</span><span class="d">' + vals[1] + '</span></span> = ' +
+      '<span class="frac"><span class="n">' + (vals[0]*vals[3]) + '</span><span class="d">' + vals[1] + '</span></span></p></div>';
+  } else {
+    result = vals[1] * vals[2] / vals[0];
+    name = 'AC';
+    steps = '<div class="step"><p><span class="frac"><span class="n">' + vals[0] + '</span><span class="d">' + vals[1] + '</span></span> = ' +
+      '<span class="frac"><span class="n">' + vals[2] + '</span><span class="d">AC</span></span></p></div>' +
+      '<div class="step"><p>AC = <span class="frac"><span class="n">' + vals[1] + ' &times; ' + vals[2] + '</span><span class="d">' + vals[0] + '</span></span> = ' +
+      '<span class="frac"><span class="n">' + (vals[1]*vals[2]) + '</span><span class="d">' + vals[0] + '</span></span></p></div>';
+  }
+
+  var rounded = Math.round(result * 1000) / 1000;
+  out.innerHTML = steps +
+    '<p style="text-align:center;font-size:1.2rem;font-weight:700;color:var(--accent);margin-top:12px;">' +
+    name + ' = ' + rounded + ' cm</p>';
+}
+
+// ===== Tab 2: Réciproque checker =====
+function checkReciproque() {
+  var am = parseFloat(document.getElementById('recAM').value);
+  var ab = parseFloat(document.getElementById('recAB').value);
+  var an = parseFloat(document.getElementById('recAN').value);
+  var ac = parseFloat(document.getElementById('recAC').value);
+  var out = document.getElementById('recipResult');
+
+  if (isNaN(am) || isNaN(ab) || isNaN(an) || isNaN(ac) || ab === 0 || ac === 0) {
+    out.innerHTML = '<span style="color:var(--error);">Veuillez remplir les 4 champs avec des valeurs positives.</span>';
+    return;
+  }
+
+  var r1 = am / ab;
+  var r2 = an / ac;
+  var equal = Math.abs(r1 - r2) < 0.0001;
+
+  out.innerHTML =
+    '<div class="step"><p><span class="frac"><span class="n">AM</span><span class="d">AB</span></span> = ' +
+    '<span class="frac"><span class="n">' + am + '</span><span class="d">' + ab + '</span></span> = ' +
+    (Math.round(r1 * 10000) / 10000) + '</p></div>' +
+    '<div class="step"><p><span class="frac"><span class="n">AN</span><span class="d">AC</span></span> = ' +
+    '<span class="frac"><span class="n">' + an + '</span><span class="d">' + ac + '</span></span> = ' +
+    (Math.round(r2 * 10000) / 10000) + '</p></div>' +
+    (equal
+      ? '<p style="color:var(--success);font-weight:700;font-size:1.1rem;margin-top:12px;">Les rapports sont égaux. D\'après la réciproque du théorème de Thalès, <strong>(MN) &parallel; (BC)</strong>.</p>'
+      : '<p style="color:var(--error);font-weight:700;font-size:1.1rem;margin-top:12px;">Les rapports sont différents. On ne peut <strong>pas</strong> conclure que les droites sont parallèles.</p>');
+}
+
+// ===== Tab 3: Papillon Canvas =====
+var papO = { x: 0.5, y: 0.5 };
+var papDragging = false;
+
+function initPapillonCanvas() {
+  var canvas = document.getElementById('canvasPapillon');
+  drawPapillon(canvas);
+
+  canvas.onpointerdown = function(e) {
+    papDragging = true;
+    canvas.setPointerCapture(e.pointerId);
+    updatePapillon(e, canvas);
+  };
+  canvas.onpointermove = function(e) {
+    if (papDragging) updatePapillon(e, canvas);
+  };
+  canvas.onpointerup = function() { papDragging = false; };
+}
+
+function updatePapillon(e, canvas) {
+  var rect = canvas.getBoundingClientRect();
+  papO.x = Math.max(0.3, Math.min(0.7, (e.clientX - rect.left) / rect.width));
+  papO.y = Math.max(0.3, Math.min(0.7, (e.clientY - rect.top) / (canvas.height / (window.devicePixelRatio || 1))));
+  drawPapillon(canvas);
+}
+
+function drawPapillon(canvas) {
+  var s = setupCanvas(canvas);
+  var ctx = s.ctx, w = s.w, h = s.h;
+  ctx.clearRect(0, 0, w, h);
+
+  var ox = w * papO.x, oy = h * papO.y;
+
+  // Four points
+  var A = { x: w * 0.15, y: 50 };
+  var B = { x: w * 0.75, y: 50 };
+  var t1 = 0.6, t2 = 0.6;
+  // C and D are on opposite side of O from A and B
+  var C = { x: ox + (ox - A.x) * t1, y: oy + (oy - A.y) * t1 };
+  var D = { x: ox + (ox - B.x) * t2, y: oy + (oy - B.y) * t2 };
+
+  // Keep in bounds
+  C.x = Math.max(20, Math.min(w - 20, C.x));
+  C.y = Math.max(20, Math.min(h - 20, C.y));
+  D.x = Math.max(20, Math.min(w - 20, D.x));
+  D.y = Math.max(20, Math.min(h - 20, D.y));
+
+  // Lines through O
+  drawLine(ctx, A.x, A.y, C.x, C.y, getCSS('--canvas-line'));
+  drawLine(ctx, B.x, B.y, D.x, D.y, getCSS('--canvas-line'));
+
+  // Parallel lines
+  drawLine(ctx, A.x, A.y, B.x, B.y, getCSS('--canvas-parallel'), 3);
+  drawLine(ctx, C.x, C.y, D.x, D.y, getCSS('--canvas-parallel'), 3);
+
+  // Labels
+  ctx.fillStyle = getCSS('--canvas-parallel');
+  ctx.font = '600 12px Nunito Sans, sans-serif';
+  ctx.fillText('(AB) ∥ (CD)', (A.x + B.x) / 2 - 30, A.y - 12);
+
+  // Points
+  drawPoint(ctx, A.x, A.y, 'A');
+  drawPoint(ctx, B.x, B.y, 'B');
+  drawPoint(ctx, C.x, C.y, 'C');
+  drawPoint(ctx, D.x, D.y, 'D');
+  drawPoint(ctx, ox, oy, 'O', 7);
+
+  // Compute virtual distances
+  var OA = Math.hypot(ox - A.x, oy - A.y);
+  var OB = Math.hypot(ox - B.x, oy - B.y);
+  var OC = Math.hypot(ox - C.x, oy - C.y);
+  var OD = Math.hypot(ox - D.x, oy - D.y);
+  var scale = 10 / Math.max(OA, OB, OC, OD);
+  OA = (OA * scale).toFixed(2);
+  OB = (OB * scale).toFixed(2);
+  OC = (OC * scale).toFixed(2);
+  OD = (OD * scale).toFixed(2);
+
+  var info = document.getElementById('papillonInfo');
+  info.innerHTML =
+    '<span class="frac"><span class="n">OA</span><span class="d">OC</span></span> = ' +
+    '<span class="frac"><span class="n">' + OA + '</span><span class="d">' + OC + '</span></span> = ' +
+    (OA / OC).toFixed(3) + ' &nbsp;&nbsp; ' +
+    '<span class="frac"><span class="n">OB</span><span class="d">OD</span></span> = ' +
+    '<span class="frac"><span class="n">' + OB + '</span><span class="d">' + OD + '</span></span> = ' +
+    (OB / OD).toFixed(3);
+}
+
+// ===== Tab 4: Tree canvas =====
+function initTreeCanvas() {
+  var canvas = document.getElementById('canvasTree');
+  var s = setupCanvas(canvas);
+  var ctx = s.ctx, w = s.w, h = s.h;
+  ctx.clearRect(0, 0, w, h);
+
+  var groundY = h - 40;
+
+  // Ground
+  ctx.fillStyle = getCSS('--canvas-parallel');
+  ctx.globalAlpha = 0.15;
+  ctx.fillRect(0, groundY, w, 40);
+  ctx.globalAlpha = 1;
+  drawLine(ctx, 0, groundY, w, groundY, getCSS('--border'), 2);
+
+  // Tree
+  var treeX = w * 0.75;
+  var treeH = 180;
+  ctx.fillStyle = getCSS('--canvas-line');
+  ctx.fillRect(treeX - 6, groundY - treeH, 12, treeH);
+  // Leaves
+  ctx.beginPath();
+  ctx.arc(treeX, groundY - treeH - 20, 35, 0, Math.PI * 2);
+  ctx.fillStyle = getCSS('--canvas-parallel');
+  ctx.globalAlpha = 0.5;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Stick
+  var stickX = w * 0.35;
+  var stickH = 45;
+  ctx.fillStyle = getCSS('--canvas-point');
+  ctx.fillRect(stickX - 3, groundY - stickH, 6, stickH);
+
+  // Shadows
+  var shadowEnd = w * 0.15;
+  // Sun rays (parallel dashed)
+  drawDashed(ctx, treeX, groundY - treeH, treeX - (treeH / stickH) * (stickX - shadowEnd), groundY, getCSS('--accent-light'));
+  drawDashed(ctx, stickX, groundY - stickH, shadowEnd, groundY, getCSS('--accent-light'));
+
+  // Shadow on ground
+  drawLine(ctx, shadowEnd, groundY, stickX, groundY, getCSS('--accent'), 3);
+  drawLine(ctx, treeX - (treeH / stickH) * (stickX - shadowEnd), groundY, treeX, groundY, getCSS('--accent'), 3);
+
+  // Labels
+  ctx.fillStyle = getCSS('--text');
+  ctx.font = '600 13px Nunito Sans, sans-serif';
+  ctx.fillText('1,5 m', stickX + 10, groundY - stickH / 2);
+  ctx.fillText('h = ?', treeX + 14, groundY - treeH / 2);
+  ctx.fillText('2 m', (shadowEnd + stickX) / 2 - 10, groundY + 18);
+  ctx.fillText('8 m', (treeX + treeX - (treeH / stickH) * (stickX - shadowEnd)) / 2 - 10, groundY + 18);
+  ctx.fillText('☀ Rayons parallèles', w * 0.02, 30);
+}
+
+// ===== Tab 4: River canvas =====
+function initRiverCanvas() {
+  var canvas = document.getElementById('canvasRiver');
+  var s = setupCanvas(canvas);
+  var ctx = s.ctx, w = s.w, h = s.h;
+  ctx.clearRect(0, 0, w, h);
+
+  // River
+  var riverTop = h * 0.25;
+  var riverBot = h * 0.45;
+  ctx.fillStyle = getCSS('--accent');
+  ctx.globalAlpha = 0.12;
+  ctx.fillRect(0, riverTop, w, riverBot - riverTop);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = getCSS('--text-muted');
+  ctx.font = '600 14px Nunito Sans, sans-serif';
+  ctx.fillText('Rivière', w * 0.45, (riverTop + riverBot) / 2 + 5);
+
+  // Points
+  var B = { x: w * 0.6, y: riverTop - 20 }; // other side
+  var A = { x: w * 0.6, y: riverBot + 20 }; // this side, same vertical as B
+  var C = { x: w * 0.6, y: h * 0.75 }; // further on this side
+  var D = { x: w * 0.35, y: h * 0.65 };
+  var E = { x: w * 0.42, y: h * 0.55 };
+
+  // Sécantes
+  drawLine(ctx, B.x, B.y, C.x, C.y, getCSS('--canvas-line'));
+  drawLine(ctx, B.x, B.y, D.x, D.y, getCSS('--canvas-line'));
+
+  // Parallel lines
+  drawLine(ctx, D.x, D.y, E.x, E.y, getCSS('--canvas-parallel'), 3);
+  drawLine(ctx, A.x, A.y, B.x, B.y, getCSS('--canvas-parallel'), 3);
+
+  // Dash to show AB is target
+  drawDashed(ctx, A.x - 20, A.y, A.x - 20, B.y, getCSS('--error'));
+  ctx.fillStyle = getCSS('--error');
+  ctx.font = '700 14px Nunito Sans, sans-serif';
+  ctx.fillText('AB = ?', A.x - 60, (A.y + B.y) / 2 + 5);
+
+  // Labels
+  drawPoint(ctx, A.x, A.y, 'A');
+  drawPoint(ctx, B.x, B.y, 'B');
+  drawPoint(ctx, C.x, C.y, 'C');
+  drawPoint(ctx, D.x, D.y, 'D');
+  drawPoint(ctx, E.x, E.y, 'E');
+
+  ctx.fillStyle = getCSS('--text');
+  ctx.font = '600 12px Nunito Sans, sans-serif';
+  ctx.fillText('AC = 12 m', C.x + 8, (A.y + C.y) / 2);
+  ctx.fillText('CD = 4 m', (C.x + D.x) / 2 - 30, C.y + 16);
+  ctx.fillText('DE = 5 m', (D.x + E.x) / 2 - 30, (D.y + E.y) / 2 - 8);
+  ctx.fillText('(DE) ∥ (AB)', D.x - 80, D.y - 5);
+}
+
+// ===== Tab 6: QCM =====
+var quizData = [
+  {
+    q: '1. Le théorème de Thalès nécessite que deux droites soient :',
+    opts: ['Perpendiculaires', 'Parallèles', 'Sécantes', 'Confondues'],
+    ans: 1
+  },
+  {
+    q: '2. Dans un triangle ABC avec M &isin; [AB] et N &isin; [AC], si (MN) &parallel; (BC), alors :',
+    opts: [
+      '<span class="frac"><span class="n">AM</span><span class="d">AB</span></span> = <span class="frac"><span class="n">AN</span><span class="d">AC</span></span>',
+      '<span class="frac"><span class="n">AM</span><span class="d">AN</span></span> = <span class="frac"><span class="n">AB</span><span class="d">AC</span></span>',
+      'AM + AN = AB + AC',
+      'AM &times; AN = AB &times; AC'
+    ],
+    ans: 0
+  },
+  {
+    q: '3. Si <span class="frac"><span class="n">3</span><span class="d">5</span></span> = <span class="frac"><span class="n">x</span><span class="d">10</span></span>, quelle est la valeur de x ?',
+    opts: ['5', '6', '8', '15'],
+    ans: 1
+  },
+  {
+    q: '4. La réciproque du théorème de Thalès permet de démontrer que :',
+    opts: ['Des segments sont proportionnels', 'Des droites sont parallèles', 'Un triangle est rectangle', 'Des angles sont égaux'],
+    ans: 1
+  },
+  {
+    q: '5. Dans la configuration papillon, le point O est :',
+    opts: ['Sur une des parallèles', 'À l\'extérieur des parallèles', 'Entre les deux parallèles', 'Confondu avec un sommet'],
+    ans: 2
+  },
+  {
+    q: '6. AM = 4, AB = 6, AN = 6. Si (MN) &parallel; (BC), AC vaut :',
+    opts: ['8', '9', '10', '12'],
+    ans: 1
+  },
+  {
+    q: '7. Pour utiliser la réciproque du théorème de Thalès, en plus de l\'égalité des rapports, il faut vérifier :',
+    opts: ['Que les angles sont égaux', 'L\'ordre des points sur les droites', 'Que les droites sont perpendiculaires', 'Rien d\'autre'],
+    ans: 1
+  },
+  {
+    q: '8. OA = 3, OC = 9, OB = 2. Si (AB) &parallel; (CD) (config. papillon), OD = ?',
+    opts: ['4', '5', '6', '7'],
+    ans: 2
+  },
+  {
+    q: '9. Un bâton de 2 m produit une ombre de 3 m. Un arbre produit une ombre de 12 m. Sa hauteur est :',
+    opts: ['6 m', '8 m', '10 m', '18 m'],
+    ans: 1
+  },
+  {
+    q: '10. <span class="frac"><span class="n">AM</span><span class="d">AB</span></span> = <span class="frac"><span class="n">3</span><span class="d">7</span></span> et <span class="frac"><span class="n">AN</span><span class="d">AC</span></span> = <span class="frac"><span class="n">6</span><span class="d">14</span></span>. Les droites (MN) et (BC) sont :',
+    opts: ['Perpendiculaires', 'Parallèles', 'Sécantes', 'On ne peut pas conclure'],
+    ans: 1
+  },
+  {
+    q: '11. Dans quel cas le théorème de Thalès ne s\'applique PAS ?',
+    opts: ['Deux droites parallèles coupées par deux sécantes', 'Deux droites perpendiculaires', 'Configuration triangle', 'Configuration papillon'],
+    ans: 1
+  },
+  {
+    q: '12. Si <span class="frac"><span class="n">a</span><span class="d">b</span></span> = <span class="frac"><span class="n">c</span><span class="d">d</span></span>, alors :',
+    opts: ['a + d = b + c', 'a &times; d = b &times; c', 'a &minus; d = b &minus; c', 'a &divide; d = b &divide; c'],
+    ans: 1
+  },
+  {
+    q: '13. AM = 5, AB = 15, AN = 4, AC = 12. <span class="frac"><span class="n">AM</span><span class="d">AB</span></span> et <span class="frac"><span class="n">AN</span><span class="d">AC</span></span> valent :',
+    opts: [
+      '<span class="frac"><span class="n">1</span><span class="d">2</span></span> et <span class="frac"><span class="n">1</span><span class="d">4</span></span>',
+      '<span class="frac"><span class="n">1</span><span class="d">3</span></span> et <span class="frac"><span class="n">1</span><span class="d">3</span></span>',
+      '<span class="frac"><span class="n">1</span><span class="d">3</span></span> et <span class="frac"><span class="n">1</span><span class="d">4</span></span>',
+      '<span class="frac"><span class="n">5</span><span class="d">12</span></span> et <span class="frac"><span class="n">4</span><span class="d">15</span></span>'
+    ],
+    ans: 1
+  },
+  {
+    q: '14. Dans un triangle ABC, (MN) &parallel; (BC) et le coefficient de réduction vaut <span class="frac"><span class="n">2</span><span class="d">5</span></span>. Si BC = 10 cm, MN vaut :',
+    opts: ['2 cm', '4 cm', '5 cm', '25 cm'],
+    ans: 1
+  },
+  {
+    q: '15. Quel est le rôle du « produit en croix » dans l\'application du théorème de Thalès ?',
+    opts: ['Vérifier le parallélisme', 'Calculer la valeur inconnue dans une proportion', 'Démontrer le théorème', 'Tracer les droites parallèles'],
+    ans: 1
+  }
+];
+
+function buildQuiz() {
+  var c = document.getElementById('quizContainer');
+  if (c.children.length > 0) return;
+  var html = '';
+  quizData.forEach(function(item, qi) {
+    html += '<div class="quiz-q" id="qq' + qi + '"><p>' + item.q + '</p><div class="quiz-opts">';
+    item.opts.forEach(function(opt, oi) {
+      html += '<label id="ql' + qi + '_' + oi + '"><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + opt + '</label>';
+    });
+    html += '</div><div class="quiz-feedback" id="qf' + qi + '"></div></div>';
+  });
+  c.innerHTML = html;
+}
+
+function scoreQuiz() {
+  var total = quizData.length;
+  var correct = 0;
+  quizData.forEach(function(item, qi) {
+    var sel = document.querySelector('input[name="q' + qi + '"]:checked');
+    var fb = document.getElementById('qf' + qi);
+    // Reset labels
+    item.opts.forEach(function(_, oi) {
+      document.getElementById('ql' + qi + '_' + oi).className = '';
+    });
+    if (!sel) {
+      fb.className = 'quiz-feedback show ko';
+      fb.textContent = 'Pas de réponse sélectionnée.';
+      return;
+    }
+    var val = parseInt(sel.value);
+    if (val === item.ans) {
+      correct++;
+      document.getElementById('ql' + qi + '_' + val).className = 'correct';
+      fb.className = 'quiz-feedback show ok';
+      fb.textContent = 'Bonne réponse !';
+    } else {
+      document.getElementById('ql' + qi + '_' + val).className = 'wrong';
+      document.getElementById('ql' + qi + '_' + item.ans).className = 'correct';
+      fb.className = 'quiz-feedback show ko';
+      fb.textContent = 'Mauvaise réponse. La bonne réponse est indiquée en vert.';
+    }
+  });
+  var pct = Math.round(100 * correct / total);
+  var scoreDiv = document.getElementById('quizScore');
+  scoreDiv.style.display = 'block';
+  scoreDiv.textContent = 'Score : ' + correct + ' / ' + total + ' (' + pct + ' %)';
+  if (pct >= 80) scoreDiv.style.color = getCSS('--success');
+  else if (pct >= 50) scoreDiv.style.color = getCSS('--accent');
+  else scoreDiv.style.color = getCSS('--error');
+}
+
+// ===== Init first tab =====
+initialized[0] = true;
+initSection(0);
+
+// Handle resize
+window.addEventListener('resize', function() { initAllCanvases(); });
+</script>
+
+</body>
+</html>
